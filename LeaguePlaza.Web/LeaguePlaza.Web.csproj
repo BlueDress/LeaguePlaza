@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LeaguePlaza.Infrastructure\LeaguePlaza.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

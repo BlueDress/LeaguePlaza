@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LeaguePlaza.Web.Data.Migrations
+namespace LeaguePlaza.Infrastructure.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
