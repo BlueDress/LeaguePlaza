@@ -10,14 +10,14 @@ namespace LeaguePlaza.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            AvailableQuestsViewModel availableQuestsViewModel = await _questService.CreateAvailableQuestsViewModel();
+            AvailableQuestsViewModel availableQuestsViewModel = await _questService.CreateAvailableQuestsViewModelAsync();
 
             return View(availableQuestsViewModel);
         }
 
         public async Task<IActionResult> MyQuests()
         {
-            UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModel();
+            UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
             return View(userQuestsViewModel);
         }

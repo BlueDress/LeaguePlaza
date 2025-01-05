@@ -2,16 +2,11 @@
 
 namespace LeaguePlaza.Infrastructure.Data.Repository
 {
-    public class Repository : IRepository
+    public class Repository(ApplicationDbContext context) : IRepository
     {
-        private readonly DbContext _context;
+        private readonly DbContext _context = context;
 
-        public Repository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<IEnumerable<T>> GetAllAsync<T>() where T : class 
+        public async Task<IEnumerable<T>> GetAllAsync<T>() where T : class
         {
             return await DbSet<T>().ToListAsync();
         }
@@ -24,6 +19,16 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
         public async Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Func<T, bool> predicate) where T : class
         {
             return await Task.Run(() => DbSet<T>().AsNoTracking().Where(predicate));
+        }
+
+        public async Task AddAsync<T>(T entity) where T : class
+        {
+            await DbSet<T>().AddAsync(entity);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
 
         private DbSet<T> DbSet<T>() where T : class

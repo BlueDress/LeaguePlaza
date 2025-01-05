@@ -1,7 +1,9 @@
 ﻿using LeaguePlaza.Core.Features.Quest.Contracts;
+using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 using LeaguePlaza.Infrastructure.Data.Entities;
+using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
 
 using Microsoft.AspNetCore.Http;
@@ -15,7 +17,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-        public async Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModel()
+        public async Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
             var availableQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.Adventurer == null);
 
@@ -36,7 +38,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             };
         }
 
-        public async Task<UserQuestsViewModel> CreateUserQuestsViewModel()
+        public async Task<UserQuestsViewModel> CreateUserQuestsViewModelAsync()
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -44,18 +46,49 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             return new UserQuestsViewModel()
             {
-                 UserQuests = userQuests.Select(q => new QuestDto
-                 {
-                     Id = q.Id,
-                     Title = q.Title,
-                     Description = q.Description,
-                     Created = q.Created,
-                     RewardAmount = q.RewardAmount,
-                     Type = q.Type.ToString(),
-                     Status = q.Status.ToString(),
-                     CreatorId = q.CreatorId,
-                     AdventurerId = q.AdventurerId,
-                 })
+                UserQuests = userQuests.Select(q => new QuestDto
+                {
+                    Id = q.Id,
+                    Title = q.Title,
+                    Description = q.Description,
+                    Created = q.Created,
+                    RewardAmount = q.RewardAmount,
+                    Type = q.Type.ToString(),
+                    Status = q.Status.ToString(),
+                    CreatorId = q.CreatorId,
+                    AdventurerId = q.AdventurerId,
+                })
+            };
+        }
+
+        public async Task<QuestDto> CreateQuestAsync(CreateQuestDto createQuestDto)
+        {
+            ApplicationUser currentUser = (await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!))!;
+
+            var newQuest = new QuestEntity()
+            {
+                Title = createQuestDto.Title,
+                Description = createQuestDto.Description,
+                Created = DateTime.Now,
+                RewardAmount = createQuestDto.RewardAmount,
+                Type = (QuestType)Enum.Parse(typeof(QuestType), createQuestDto.Type),
+                Status = QuestStatus.Posted,
+                Creator = currentUser,
+            };
+
+            await _repository.AddAsync(newQuest);
+            await _repository.SaveChangesAsync();
+
+            return new QuestDto
+            {
+                Id = newQuest.Id,
+                Title = newQuest.Title,
+                Description = newQuest.Description,
+                Created = DateTime.Now,
+                RewardAmount = newQuest.RewardAmount,
+                Type = newQuest.Type.ToString(),
+                Status = newQuest.Status.ToString(),
+                CreatorId = currentUser.Id,
             };
         }
     }

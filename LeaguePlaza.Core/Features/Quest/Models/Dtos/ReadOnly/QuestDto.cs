@@ -1,6 +1,4 @@
-﻿using LeaguePlaza.Infrastructure.Data.Enums;
-
-namespace LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly
+﻿namespace LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly
 {
     public class QuestDto
     {

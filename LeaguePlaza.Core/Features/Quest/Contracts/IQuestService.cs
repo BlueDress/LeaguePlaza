@@ -1,11 +1,15 @@
-﻿using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
+﻿using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
+using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 
 namespace LeaguePlaza.Core.Features.Quest.Contracts
 {
     public interface IQuestService
     {
-        Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModel();
+        Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync();
 
-        Task<UserQuestsViewModel> CreateUserQuestsViewModel();
+        Task<UserQuestsViewModel> CreateUserQuestsViewModelAsync();
+
+        Task<QuestDto> CreateQuestAsync(CreateQuestDto createQuestDto);
     }
 }

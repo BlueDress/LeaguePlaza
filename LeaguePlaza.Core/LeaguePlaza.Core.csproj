@@ -10,8 +10,4 @@
     <ProjectReference Include="..\LeaguePlaza.Infrastructure\LeaguePlaza.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Quest\Models\Dtos\Create\" />
-  </ItemGroup>
-
 </Project>
