@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LeaguePlaza.Infrastructure\LeaguePlaza.Infrastructure.csproj" />
+    <ProjectReference Include="..\LeaguePlaza.Core\LeaguePlaza.Core.csproj" />
   </ItemGroup>
 
 </Project>
