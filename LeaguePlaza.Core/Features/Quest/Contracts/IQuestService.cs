@@ -4,6 +4,8 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
 {
     public interface IQuestService
     {
-        Task<AllAvailableQuestsViewModel> CreateAllAvailableQuestsViewModel();
+        Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModel();
+
+        Task<UserQuestsViewModel> CreateUserQuestsViewModel();
     }
 }

@@ -1,11 +1,11 @@
 ﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
 
-@model AvailableQuestsViewModel
+@model UserQuestsViewModel
 
-<h1>All Quests</h1>
+<h1>My Quests</h1>
 
 <div>
-    @foreach (var quest in Model.AvailableQuests)
+    @foreach (var quest in Model.UserQuests)
     {
         <ul>
             <li>@quest.Id</li>

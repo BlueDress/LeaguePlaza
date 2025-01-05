@@ -2,8 +2,8 @@
 
 namespace LeaguePlaza.Core.Features.Quest.Models.ViewModels
 {
-    public class AllAvailableQuestsViewModel
+    public class UserQuestsViewModel
     {
-        public IEnumerable<QuestDto> AllAvailableQuests { get; set; } = new List<QuestDto>();
+        public IEnumerable<QuestDto> UserQuests { get; set; } = new List<QuestDto>();
     }
 }
