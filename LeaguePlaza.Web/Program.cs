@@ -18,7 +18,7 @@ namespace LeaguePlaza.Web
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddScoped<IRepository, Repository>();
+            builder.Services.AddScoped(typeof(IRepository), typeof(Repository));
 
             var app = builder.Build();
 
