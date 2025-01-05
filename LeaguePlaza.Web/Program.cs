@@ -1,5 +1,6 @@
 using LeaguePlaza.Infrastructure.Data;
 using LeaguePlaza.Infrastructure.Data.Entities;
+using LeaguePlaza.Infrastructure.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaguePlaza.Web
@@ -16,6 +17,8 @@ namespace LeaguePlaza.Web
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IRepository, Repository>();
 
             var app = builder.Build();
 
