@@ -4,8 +4,8 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public ICollection<Quest> PostedQuests { get; set; } = new HashSet<Quest>();
+        public ICollection<QuestEntity> PostedQuests { get; set; } = new HashSet<QuestEntity>();
 
-        public ICollection<Quest> AcceptedQuests { get; set; } = new HashSet<Quest>();
+        public ICollection<QuestEntity> AcceptedQuests { get; set; } = new HashSet<QuestEntity>();
     }
 }

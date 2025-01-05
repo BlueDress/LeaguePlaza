@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LeaguePlaza.Core.Features.Quest.Contracts;
+using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LeaguePlaza.Web.Controllers
 {
-    public class QuestController : Controller
+    public class QuestController(IQuestService questService) : Controller
     {
-        public IActionResult Index()
+        private readonly IQuestService _questService = questService;
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+            AllAvailableQuestsViewModel allAvailableQuestsViewModel = await _questService.CreateAllAvailableQuestsViewModel();
+
+            return View(allAvailableQuestsViewModel);
         }
     }
 }

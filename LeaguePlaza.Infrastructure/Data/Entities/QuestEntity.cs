@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LeaguePlaza.Infrastructure.Data.Entities
 {
-    public class Quest
+    public class QuestEntity
     {
         [Key]
         public int Id { get; set; }

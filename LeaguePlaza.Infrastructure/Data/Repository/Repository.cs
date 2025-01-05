@@ -21,6 +21,11 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             return await DbSet<T>().AsNoTracking().ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Func<T, bool> predicate) where T : class
+        {
+            return await Task.Run(() => DbSet<T>().AsNoTracking().Where(predicate));
+        }
+
         private DbSet<T> DbSet<T>() where T : class
         {
             return _context.Set<T>();

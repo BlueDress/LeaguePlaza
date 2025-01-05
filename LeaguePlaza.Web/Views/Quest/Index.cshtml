@@ -1,1 +1,22 @@
-﻿
+﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+
+@model AllAvailableQuestsViewModel
+
+<h1>All Quests</h1>
+
+<div>
+    @foreach (var quest in Model.AllAvailableQuests)
+    {
+        <ul>
+            <li>@quest.Id</li>
+            <li>@quest.Title</li>
+            <li>@quest.Description</li>
+            <li>@quest.Created</li>
+            <li>@quest.RewardAmount</li>
+            <li>@quest.Type</li>
+            <li>@quest.Status</li>
+            <li>@quest.CreatorId</li>
+            <li><a asp-controller="Quest" asp-action="ViewQuest">View Quest</a></li>
+        </ul>
+    }
+</div>
