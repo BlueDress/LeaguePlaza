@@ -61,6 +61,27 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             };
         }
 
+        public async Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id)
+        {
+            QuestEntity quest = await _repository.FindByIdAsync<QuestEntity>(id);
+
+            return new ViewQuestViewModel()
+            {
+                QuestDto = new QuestDto()
+                {
+                    Id = id,
+                    Title = quest.Title,
+                    Description = quest.Description,
+                    Created = quest.Created,
+                    RewardAmount = quest.RewardAmount,
+                    Type = quest.Type.ToString(),
+                    Status = quest.Status.ToString(),
+                    CreatorId = quest.CreatorId,
+                    AdventurerId = quest.AdventurerId,
+                },
+            };
+        }
+
         public async Task<QuestDto> CreateQuestAsync(CreateQuestDto createQuestDto)
         {
             ApplicationUser currentUser = (await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!))!;

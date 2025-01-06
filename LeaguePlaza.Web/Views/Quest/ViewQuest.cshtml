@@ -1,0 +1,19 @@
+﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+
+@model ViewQuestViewModel
+
+<div>
+    <ul>
+        <li>@Model.QuestDto.Id</li>
+        <li>@Model.QuestDto.Title</li>
+        <li>@Model.QuestDto.Description</li>
+        <li>@Model.QuestDto.Created</li>
+        <li>@Model.QuestDto.RewardAmount</li>
+        <li>@Model.QuestDto.Type</li>
+        <li>@Model.QuestDto.Status</li>
+        <li>@Model.QuestDto.CreatorId</li>
+        <li>@Model.QuestDto.AdventurerId</li>
+    </ul>
+</div>
+<button>Accept</button>
+<button>Abandon</button>

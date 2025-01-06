@@ -16,7 +16,7 @@
             <li>@quest.Type</li>
             <li>@quest.Status</li>
             <li>@quest.CreatorId</li>
-            <li><a asp-controller="Quest" asp-action="ViewQuest">View Quest</a></li>
+            <li><a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a></li>
         </ul>
     }
 </div>

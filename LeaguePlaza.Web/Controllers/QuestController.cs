@@ -21,5 +21,12 @@ namespace LeaguePlaza.Web.Controllers
 
             return View(userQuestsViewModel);
         }
+
+        public async Task<IActionResult> ViewQuest(int id)
+        {
+            ViewQuestViewModel viewQuestViewModel = await _questService.CreateViewQuestViewModelAsync(id);
+
+            return View(viewQuestViewModel);
+        }
     }
 }
