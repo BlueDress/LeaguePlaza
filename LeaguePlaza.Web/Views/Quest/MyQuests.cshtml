@@ -23,30 +23,33 @@
             <option value="3">Escort</option>
         </select>
         <button type="submit">Post</button>
+        <button id="update-quest-btn" type="button">Update</button>
     </form>
 </div>
 
 <div>
     @foreach (var quest in Model.UserQuests)
     {
-        <ul>
-            <li>@quest.Id</li>
-            <li>@quest.Title</li>
-            <li>@quest.Description</li>
-            <li>@quest.Created</li>
-            <li>@quest.RewardAmount</li>
-            <li>@quest.Type</li>
-            <li>@quest.Status</li>
-            <li>@quest.CreatorId</li>
-            <li><a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a></li>
-        </ul>
-        <button>Edit</button>
-        <button>Mark as complete</button>
-        <button>Abandon</button>
+        <div>
+            <ul>
+                <li>@quest.Id</li>
+                <li>@quest.Title</li>
+                <li>@quest.Description</li>
+                <li>@quest.Created</li>
+                <li>@quest.RewardAmount</li>
+                <li>@(quest.Type == "MonsterHunt" ? "Monster Hunt" : quest.Type)</li>
+                <li>@quest.Status</li>
+                <li>@quest.CreatorId</li>
+                <li><a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a></li>
+            </ul>
+            <button class="edit-btn-js" type="button">Edit</button>
+            <button class="complete-btn-js" type="button">Mark as complete</button>
+            <button type="button">Abandon</button>
+        </div>
     }
 </div>
 
 @section Scripts
 {
-    <script src="~/js/quest/my-quests.js" ></script>
+    <script src="~/js/quest/my-quests.js"></script>
 }

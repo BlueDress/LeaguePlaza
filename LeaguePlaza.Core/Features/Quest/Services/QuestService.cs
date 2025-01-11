@@ -112,5 +112,40 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 CreatorId = currentUser.Id,
             };
         }
+
+        public async Task<QuestDto> UpdateQuestAsync(UpdateQuestDto updateQuestDto)
+        {
+            var questToUpdate = await _repository.FindByIdAsync<QuestEntity>(updateQuestDto.Id);
+
+            questToUpdate.Title = updateQuestDto.Title;
+            questToUpdate.Description = updateQuestDto.Description;
+            questToUpdate.RewardAmount = updateQuestDto.RewardAmount;
+            questToUpdate.Type = (QuestType)Enum.Parse(typeof(QuestType), updateQuestDto.Type);
+
+            _repository.Update(questToUpdate);
+            await _repository.SaveChangesAsync();
+
+            return new QuestDto
+            {
+                Id = questToUpdate.Id,
+                Title = questToUpdate.Title,
+                Description = questToUpdate.Description,
+                Created = questToUpdate.Created,
+                RewardAmount = questToUpdate.RewardAmount,
+                Type = questToUpdate.Type.ToString(),
+                Status = questToUpdate.Status.ToString(),
+                CreatorId = questToUpdate.CreatorId,
+            };
+        }
+
+        public async Task CompleteQuestAsync(int questId)
+        {
+            var questToComplete = await _repository.FindByIdAsync<QuestEntity>(questId);
+
+            questToComplete.Status = QuestStatus.Completed;
+
+            _repository.Update(questToComplete);
+            await _repository.SaveChangesAsync();
+        }
     }
 }

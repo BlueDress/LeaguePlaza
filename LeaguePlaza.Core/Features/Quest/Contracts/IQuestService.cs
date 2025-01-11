@@ -13,5 +13,9 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
         Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id);
 
         Task<QuestDto> CreateQuestAsync(CreateQuestDto createQuestDto);
+
+        Task<QuestDto> UpdateQuestAsync(UpdateQuestDto updateQuestDto);
+
+        Task CompleteQuestAsync(int questId);
     }
 }

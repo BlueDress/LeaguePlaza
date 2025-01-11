@@ -21,5 +21,21 @@ namespace LeaguePlaza.Web.Controllers
 
             return Ok(JsonSerializer.Serialize(newQuest));
         }
+
+        [HttpPut("updatequest")]
+        public async Task<IActionResult> UpdateQuest([FromBody] UpdateQuestDto updateQuestDto)
+        {
+            QuestDto updatedQuest = await _questService.UpdateQuestAsync(updateQuestDto);
+
+            return Ok(JsonSerializer.Serialize(updatedQuest));
+        }
+
+        [HttpPut("completequest")]
+        public async Task<IActionResult> CompleteQuest([FromBody] CompleteQuestDto completeQuestDto)
+        {
+            await _questService.CompleteQuestAsync(completeQuestDto.Id);
+
+            return Ok();
+        }
     }
 }
