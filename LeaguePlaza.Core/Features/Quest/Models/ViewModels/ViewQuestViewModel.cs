@@ -4,6 +4,6 @@ namespace LeaguePlaza.Core.Features.Quest.Models.ViewModels
 {
     public class ViewQuestViewModel
     {
-        public QuestDto QuestDto { get; set; } = new QuestDto();
+        public QuestDto Quest { get; set; } = new QuestDto();
     }
 }

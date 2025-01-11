@@ -67,7 +67,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             return new ViewQuestViewModel()
             {
-                QuestDto = new QuestDto()
+                Quest = new QuestDto()
                 {
                     Id = id,
                     Title = quest.Title,
@@ -136,6 +136,19 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 Status = questToUpdate.Status.ToString(),
                 CreatorId = questToUpdate.CreatorId,
             };
+        }
+
+        public async Task AcceptQuest(int id)
+        {
+            ApplicationUser currentUser = (await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!))!;
+
+            var questToAccept = await _repository.FindByIdAsync<QuestEntity>(id);
+
+            questToAccept.Status = QuestStatus.Accepted;
+            questToAccept.AdventurerId = currentUser.Id;
+
+            _repository.Update(questToAccept);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task CompleteQuestAsync(int id)

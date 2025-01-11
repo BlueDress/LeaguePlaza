@@ -16,6 +16,8 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
 
         Task<QuestDto> UpdateQuestAsync(UpdateQuestDataDto updateQuestDto);
 
+        Task AcceptQuest(int id);
+
         Task CompleteQuestAsync(int id);
 
         Task AbandonQuestAsync(int id);

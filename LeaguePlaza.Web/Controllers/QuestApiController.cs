@@ -30,6 +30,14 @@ namespace LeaguePlaza.Web.Controllers
             return Ok(JsonSerializer.Serialize(updatedQuest));
         }
 
+        [HttpPut("acceptquest")]
+        public async Task<IActionResult> AcceptQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
+        {
+            await _questService.AcceptQuest(updateQuestStatusDto.Id);
+
+            return Ok();
+        }
+
         [HttpPut("completequest")]
         public async Task<IActionResult> CompleteQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {

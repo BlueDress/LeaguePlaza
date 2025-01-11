@@ -1,7 +1,7 @@
 ﻿document.addEventListener("DOMContentLoaded", myQuestsMain());
 
 function myQuestsMain() {
-    const baseUrl = '/api/questapi/'
+    const baseUrl = '/api/questapi/';
 
     const titleInput = document.querySelector('#title');
     const descriptionInput = document.querySelector('#description');
