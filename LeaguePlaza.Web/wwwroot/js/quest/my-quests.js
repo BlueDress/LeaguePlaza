@@ -12,6 +12,7 @@ function myQuestsMain() {
     const updateBtn = document.querySelector('#update-quest-btn');
     const editBtns = document.querySelectorAll('.edit-btn-js');
     const completeBtns = document.querySelectorAll('.complete-btn-js');
+    const abandonBtns = document.querySelectorAll('.abandon-btn-js');
 
     let questId;
 
@@ -19,6 +20,7 @@ function myQuestsMain() {
     updateBtn.addEventListener('click', e => updateQuest(e));
     editBtns.forEach(eb => eb.addEventListener('click', e => editBtnClick(e)));
     completeBtns.forEach(cb => cb.addEventListener('click', e => completeQuest(e)));
+    abandonBtns.forEach(ab => ab.addEventListener('click', e => abandonQuest(e)));
 
     async function createQuest(e) {
         e.preventDefault();
@@ -83,6 +85,18 @@ function myQuestsMain() {
         const ul = e.target.parentElement.children[0];
 
         const response = await fetch(baseUrl + 'completequest', {
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({ id: ul.children[0].textContent })
+        });
+    }
+
+    async function abandonQuest(e) {
+        const ul = e.target.parentElement.children[0];
+
+        const response = await fetch(baseUrl + 'abandonQuest', {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',

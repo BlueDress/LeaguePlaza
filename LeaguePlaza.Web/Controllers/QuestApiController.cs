@@ -23,7 +23,7 @@ namespace LeaguePlaza.Web.Controllers
         }
 
         [HttpPut("updatequest")]
-        public async Task<IActionResult> UpdateQuest([FromBody] UpdateQuestDto updateQuestDto)
+        public async Task<IActionResult> UpdateQuest([FromBody] UpdateQuestDataDto updateQuestDto)
         {
             QuestDto updatedQuest = await _questService.UpdateQuestAsync(updateQuestDto);
 
@@ -31,9 +31,17 @@ namespace LeaguePlaza.Web.Controllers
         }
 
         [HttpPut("completequest")]
-        public async Task<IActionResult> CompleteQuest([FromBody] CompleteQuestDto completeQuestDto)
+        public async Task<IActionResult> CompleteQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
-            await _questService.CompleteQuestAsync(completeQuestDto.Id);
+            await _questService.CompleteQuestAsync(updateQuestStatusDto.Id);
+
+            return Ok();
+        }
+
+        [HttpPut("abandonQuest")]
+        public async Task<IActionResult> AbandonQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
+        {
+            await _questService.AbandonQuestAsync(updateQuestStatusDto.Id);
 
             return Ok();
         }

@@ -113,7 +113,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             };
         }
 
-        public async Task<QuestDto> UpdateQuestAsync(UpdateQuestDto updateQuestDto)
+        public async Task<QuestDto> UpdateQuestAsync(UpdateQuestDataDto updateQuestDto)
         {
             var questToUpdate = await _repository.FindByIdAsync<QuestEntity>(updateQuestDto.Id);
 
@@ -138,13 +138,24 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             };
         }
 
-        public async Task CompleteQuestAsync(int questId)
+        public async Task CompleteQuestAsync(int id)
         {
-            var questToComplete = await _repository.FindByIdAsync<QuestEntity>(questId);
+            var questToComplete = await _repository.FindByIdAsync<QuestEntity>(id);
 
             questToComplete.Status = QuestStatus.Completed;
 
             _repository.Update(questToComplete);
+            await _repository.SaveChangesAsync();
+        }
+
+        public async Task AbandonQuestAsync(int id)
+        {
+            var questToAbandon = await _repository.FindByIdAsync<QuestEntity>(id);
+
+            questToAbandon.Status = QuestStatus.Posted;
+            questToAbandon.AdventurerId = null;
+
+            _repository.Update(questToAbandon);
             await _repository.SaveChangesAsync();
         }
     }
