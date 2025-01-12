@@ -17,6 +17,21 @@
 </div>
 <button id="accept-btn-js" type="button" data-quest-id="@Model.Quest.Id">Accept</button>
 
+@foreach (var quest in Model.RecommendedQuests)
+{
+    <ul>
+        <li>@quest.Id</li>
+        <li>@quest.Title</li>
+        <li>@quest.Description</li>
+        <li>@quest.Created</li>
+        <li>@quest.RewardAmount</li>
+        <li>@quest.Type</li>
+        <li>@quest.Status</li>
+        <li>@quest.CreatorId</li>
+        <li>@quest.AdventurerId</li>
+    </ul>
+}
+
 @section Scripts
 {
     <script src="~/js/quest/view-quest.js"></script>

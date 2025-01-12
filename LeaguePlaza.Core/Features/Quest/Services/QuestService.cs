@@ -64,6 +64,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         public async Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id)
         {
             QuestEntity quest = await _repository.FindByIdAsync<QuestEntity>(id);
+            IEnumerable<QuestEntity> recommendedQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.Id != id && q.Type == quest.Type);
 
             return new ViewQuestViewModel()
             {
@@ -79,6 +80,18 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     CreatorId = quest.CreatorId,
                     AdventurerId = quest.AdventurerId,
                 },
+                RecommendedQuests = recommendedQuests.Select(q => new QuestDto
+                {
+                    Id = q.Id,
+                    Title = q.Title,
+                    Description = q.Description,
+                    Created = q.Created,
+                    RewardAmount = q.RewardAmount,
+                    Type = q.Type.ToString(),
+                    Status = q.Status.ToString(),
+                    CreatorId = q.CreatorId,
+                    AdventurerId = q.AdventurerId,
+                }),
             };
         }
 
