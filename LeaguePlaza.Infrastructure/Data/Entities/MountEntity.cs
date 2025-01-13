@@ -1,0 +1,30 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using LeaguePlaza.Infrastructure.Data.Enums;
+
+namespace LeaguePlaza.Infrastructure.Data.Entities
+{
+    public class MountEntity
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Name { get; set; } = string.Empty;
+
+        [MaxLength(500)]
+        public string? Description { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(12,2)")]
+        public decimal RentPrice { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public MountType MountType { get; set; }
+
+        public double Rating { get; set; }
+    }
+}
