@@ -1,8 +1,10 @@
 using System.Diagnostics;
+
 using LeaguePlaza.Web.Models;
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace LeaguePlaza.Web.Controllers
+namespace LeaguePlaza.Web.Controllers.Home
 {
     public class HomeController(ILogger<HomeController> logger) : Controller
     {

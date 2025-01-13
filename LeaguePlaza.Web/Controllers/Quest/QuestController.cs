@@ -1,8 +1,9 @@
 ﻿using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace LeaguePlaza.Web.Controllers
+namespace LeaguePlaza.Web.Controllers.Quest
 {
     public class QuestController(IQuestService questService) : Controller
     {

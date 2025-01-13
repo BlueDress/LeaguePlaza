@@ -6,7 +6,7 @@ using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace LeaguePlaza.Web.Controllers
+namespace LeaguePlaza.Web.Controllers.Quest
 {
     [ApiController]
     [Route("api/[controller]")]
