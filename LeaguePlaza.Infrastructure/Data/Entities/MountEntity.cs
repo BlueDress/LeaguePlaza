@@ -21,6 +21,7 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         [Column(TypeName = "decimal(12,2)")]
         public decimal RentPrice { get; set; }
 
+        [MaxLength(500)]
         public string? ImageUrl { get; set; }
 
         public MountType MountType { get; set; }
