@@ -1,3 +1,5 @@
+using LeaguePlaza.Core.Features.Mount.Contracts;
+using LeaguePlaza.Core.Features.Mount.Services;
 using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Services;
 using LeaguePlaza.Infrastructure.Data;
@@ -23,6 +25,7 @@ namespace LeaguePlaza.Web
             builder.Services.AddScoped(typeof(IRepository), typeof(Repository));
 
             builder.Services.AddTransient(typeof(IQuestService), typeof(QuestService));
+            builder.Services.AddTransient(typeof(IMountService), typeof(MountService));
 
             var app = builder.Build();
 

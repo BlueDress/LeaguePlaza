@@ -1,1 +1,21 @@
-﻿<h1>Rent a Mount</h1>
+﻿@using LeaguePlaza.Core.Features.Mount.Models.ViewModels
+
+@model MountsViewModel
+
+<h1>Rent a Mount</h1>
+
+<div>
+    @foreach (var mount in Model.Mounts)
+    {
+        <ul>
+            <li>@mount.Id</li>
+            <li>@mount.Name</li>
+            <li>@mount.Description</li>
+            <li>@mount.RentPrice</li>
+            <li>@mount.ImageUrl</li>
+            <li>@mount.Type</li>
+            <li>@mount.Rating</li>
+            <li><a asp-controller="Mount" asp-action="ViewMount" asp-route-id="@mount.Id">View Mount</a></li>
+        </ul>
+    }
+</div>
