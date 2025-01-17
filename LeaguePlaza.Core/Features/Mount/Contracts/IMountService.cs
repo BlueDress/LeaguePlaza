@@ -4,6 +4,8 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
 {
     public interface IMountService
     {
-        Task<MountsViewModel> CreateMountViewModelAsync();
+        Task<MountsViewModel> CreateMountsViewModelAsync();
+
+        Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id);
     }
 }

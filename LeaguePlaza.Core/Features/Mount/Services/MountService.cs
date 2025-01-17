@@ -10,7 +10,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
     {
         private IRepository _repository = repository;
 
-        public async Task<MountsViewModel> CreateMountViewModelAsync()
+        public async Task<MountsViewModel> CreateMountsViewModelAsync()
         {
             var mounts = await _repository.GetAllReadOnlyAsync<MountEntity>();
 
@@ -26,6 +26,36 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     Type = m.MountType.ToString(),
                     Rating = m.Rating,
                 })
+            };
+        }
+
+        public async Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id)
+        {
+            var mount = await _repository.FindByIdAsync<MountEntity>(id);
+            var recommendedMounts = await _repository.FindAllReadOnlyAsync<MountEntity>(m => m.Id != id && m.MountType == mount.MountType);
+
+            return new ViewMountViewModel()
+            {
+                Mount = new MountDto()
+                {
+                    Id = id,
+                    Name = mount.Name,
+                    Description = mount.Description,
+                    RentPrice = mount.RentPrice,
+                    ImageUrl = mount.ImageUrl,
+                    Type = mount.MountType.ToString(),
+                    Rating = mount.Rating,
+                },
+                RecommendedMounts = recommendedMounts.Select(m => new MountDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Description = m.Description,
+                    RentPrice = m.RentPrice,
+                    ImageUrl = m.ImageUrl,
+                    Type = m.MountType.ToString(),
+                    Rating = m.Rating,
+                }),
             };
         }
     }

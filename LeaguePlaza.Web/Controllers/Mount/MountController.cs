@@ -11,9 +11,16 @@ namespace LeaguePlaza.Web.Controllers.Mount
 
         public async Task<IActionResult> Index()
         {
-            MountsViewModel mountViewModel = await _mountService.CreateMountViewModelAsync();
+            MountsViewModel mountsViewModel = await _mountService.CreateMountsViewModelAsync();
 
-            return View(mountViewModel);
+            return View(mountsViewModel);
+        }
+
+        public async Task<IActionResult> ViewMount(int id)
+        {
+            ViewMountViewModel viewMountViewModel = await _mountService.CreateViewMountViewModelAsync(id);
+
+            return View(viewMountViewModel);
         }
     }
 }

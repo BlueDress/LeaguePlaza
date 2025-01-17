@@ -1,0 +1,30 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.ViewModels
+
+@model ViewMountViewModel
+
+<div>
+    <ul>
+        <li>@Model.Mount.Id</li>
+        <li>@Model.Mount.Name</li>
+        <li>@Model.Mount.Description</li>
+        <li>@Model.Mount.RentPrice</li>
+        <li>@Model.Mount.ImageUrl</li>
+        <li>@Model.Mount.Type</li>
+        <li>@Model.Mount.Rating</li>
+    </ul>
+</div>
+<button type="button">Rent</button>
+
+@foreach (var mount in Model.RecommendedMounts)
+{
+    <ul>
+        <li>@mount.Id</li>
+        <li>@mount.Name</li>
+        <li>@mount.Description</li>
+        <li>@mount.RentPrice</li>
+        <li>@mount.ImageUrl</li>
+        <li>@mount.Type</li>
+        <li>@mount.Rating</li>
+        <li><a asp-controller="Mount" asp-action="ViewMount" asp-route-id="@mount.Id">View Mount</a></li>
+    </ul>
+}
