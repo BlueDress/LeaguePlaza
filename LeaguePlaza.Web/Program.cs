@@ -33,12 +33,14 @@ namespace LeaguePlaza.Web
 
             builder.Services.AddTransient(typeof(IQuestService), typeof(QuestService));
             builder.Services.AddTransient(typeof(IMountService), typeof(MountService));
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
             {
                 var dataSeeder = scope.ServiceProvider.GetService<IDataSeeder>();
                 await dataSeeder!.EnsureRoleSeedAsync();
+                await dataSeeder!.EnsureDefaultLeagueMasterSeedAsync();
             }
 
             if (app.Environment.IsDevelopment())

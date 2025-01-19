@@ -3,5 +3,7 @@
     public interface IDataSeeder
     {
         Task EnsureRoleSeedAsync();
+
+        Task EnsureDefaultLeagueMasterSeedAsync();
     }
 }
