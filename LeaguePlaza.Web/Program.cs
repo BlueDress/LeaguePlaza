@@ -3,15 +3,18 @@ using LeaguePlaza.Core.Features.Mount.Services;
 using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Services;
 using LeaguePlaza.Infrastructure.Data;
+using LeaguePlaza.Infrastructure.Data.DataSeed;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Repository;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaguePlaza.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -19,15 +22,24 @@ namespace LeaguePlaza.Web
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                            .AddRoles<IdentityRole>()
+                            .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped(typeof(IRepository), typeof(Repository));
+            builder.Services.AddScoped(typeof(IDataSeeder), typeof(DataSeeder));
 
             builder.Services.AddTransient(typeof(IQuestService), typeof(QuestService));
             builder.Services.AddTransient(typeof(IMountService), typeof(MountService));
-
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dataSeeder = scope.ServiceProvider.GetService<IDataSeeder>();
+                await dataSeeder!.EnsureRoleSeedAsync();
+            }
 
             if (app.Environment.IsDevelopment())
             {
@@ -45,6 +57,7 @@ namespace LeaguePlaza.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
