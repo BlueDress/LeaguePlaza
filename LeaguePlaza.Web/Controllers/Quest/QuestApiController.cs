@@ -4,6 +4,7 @@ using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeaguePlaza.Web.Controllers.Quest
@@ -14,6 +15,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
     {
         private readonly IQuestService _questService = questService;
 
+        [Authorize(Roles = "Quest Giver")]
         [HttpPost("createquest")]
         public async Task<IActionResult> CreateQuest([FromBody] CreateQuestDto createQuestDto)
         {
@@ -22,6 +24,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return Ok(JsonSerializer.Serialize(newQuest));
         }
 
+        [Authorize(Roles = "Quest Giver")]
         [HttpPut("updatequest")]
         public async Task<IActionResult> UpdateQuest([FromBody] UpdateQuestDataDto updateQuestDto)
         {
@@ -30,6 +33,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return Ok(JsonSerializer.Serialize(updatedQuest));
         }
 
+        [Authorize(Roles = "Adventurer")]
         [HttpPut("acceptquest")]
         public async Task<IActionResult> AcceptQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
@@ -38,6 +42,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return Ok();
         }
 
+        [Authorize(Roles = "Quest Giver")]
         [HttpPut("completequest")]
         public async Task<IActionResult> CompleteQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
@@ -46,6 +51,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return Ok();
         }
 
+        [Authorize(Roles = "Adventurer")]
         [HttpPut("abandonQuest")]
         public async Task<IActionResult> AbandonQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {

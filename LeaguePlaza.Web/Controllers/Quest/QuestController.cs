@@ -1,6 +1,7 @@
 ﻿using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeaguePlaza.Web.Controllers.Quest
@@ -16,6 +17,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return View(availableQuestsViewModel);
         }
 
+        [Authorize]
         public async Task<IActionResult> MyQuests()
         {
             UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
@@ -23,6 +25,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return View(userQuestsViewModel);
         }
 
+        [Authorize]
         public async Task<IActionResult> ViewQuest(int id)
         {
             ViewQuestViewModel viewQuestViewModel = await _questService.CreateViewQuestViewModelAsync(id);

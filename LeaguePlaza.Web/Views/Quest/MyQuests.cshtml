@@ -4,28 +4,31 @@
 
 <h1>My Quests</h1>
 
-<div>
-    <form id="create-quest">
-        <label for="title">Title</label>
-        <input id="title" type="text" name="title" placeholder="Title" />
+@if (Model.UserRoles.Contains("Quest Giver"))
+{
+    <div>
+        <form id="create-quest">
+            <label for="title">Title</label>
+            <input id="title" type="text" name="title" placeholder="Title" />
 
-        <label for="description">Description</label>
-        <input id="description" type="text" name="description" placeholder="Description" />
+            <label for="description">Description</label>
+            <input id="description" type="text" name="description" placeholder="Description" />
 
-        <label for="reward">Reward</label>
-        <input id="reward" type="number" step="0.01" name="reward" placeholder="0.00" />
+            <label for="reward">Reward</label>
+            <input id="reward" type="number" step="0.01" name="reward" placeholder="0.00" />
 
-        <label for="type">Type</label>
-        <select id="type" name="type">
-            <option value="" disabled selected>Select quest type</option>
-            <option value="1">Monster Hunt</option>
-            <option value="2">Gathering</option>
-            <option value="3">Escort</option>
-        </select>
-        <button type="submit">Post</button>
-        <button id="update-quest-btn" type="button">Update</button>
-    </form>
-</div>
+            <label for="type">Type</label>
+            <select id="type" name="type">
+                <option value="" disabled selected>Select quest type</option>
+                <option value="1">Monster Hunt</option>
+                <option value="2">Gathering</option>
+                <option value="3">Escort</option>
+            </select>
+            <button type="submit">Post</button>
+            <button id="update-quest-btn" type="button">Update</button>
+        </form>
+    </div>
+}
 
 <div>
     @foreach (var quest in Model.UserQuests)
@@ -42,9 +45,15 @@
                 <li>@quest.CreatorId</li>
                 <li><a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a></li>
             </ul>
-            <button class="edit-btn-js" type="button">Edit</button>
-            <button class="complete-btn-js" type="button">Mark as complete</button>
-            <button class="abandon-btn-js" type="button">Abandon</button>
+            @if (Model.UserRoles.Contains("Quest Giver"))
+            {
+                <button class="edit-btn-js" type="button">Edit</button>
+                <button class="complete-btn-js" type="button">Mark as complete</button>
+            }
+            @if (Model.UserRoles.Contains("Adventurer"))
+            {
+                <button class="abandon-btn-js" type="button">Abandon</button>
+            }
         </div>
     }
 </div>

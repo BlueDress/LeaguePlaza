@@ -16,11 +16,11 @@ function myQuestsMain() {
 
     let questId;
 
-    createQuestForm.addEventListener('submit', e => createQuest(e));
-    updateBtn.addEventListener('click', e => updateQuest(e));
-    editBtns.forEach(eb => eb.addEventListener('click', e => editBtnClick(e)));
-    completeBtns.forEach(cb => cb.addEventListener('click', e => completeQuest(e)));
-    abandonBtns.forEach(ab => ab.addEventListener('click', e => abandonQuest(e)));
+    createQuestForm?.addEventListener('submit', e => createQuest(e));
+    updateBtn?.addEventListener('click', e => updateQuest(e));
+    editBtns?.forEach(eb => eb.addEventListener('click', e => editBtnClick(e)));
+    completeBtns?.forEach(cb => cb.addEventListener('click', e => completeQuest(e)));
+    abandonBtns?.forEach(ab => ab.addEventListener('click', e => abandonQuest(e)));
 
     async function createQuest(e) {
         e.preventDefault();
