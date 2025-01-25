@@ -1,4 +1,5 @@
-﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+﻿@using LeaguePlaza.Common.Constants
+@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
 
 @model ViewQuestViewModel
 
@@ -16,7 +17,7 @@
     </ul>
 </div>
 
-@if (Model.UserRoles.Contains("Adventurer"))
+@if (Model.UserRoles.Contains(UserRoleConstants.Adventurer))
 {
     <button id="accept-btn-js" type="button" data-quest-id="@Model.Quest.Id">Accept</button>
 }

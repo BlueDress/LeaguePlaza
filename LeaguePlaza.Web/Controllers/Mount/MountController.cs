@@ -1,4 +1,5 @@
-﻿using LeaguePlaza.Core.Features.Mount.Contracts;
+﻿using LeaguePlaza.Common.Constants;
+using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,7 @@ namespace LeaguePlaza.Web.Controllers.Mount
     {
         private IMountService _mountService = mountService;
 
-        [Authorize(Roles = "Adventurer")]
+        [Authorize(Roles = UserRoleConstants.Adventurer)]
         public async Task<IActionResult> Index()
         {
             MountsViewModel mountsViewModel = await _mountService.CreateMountsViewModelAsync();
@@ -18,7 +19,7 @@ namespace LeaguePlaza.Web.Controllers.Mount
             return View(mountsViewModel);
         }
 
-        [Authorize(Roles = "Adventurer")]
+        [Authorize(Roles = UserRoleConstants.Adventurer)]
         public async Task<IActionResult> ViewMount(int id)
         {
             ViewMountViewModel viewMountViewModel = await _mountService.CreateViewMountViewModelAsync(id);

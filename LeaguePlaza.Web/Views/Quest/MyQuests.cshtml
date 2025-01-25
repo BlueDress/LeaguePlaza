@@ -1,10 +1,11 @@
-﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+﻿@using LeaguePlaza.Common.Constants
+@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
 
 @model UserQuestsViewModel
 
 <h1>My Quests</h1>
 
-@if (Model.UserRoles.Contains("Quest Giver"))
+@if (Model.UserRoles.Contains(UserRoleConstants.QuestGiver))
 {
     <div>
         <form id="create-quest">
@@ -45,12 +46,12 @@
                 <li>@quest.CreatorId</li>
                 <li><a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a></li>
             </ul>
-            @if (Model.UserRoles.Contains("Quest Giver"))
+            @if (Model.UserRoles.Contains(UserRoleConstants.QuestGiver))
             {
                 <button class="edit-btn-js" type="button">Edit</button>
                 <button class="complete-btn-js" type="button">Mark as complete</button>
             }
-            @if (Model.UserRoles.Contains("Adventurer"))
+            @if (Model.UserRoles.Contains(UserRoleConstants.Adventurer))
             {
                 <button class="abandon-btn-js" type="button">Abandon</button>
             }

@@ -5,7 +5,7 @@ function viewQuestMain() {
 
     const acceptBtn = document.querySelector('#accept-btn-js');
 
-    acceptBtn.addEventListener('click', e => acceptQuest(e));
+    acceptBtn?.addEventListener('click', e => acceptQuest(e));
 
     async function acceptQuest(e) {
         const response = await fetch(baseUrl + 'acceptquest', {

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 
+using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
@@ -15,7 +16,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
     {
         private readonly IQuestService _questService = questService;
 
-        [Authorize(Roles = "Quest Giver")]
+        [Authorize(Roles = UserRoleConstants.QuestGiver)]
         [HttpPost("createquest")]
         public async Task<IActionResult> CreateQuest([FromBody] CreateQuestDto createQuestDto)
         {
@@ -24,7 +25,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return Ok(JsonSerializer.Serialize(newQuest));
         }
 
-        [Authorize(Roles = "Quest Giver")]
+        [Authorize(Roles = UserRoleConstants.QuestGiver)]
         [HttpPut("updatequest")]
         public async Task<IActionResult> UpdateQuest([FromBody] UpdateQuestDataDto updateQuestDto)
         {
@@ -33,7 +34,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return Ok(JsonSerializer.Serialize(updatedQuest));
         }
 
-        [Authorize(Roles = "Adventurer")]
+        [Authorize(Roles = UserRoleConstants.Adventurer)]
         [HttpPut("acceptquest")]
         public async Task<IActionResult> AcceptQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
@@ -42,7 +43,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return Ok();
         }
 
-        [Authorize(Roles = "Quest Giver")]
+        [Authorize(Roles = UserRoleConstants.QuestGiver)]
         [HttpPut("completequest")]
         public async Task<IActionResult> CompleteQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
@@ -51,7 +52,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             return Ok();
         }
 
-        [Authorize(Roles = "Adventurer")]
+        [Authorize(Roles = UserRoleConstants.Adventurer)]
         [HttpPut("abandonQuest")]
         public async Task<IActionResult> AbandonQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {

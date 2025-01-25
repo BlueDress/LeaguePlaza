@@ -1,4 +1,5 @@
-﻿using LeaguePlaza.Infrastructure.Data.Entities;
+﻿using LeaguePlaza.Common.Constants;
+using LeaguePlaza.Infrastructure.Data.Entities;
 
 using Microsoft.AspNetCore.Identity;
 
@@ -11,7 +12,7 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
 
         public async Task EnsureRoleSeedAsync()
         {
-            string[] roleNames = ["League Master", "Adventurer", "Quest Giver"];
+            string[] roleNames = [UserRoleConstants.LeagueMaster, UserRoleConstants.Adventurer, UserRoleConstants.QuestGiver];
 
             foreach (var roleName in roleNames)
             {
@@ -36,7 +37,7 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
             if (await _userManager.FindByEmailAsync(defaultLeagueMaster.Email) == null)
             {
                 await _userManager.CreateAsync(defaultLeagueMaster, "LeagueMaster@123");
-                await _userManager.AddToRoleAsync(defaultLeagueMaster, "League Master");
+                await _userManager.AddToRoleAsync(defaultLeagueMaster, UserRoleConstants.LeagueMaster);
             }
         }
     }
