@@ -96,6 +96,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
                 }),
+                CurrentUserId = currentUser.Id,
                 UserRoles = userRoles,
             };
         }

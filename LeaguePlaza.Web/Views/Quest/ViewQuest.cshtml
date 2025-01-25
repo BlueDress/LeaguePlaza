@@ -3,7 +3,7 @@
 
 @model ViewQuestViewModel
 
-<div>
+<div id="quest-info">
     <ul>
         <li>@Model.Quest.Id</li>
         <li>@Model.Quest.Title</li>
@@ -15,12 +15,21 @@
         <li>@Model.Quest.CreatorId</li>
         <li>@Model.Quest.AdventurerId</li>
     </ul>
-</div>
 
-@if (Model.UserRoles.Contains(UserRoleConstants.Adventurer))
-{
-    <button id="accept-btn-js" type="button" data-quest-id="@Model.Quest.Id">Accept</button>
-}
+    @if (Model.UserRoles.Contains(UserRoleConstants.Adventurer))
+    {
+        <div id="button-holder">
+            @if (Model.Quest.AdventurerId == null)
+            {
+                <button id="accept-btn" type="button" data-quest-id="@Model.Quest.Id">Accept</button>
+            }
+            @if (Model.Quest.AdventurerId == Model.CurrentUserId)
+            {
+                <button id="abandon-btn" type="button" data-quest-id="@Model.Quest.Id">Abandon</button>
+            }
+        </div>
+    }
+</div>
 
 
 @foreach (var quest in Model.RecommendedQuests)
