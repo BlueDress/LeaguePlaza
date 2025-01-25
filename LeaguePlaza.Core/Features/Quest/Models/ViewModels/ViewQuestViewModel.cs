@@ -7,5 +7,7 @@ namespace LeaguePlaza.Core.Features.Quest.Models.ViewModels
         public QuestDto Quest { get; set; } = new QuestDto();
 
         public IEnumerable<QuestDto> RecommendedQuests { get; set; } = new List<QuestDto>();
+
+        public IEnumerable<string> UserRoles { get; set; } = new List<string>();
     }
 }

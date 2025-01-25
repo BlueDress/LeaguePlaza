@@ -15,7 +15,12 @@
         <li>@Model.Quest.AdventurerId</li>
     </ul>
 </div>
-<button id="accept-btn-js" type="button" data-quest-id="@Model.Quest.Id">Accept</button>
+
+@if (Model.UserRoles.Contains("Adventurer"))
+{
+    <button id="accept-btn-js" type="button" data-quest-id="@Model.Quest.Id">Accept</button>
+}
+
 
 @foreach (var quest in Model.RecommendedQuests)
 {

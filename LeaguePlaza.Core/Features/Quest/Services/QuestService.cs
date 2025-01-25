@@ -19,7 +19,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
         public async Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
-            var availableQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.Adventurer == null);
+            var availableQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.AdventurerId == null);
 
             return new AvailableQuestsViewModel()
             {
@@ -65,7 +65,10 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         public async Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id)
         {
             QuestEntity quest = await _repository.FindByIdAsync<QuestEntity>(id);
-            IEnumerable<QuestEntity> recommendedQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.Id != id && q.Type == quest.Type);
+            IEnumerable<QuestEntity> recommendedQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.Id != id && q.Type == quest.Type && q.Status == QuestStatus.Posted);
+
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+            IList<string> userRoles = await _userManager.GetRolesAsync(currentUser);
 
             return new ViewQuestViewModel()
             {
@@ -93,6 +96,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
                 }),
+                UserRoles = userRoles,
             };
         }
 
