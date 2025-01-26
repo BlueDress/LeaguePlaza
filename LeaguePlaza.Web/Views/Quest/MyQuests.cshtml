@@ -31,10 +31,10 @@
     </div>
 }
 
-<div>
+<div id="quests-holder">
     @foreach (var quest in Model.UserQuests)
     {
-        <div>
+        <div class="quest-info-js">
             <ul>
                 <li>@quest.Id</li>
                 <li>@quest.Title</li>
@@ -44,6 +44,7 @@
                 <li>@(quest.Type == "MonsterHunt" ? "Monster Hunt" : quest.Type)</li>
                 <li>@quest.Status</li>
                 <li>@quest.CreatorId</li>
+                <li>@quest.AdventurerId</li>
                 <li><a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a></li>
             </ul>
             @if (Model.UserRoles.Contains(UserRoleConstants.QuestGiver))

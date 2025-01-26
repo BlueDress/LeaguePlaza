@@ -10,17 +10,13 @@ function myQuestsMain() {
 
     const createQuestForm = document.querySelector('#create-quest');
     const updateBtn = document.querySelector('#update-quest-btn');
-    const editBtns = document.querySelectorAll('.edit-btn-js');
-    const completeBtns = document.querySelectorAll('.complete-btn-js');
-    const abandonBtns = document.querySelectorAll('.abandon-btn-js');
+    const questsHolder = document.querySelector('#quests-holder');
 
     let questId;
 
     createQuestForm?.addEventListener('submit', e => createQuest(e));
     updateBtn?.addEventListener('click', e => updateQuest(e));
-    editBtns?.forEach(eb => eb.addEventListener('click', e => editBtnClick(e)));
-    completeBtns?.forEach(cb => cb.addEventListener('click', e => completeQuest(e)));
-    abandonBtns?.forEach(ab => ab.addEventListener('click', e => abandonQuest(e)));
+    questsHolder.addEventListener('click', e => handleQuestButtonClick(e));
 
     async function createQuest(e) {
         e.preventDefault();
@@ -57,6 +53,19 @@ function myQuestsMain() {
             },
             body: JSON.stringify(questToUpdate),
         });
+    }
+
+    async function handleQuestButtonClick(e) {
+        if (e.target) {
+            if (e.target.classList.contains('edit-btn-js')) {
+                editBtnClick(e);
+            }
+            if (e.target.classList.contains('complete-btn-js')) {
+                await completeQuest(e);
+            } if (e.target.classList.contains('abandon-btn-js')) {
+                await abandonQuest(e);
+            }
+        }
     }
 
     function editBtnClick(e) {
@@ -103,5 +112,10 @@ function myQuestsMain() {
             },
             body: JSON.stringify({ id: ul.children[0].textContent })
         });
+
+        if (response.status == 200) {
+            const questInfoElement = e.target.closest('.quest-info-js');
+            questsHolder.removeChild(questInfoElement);
+        }
     }
 }
