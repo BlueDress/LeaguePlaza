@@ -16,7 +16,7 @@
         <li>@Model.Quest.AdventurerId</li>
     </ul>
 
-    @if (Model.UserRoles.Contains(UserRoleConstants.Adventurer))
+    @if (User.IsInRole(UserRoleConstants.Adventurer))
     {
         <div id="button-holder">
             @if (Model.Quest.AdventurerId == null)
