@@ -195,6 +195,11 @@ function myQuestsMain() {
         });
 
         // TODO: handle response from server
+
+        if (response.status === 200) {
+            const questInfoDiv = e.target.closest('.quest-info-js');
+            questInfoDiv.removeChild(e.target);
+        }
     }
 
     async function abandonQuest(e) {
