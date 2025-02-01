@@ -11,6 +11,7 @@ function myQuestsMain() {
     const typeSelect = document.querySelector('#type');
 
     const createQuestForm = document.querySelector('#create-quest');
+    const createBtn = document.querySelector('#create-quest-btn');
     const updateBtn = document.querySelector('#update-quest-btn');
     const questsHolder = document.querySelector('#quests-holder');
 
@@ -50,6 +51,7 @@ function myQuestsMain() {
     }
 
     async function createQuest(e) {
+        createBtn.setAttribute('disabled', 'disabled');
         e.preventDefault();
 
         if (formIsValid([titleInput, rewardInput, typeSelect])) {
@@ -67,7 +69,11 @@ function myQuestsMain() {
                 },
                 body: JSON.stringify(newQuest),
             });
+
+            // TODO: handle response from server
         }
+
+        createBtn.removeAttribute('disabled');
     }
 
     async function updateQuest(e) {
@@ -87,6 +93,13 @@ function myQuestsMain() {
                 },
                 body: JSON.stringify(questToUpdate),
             });
+
+            // TODO: handle response from server
+
+            if (response.status == 200) {
+                createBtn.removeAttribute('disabled');
+                updateBtn.setAttribute('disabled', 'disabled');
+            }
         }
     }
 
@@ -113,9 +126,13 @@ function myQuestsMain() {
             if (e.target.classList.contains('edit-btn-js')) {
                 editBtnClick(e);
             }
+            if (e.target.classList.contains('remove-btn-js')) {
+                await removeQuest(e);
+            }
             if (e.target.classList.contains('complete-btn-js')) {
                 await completeQuest(e);
-            } if (e.target.classList.contains('abandon-btn-js')) {
+            }
+            if (e.target.classList.contains('abandon-btn-js')) {
                 await abandonQuest(e);
             }
         }
@@ -129,6 +146,9 @@ function myQuestsMain() {
         rewardInput.value = parseFloat(ul.children[4].textContent.replace(',', '.'));
         typeSelect.value = getQuestTypeValue(ul.children[5].textContent);
         questId = ul.children[0].textContent;
+
+        createBtn.setAttribute('disabled', 'disabled');
+        updateBtn.removeAttribute('disabled')
     }
 
     function getQuestTypeValue(questType) {
@@ -143,6 +163,21 @@ function myQuestsMain() {
         return value;
     }
 
+    async function removeQuest(e) {
+        const ul = e.target.parentElement.children[0];
+        const questId = ul.children[0].textContent;
+
+        const response = await fetch(baseUrl + 'removequest', {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({ id: questId })
+        });
+
+        // TODO: handle response from server
+    }
+
     async function completeQuest(e) {
         const ul = e.target.parentElement.children[0];
 
@@ -153,6 +188,8 @@ function myQuestsMain() {
             },
             body: JSON.stringify({ id: ul.children[0].textContent })
         });
+
+        // TODO: handle response from server
     }
 
     async function abandonQuest(e) {
@@ -165,6 +202,8 @@ function myQuestsMain() {
             },
             body: JSON.stringify({ id: ul.children[0].textContent })
         });
+
+        // TODO: handle response from server
 
         if (response.status == 200) {
             const questInfoElement = e.target.closest('.quest-info-js');

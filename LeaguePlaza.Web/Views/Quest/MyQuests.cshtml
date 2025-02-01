@@ -29,7 +29,7 @@
             </select>
             <span class="display-none"></span>
 
-            <button type="submit">Post</button>
+            <button id="create-quest-btn" type="submit">Post</button>
             <button id="update-quest-btn" type="button" disabled>Update</button>
         </form>
     </div>
@@ -53,13 +53,18 @@
             </ul>
             @if (Model.UserRoles.Contains(UserRoleConstants.QuestGiver))
             {
-                <button class="edit-btn-js" type="button">Edit</button>
+                @if (quest.AdventurerId == null)
+                {
+                    <button class="edit-btn-js" type="button">Edit</button>
+                    <button class="remove-btn-js" type="button">Remove</button>
+                }
 
-                @if (quest.AdventurerId != null)
+                @if(quest.AdventurerId != null && quest.Status != "Completed")
                 {
                     <button class="complete-btn-js" type="button">Mark as complete</button>
                 }
             }
+
             @if (Model.UserRoles.Contains(UserRoleConstants.Adventurer))
             {
                 <button class="abandon-btn-js" type="button">Abandon</button>

@@ -18,6 +18,8 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
 
         Task AcceptQuest(int id);
 
+        Task RemoveQuestAsync(int id);
+
         Task CompleteQuestAsync(int id);
 
         Task AbandonQuestAsync(int id);

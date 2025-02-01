@@ -170,6 +170,14 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             await _repository.SaveChangesAsync();
         }
 
+        public async Task RemoveQuestAsync(int id)
+        {
+            var questToRemove = await _repository.FindByIdAsync<QuestEntity>(id);
+
+            _repository.Remove(questToRemove);
+            await _repository.SaveChangesAsync();
+        }
+
         public async Task CompleteQuestAsync(int id)
         {
             var questToComplete = await _repository.FindByIdAsync<QuestEntity>(id);

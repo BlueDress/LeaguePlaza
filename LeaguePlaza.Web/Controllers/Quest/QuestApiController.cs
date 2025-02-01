@@ -44,6 +44,15 @@ namespace LeaguePlaza.Web.Controllers.Quest
         }
 
         [Authorize(Roles = UserRoleConstants.QuestGiver)]
+        [HttpDelete("removequest")]
+        public async Task<IActionResult> RemoveQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
+        {
+            await _questService.RemoveQuestAsync(updateQuestStatusDto.Id);
+
+            return Ok();
+        }
+
+        [Authorize(Roles = UserRoleConstants.QuestGiver)]
         [HttpPut("completequest")]
         public async Task<IActionResult> CompleteQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
