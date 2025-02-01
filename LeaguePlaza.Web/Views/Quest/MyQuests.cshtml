@@ -65,7 +65,7 @@
                 }
             }
 
-            @if (Model.UserRoles.Contains(UserRoleConstants.Adventurer))
+            @if (Model.UserRoles.Contains(UserRoleConstants.Adventurer) && quest.Status != "Completed")
             {
                 <button class="abandon-btn-js" type="button">Abandon</button>
             }
