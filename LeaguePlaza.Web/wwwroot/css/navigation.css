@@ -20,6 +20,31 @@
     gap: 15px;
 }
 
+.nav-links {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 60px;
+    width: 100%;
+}
+
+    .nav-links.open {
+        display: block;
+    }
+
+    .nav-links > li {
+        border-bottom: 1px solid black;
+    }
+
+    .nav-links > :nth-child(1) {
+        border-top: 1px solid black;
+    }
+
+    .nav-links > li > a {
+        display: block;
+        padding: 0.8rem;
+    }
+
 .identity-links {
     display: flex;
     gap: 10px;

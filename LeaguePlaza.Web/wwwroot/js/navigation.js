@@ -13,13 +13,13 @@ function navigationMain() {
         if (e.target.id === 'menu-open') {
             menuOpen.classList.add('display-none');
             menuClose.classList.remove('display-none');
-            navLinks.classList.remove('display-none');
+            navLinks.classList.add('open');
         }
 
         if (e.target.id === 'menu-close') {
             menuOpen.classList.remove('display-none');
             menuClose.classList.add('display-none');
-            navLinks.classList.add('display-none');
+            navLinks.classList.remove('open');
         }
     }
 }
