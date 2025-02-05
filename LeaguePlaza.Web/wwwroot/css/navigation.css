@@ -49,3 +49,35 @@
     display: flex;
     gap: 10px;
 }
+
+@media (min-width: 769px) {
+    .links-holder {
+        flex: 1 0 auto;
+    }
+
+    .nav-links {
+        display: flex;
+        position: relative;
+        top: 0;
+        justify-content: center;
+    }
+
+        .nav-links > li {
+            border: none;
+        }
+
+        .nav-links > :nth-child(1) {
+            border: none;
+        }
+
+    #hamburger-menu {
+        display: none;
+    }
+}
+
+@media (min-width: 1200px) {
+    .main-nav {
+        max-width: 1200px;
+        padding: 0 60px;
+    }
+}
