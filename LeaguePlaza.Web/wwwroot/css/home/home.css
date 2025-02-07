@@ -1,0 +1,29 @@
+﻿.banner {
+    border: 1px solid black;
+}
+
+    .banner img {
+        width: 100%;
+    }
+
+.banner-header,
+.banner-text {
+    text-align: center;
+}
+
+    .banner-header > h1 {
+        text-transform: uppercase;
+    }
+
+.banner-image {
+    display: flex;
+}
+
+.banner-link {
+    font-weight: 700;
+    font-style: italic;
+}
+
+    .banner-link:hover {
+        color: red;
+    }

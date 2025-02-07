@@ -2,7 +2,26 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <div class="container banner">
+        <div class="banner-header">
+            <h1>League plaza</h1>
+        </div>
+        <div class="banner-image">
+            <img src="./images/home-banner.jpg" alt="busy plaza of a fantasy town" />
+        </div>
+        @if (!User.Identity?.IsAuthenticated ?? true)
+        {
+            <div class="banner-text">
+                <p>Best place to start your journey.</p>
+                <p><a class="banner-link" asp-area="Identity" asp-page="/Account/Register">Join</a> thousands of adventurers.</p>
+                <p>Already a member? <a class="banner-link" asp-area="Identity" asp-page="/Account/Login">Enter</a> throught the portal.</p>
+            </div>
+        }
+    </div>
 </div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true" />
+}
