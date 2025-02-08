@@ -1,5 +1,7 @@
 ﻿.banner {
     border: 1px solid black;
+    max-width: 90%;
+    margin: 0 auto;
 }
 
     .banner img {
@@ -27,3 +29,9 @@
     .banner-link:hover {
         color: red;
     }
+
+@media (min-width: 1200px) {
+    .banner {
+        max-width: 1200px;
+    }
+}
