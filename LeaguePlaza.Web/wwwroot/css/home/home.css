@@ -1,7 +1,7 @@
 ﻿.banner {
     border: 1px solid black;
     max-width: 90%;
-    margin: 0 auto;
+    margin: 0 auto 30px auto;
 }
 
     .banner img {
@@ -29,6 +29,73 @@
     .banner-link:hover {
         color: red;
     }
+
+.quest-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 0 auto 30px auto;
+}
+
+.quest-card {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.quest-info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .quest-info > * {
+        flex: 1 1 100%;
+    }
+
+    .quest-info > h6,
+    .quest-info > a {
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .quest-info > h6,
+    .quest-info > p,
+    .quest-info > div {
+        border-bottom: 1px solid black;
+    }
+
+    .quest-info > p {
+        padding: 0.7rem 0.3rem;
+    }
+
+    .quest-info > div {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+        .quest-info > div > * {
+            font-size: 14px;
+            padding: 0.7rem 0.3rem;
+            flex: 1 1 auto;
+        }
+
+        .quest-info > div > :nth-child(1),
+        .quest-info > div > :nth-child(2) {
+            border-right: 1px solid black;
+        }
+
+.view-all-link {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.view-all-link > a {
+    padding: 0.5rem 1.5rem;
+    border: 0.5px solid black;
+    border-radius: 15px;
+}
 
 @media (min-width: 1200px) {
     .banner {
