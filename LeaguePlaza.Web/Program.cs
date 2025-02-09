@@ -1,3 +1,5 @@
+using LeaguePlaza.Core.Features.Home.Contracts;
+using LeaguePlaza.Core.Features.Home.Services;
 using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Services;
 using LeaguePlaza.Core.Features.Quest.Contracts;
@@ -31,6 +33,7 @@ namespace LeaguePlaza.Web
             builder.Services.AddScoped(typeof(IRepository), typeof(Repository));
             builder.Services.AddScoped(typeof(IDataSeeder), typeof(DataSeeder));
 
+            builder.Services.AddTransient(typeof(IHomeService), typeof(HomeService));
             builder.Services.AddTransient(typeof(IQuestService), typeof(QuestService));
             builder.Services.AddTransient(typeof(IMountService), typeof(MountService));
 

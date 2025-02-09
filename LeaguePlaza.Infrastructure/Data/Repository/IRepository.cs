@@ -1,4 +1,6 @@
-﻿namespace LeaguePlaza.Infrastructure.Data.Repository
+﻿using System.Linq.Expressions;
+
+namespace LeaguePlaza.Infrastructure.Data.Repository
 {
     public interface IRepository
     {
@@ -8,7 +10,9 @@
 
         Task<T> FindByIdAsync<T>(object id) where T : class;
 
-        Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Func<T, bool> predicate) where T : class;
+        Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Func<T, bool> filterCondition) where T : class;
+
+        Task<IEnumerable<T>> FindSpecificCountOrderedReadOnlyAsync<T, TKey>(int pageNumber, int count, bool orderIsDescending, Expression<Func<T, TKey>> orderCondition, Expression<Func<T, bool>> filterCondition) where T : class;
 
         Task AddAsync<T>(T entity) where T : class;
 

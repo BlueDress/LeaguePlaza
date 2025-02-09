@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace LeaguePlaza.Infrastructure.Data.Repository
 {
@@ -21,9 +23,17 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             return await DbSet<T>().FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Func<T, bool> predicate) where T : class
+        public async Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Func<T, bool> filterCondition) where T : class
         {
-            return await Task.Run(() => DbSet<T>().AsNoTracking().Where(predicate));
+            return await Task.Run(() => DbSet<T>().AsNoTracking().Where(filterCondition));
+        }
+
+        public async Task<IEnumerable<T>> FindSpecificCountOrderedReadOnlyAsync<T, TKey>(int pageNumber, int count, bool orderIsDescending, Expression<Func<T, TKey>> orderCondition, Expression<Func<T, bool>> filterCondition) where T : class
+        {
+            var query = DbSet<T>().AsNoTracking().Where(filterCondition);
+            query = orderIsDescending ? query.OrderByDescending(orderCondition) : query.OrderBy(orderCondition);
+
+            return await query.Skip((pageNumber - 1) * count).Take(count).ToListAsync();
         }
 
         public async Task AddAsync<T>(T entity) where T : class
