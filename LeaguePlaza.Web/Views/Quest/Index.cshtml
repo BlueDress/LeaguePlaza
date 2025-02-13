@@ -2,21 +2,8 @@
 
 @model AvailableQuestsViewModel
 
-<h1>All Quests</h1>
+<div class="container">
+    <h1>All Quests</h1>
 
-<div>
-    @foreach (var quest in Model.AvailableQuests)
-    {
-        <ul>
-            <li>@quest.Id</li>
-            <li>@quest.Title</li>
-            <li>@quest.Description</li>
-            <li>@quest.Created</li>
-            <li>@quest.RewardAmount</li>
-            <li>@quest.Type</li>
-            <li>@quest.Status</li>
-            <li>@quest.CreatorId</li>
-            <li><a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a></li>
-        </ul>
-    }
+    <partial name="~/Views/Shared/Quest/_QuestCardsContainer.cshtml" model="@Model.AvailableQuests"></partial>
 </div>
