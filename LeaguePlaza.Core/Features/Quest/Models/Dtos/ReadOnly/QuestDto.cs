@@ -19,5 +19,7 @@
         public string CreatorId { get; set; } = null!;
 
         public string? AdventurerId { get; set; }
+
+        public bool ShowExtraButtons { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 {
                     Id = q.Id,
                     Title = q.Title,
-                    Description = q.Description,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? "No description available" : q.Description,
                     Created = q.Created,
                     RewardAmount = q.RewardAmount,
                     Type = q.Type.ToString(),
@@ -49,13 +49,14 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 {
                     Id = q.Id,
                     Title = q.Title,
-                    Description = q.Description,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? "No description available" : q.Description,
                     Created = q.Created,
                     RewardAmount = q.RewardAmount,
                     Type = q.Type.ToString(),
                     Status = q.Status.ToString(),
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
+                    ShowExtraButtons = true,
                 }),
             };
         }
@@ -73,7 +74,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 {
                     Id = id,
                     Title = quest.Title,
-                    Description = quest.Description,
+                    Description = string.IsNullOrWhiteSpace(quest.Description) ? "No description available" : quest.Description,
                     Created = quest.Created,
                     RewardAmount = quest.RewardAmount,
                     Type = quest.Type.ToString(),
@@ -85,7 +86,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 {
                     Id = q.Id,
                     Title = q.Title,
-                    Description = q.Description,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? "No description available" : q.Description,
                     Created = q.Created,
                     RewardAmount = q.RewardAmount,
                     Type = q.Type.ToString(),

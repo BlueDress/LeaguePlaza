@@ -1,25 +1,49 @@
-﻿@using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly
+﻿@using LeaguePlaza.Common.Constants
+@using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly
 
 @model IEnumerable<QuestDto>
 
 <link rel="stylesheet" href="~/css/global/quest-cards-container.css" asp-append-version="true" />
 
-<div class="quest-cards-container">
+<div id="quests-holder" class="quest-cards-container">
     @foreach (var quest in Model)
     {
         <div class="quest-card">
             <div class="quest-image">
-                <img src="./images/quest/grey-wolf.jpg" alt="quest image" />
+                <img src="../images/quest/grey-wolf.jpg" alt="quest image" />
             </div>
             <div class="quest-info">
                 <h6>@quest.Title</h6>
                 <p>@quest.Description</p>
                 <div>
                     <span><i class="fa-solid fa-calendar-days"></i>@quest.Created.ToShortDateString()</span>
-                    <span><i class="fa-solid fa-shield"></i>@quest.Type</span>
+                    <span><i class="fa-solid fa-shield"></i>@(quest.Type == "MonsterHunt" ? "Monster Hunt" : quest.Type)</span>
                     <span><i class="fa-solid fa-coins"></i>@quest.RewardAmount</span>
                 </div>
                 <a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a>
+                @if (quest.ShowExtraButtons)
+                {
+                    <div>
+                        @if (User.IsInRole(UserRoleConstants.QuestGiver))
+                        {
+                            @if (quest.AdventurerId == null)
+                            {
+                                <button class="edit-btn-js" type="button">Edit</button>
+                                <button class="remove-btn-js" type="button">Remove</button>
+                            }
+
+                            @if (quest.AdventurerId != null && quest.Status != "Completed")
+                            {
+                                <button class="complete-btn-js" type="button">Mark as complete</button>
+                            }
+                        }
+
+                        @if (User.IsInRole(UserRoleConstants.Adventurer) && quest.Status != "Completed")
+                        {
+                            <button class="abandon-btn-js" type="button">Abandon</button>
+                        }
+                    </div>
+                }
             </div>
         </div>
     }
