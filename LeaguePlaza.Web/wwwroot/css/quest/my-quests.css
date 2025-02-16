@@ -1,0 +1,61 @@
+﻿.create-quest-form {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    font-size: 12px;
+    margin-bottom: 2rem;
+}
+
+    .create-quest-form > div {
+        flex: 1 0 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .create-quest-form > div > label,
+        .create-quest-form > div > input,
+        .create-quest-form > div > textarea,
+        .create-quest-form > div > span,
+        .create-quest-form > div > select {
+            flex: 1 0 100%;
+        }
+
+        .create-quest-form > div > input,
+        .create-quest-form > div > textarea,
+        .create-quest-form > div > select {
+            padding: 0.2rem;
+            border-radius: 5px;
+            border: 1px solid black;
+            font-size: 12px;
+        }
+
+.create-quest-form-buttons {
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+    .create-quest-form-buttons > button {
+        font-size: 12px;
+        padding: 0.2rem 1.6rem;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+@media (min-width: 601px) {
+    .create-quest-form {
+        font-size: 16px;
+    }
+
+        .create-quest-form > div > input,
+        .create-quest-form > div > textarea,
+        .create-quest-form > div > select {
+            font-size: 16px;
+        }
+    .create-quest-form-buttons > button {
+        font-size: 16px;
+    }
+
+}

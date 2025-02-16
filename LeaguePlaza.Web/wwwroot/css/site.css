@@ -64,6 +64,13 @@ ul {
     list-style: none;
 }
 
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+}
+
 .display-none {
     display: none;
 }
@@ -71,6 +78,10 @@ ul {
 .container {
     max-width: 90%;
     margin: 0 auto;
+}
+
+.error-message {
+    color: red;
 }
 
 @media (min-width: 1200px) {
