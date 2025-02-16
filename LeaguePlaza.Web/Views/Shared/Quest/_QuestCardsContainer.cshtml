@@ -15,7 +15,7 @@
             <div class="quest-info">
                 <h6>@quest.Title</h6>
                 <p>@quest.Description</p>
-                <div>
+                <div class="quest-metadata">
                     <span><i class="fa-solid fa-calendar-days"></i>@quest.Created.ToShortDateString()</span>
                     <span><i class="fa-solid fa-shield"></i>@(quest.Type == "MonsterHunt" ? "Monster Hunt" : quest.Type)</span>
                     <span><i class="fa-solid fa-coins"></i>@quest.RewardAmount</span>
@@ -23,7 +23,7 @@
                 <a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a>
                 @if (quest.ShowExtraButtons)
                 {
-                    <div>
+                    <div class="quest-extra-buttons">
                         @if (User.IsInRole(UserRoleConstants.QuestGiver))
                         {
                             @if (quest.AdventurerId == null)
