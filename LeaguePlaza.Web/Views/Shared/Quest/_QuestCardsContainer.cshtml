@@ -8,11 +8,11 @@
 <div id="quests-holder" class="quest-cards-container">
     @foreach (var quest in Model)
     {
-        <div class="quest-card">
+        <div class="quest-card quest-card-js">
             <div class="quest-image">
                 <img src="../images/quest/grey-wolf.jpg" alt="quest image" />
             </div>
-            <div class="quest-info">
+            <div class="quest-info quest-info-js">
                 <h6>@quest.Title</h6>
                 <p>@quest.Description</p>
                 <div class="quest-metadata">
@@ -23,7 +23,7 @@
                 <a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a>
                 @if (quest.ShowExtraButtons)
                 {
-                    <div class="quest-extra-buttons">
+                    <div class="quest-extra-buttons" data-quest-id="@quest.Id">
                         @if (User.IsInRole(UserRoleConstants.QuestGiver))
                         {
                             @if (quest.AdventurerId == null)

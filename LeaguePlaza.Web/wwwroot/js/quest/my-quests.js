@@ -6,7 +6,7 @@ function myQuestsMain() {
     const inputs = document.querySelectorAll('input');
 
     const titleInput = document.querySelector('#title');
-    const descriptionInput = document.querySelector('#description');
+    const descriptionTextarea = document.querySelector('#description');
     const rewardInput = document.querySelector('#reward');
     const typeSelect = document.querySelector('#type');
 
@@ -57,7 +57,7 @@ function myQuestsMain() {
         if (formIsValid([titleInput, rewardInput, typeSelect])) {
             const newQuest = {
                 title: titleInput.value,
-                description: descriptionInput.value,
+                description: descriptionTextarea.value,
                 rewardAmount: rewardInput.value,
                 type: typeSelect.value
             }
@@ -81,7 +81,7 @@ function myQuestsMain() {
             const questToUpdate = {
                 id: questId,
                 title: titleInput.value,
-                description: descriptionInput.value,
+                description: descriptionTextarea.value,
                 rewardAmount: rewardInput.value,
                 type: typeSelect.value
             }
@@ -111,7 +111,7 @@ function myQuestsMain() {
 
             if (elementInputIsValid(element)) {
                 hideErrorMessage(span);
-                break;
+                continue;
             }
 
             displayErrorMessage(span, `${element.name} is required`);
@@ -142,7 +142,7 @@ function myQuestsMain() {
         const ul = e.target.parentElement.children[0];
 
         titleInput.value = ul.children[1].textContent;
-        descriptionInput.value = ul.children[2].textContent;
+        descriptionTextarea.value = ul.children[2].textContent;
         rewardInput.value = parseFloat(ul.children[4].textContent.replace(',', '.'));
         typeSelect.value = getQuestTypeValue(ul.children[5].textContent);
         questId = ul.children[0].textContent;
@@ -164,8 +164,7 @@ function myQuestsMain() {
     }
 
     async function removeQuest(e) {
-        const ul = e.target.parentElement.children[0];
-        const questId = ul.children[0].textContent;
+        const questId = e.target.parentElement.dataset.questId;
 
         const response = await fetch(baseUrl + 'removequest', {
             method: 'DELETE',
@@ -178,46 +177,46 @@ function myQuestsMain() {
         // TODO: handle response from server
 
         if (response.status === 200) {
-            const questInfoDiv = e.target.closest('.quest-info-js');
-            questsHolder.removeChild(questInfoDiv);
+            const questCardElement = e.target.closest('.quest-card-js');
+            questsHolder.removeChild(questCardElement);
         }
     }
 
     async function completeQuest(e) {
-        const ul = e.target.parentElement.children[0];
+        const questId = e.target.parentElement.dataset.questId;
 
         const response = await fetch(baseUrl + 'completequest', {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
             },
-            body: JSON.stringify({ id: ul.children[0].textContent })
+            body: JSON.stringify({ id: questId })
         });
 
         // TODO: handle response from server
 
         if (response.status === 200) {
             const questInfoDiv = e.target.closest('.quest-info-js');
-            questInfoDiv.removeChild(e.target);
+            questInfoDiv.removeChild(e.target.parentNode);
         }
     }
 
     async function abandonQuest(e) {
-        const ul = e.target.parentElement.children[0];
+        const questId = e.target.parentElement.dataset.questId;
 
         const response = await fetch(baseUrl + 'abandonQuest', {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
             },
-            body: JSON.stringify({ id: ul.children[0].textContent })
+            body: JSON.stringify({ id: questId })
         });
 
         // TODO: handle response from server
 
         if (response.status == 200) {
-            const questInfoElement = e.target.closest('.quest-info-js');
-            questsHolder.removeChild(questInfoElement);
+            const questCardElement = e.target.closest('.quest-card-js');
+            questsHolder.removeChild(questCardElement);
         }
     }
 }
