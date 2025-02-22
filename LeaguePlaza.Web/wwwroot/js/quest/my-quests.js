@@ -14,6 +14,7 @@ function myQuestsMain() {
     const createBtn = document.querySelector('#create-quest-btn');
     const updateBtn = document.querySelector('#update-quest-btn');
     const questsHolder = document.querySelector('#quests-holder');
+    const questCardsContainer = document.querySelector('#quest-cards-container');
 
     let questId;
 
@@ -70,7 +71,13 @@ function myQuestsMain() {
                 body: JSON.stringify(newQuest),
             });
 
-            // TODO: handle response from server
+            if (response.status == 200) {
+                const questsHolderView = await response.text();
+                questsHolder.innerHTML = questsHolderView;
+                ClearInputs();
+            }
+
+            //TODO handle server error
         }
 
         createBtn.removeAttribute('disabled');
@@ -119,6 +126,13 @@ function myQuestsMain() {
         }
 
         return formIsValid;
+    }
+
+    function ClearInputs() {
+        titleInput.value = '';
+        descriptionTextarea.value = '';
+        rewardInput.value = '';
+        typeSelect.value = '';
     }
 
     async function handleQuestButtonClick(e) {
@@ -179,7 +193,7 @@ function myQuestsMain() {
 
         if (response.status === 200) {
             const questCardElement = e.target.closest('.quest-card-js');
-            questsHolder.removeChild(questCardElement);
+            questCardsContainer.removeChild(questCardElement);
         }
     }
 
@@ -217,7 +231,7 @@ function myQuestsMain() {
 
         if (response.status == 200) {
             const questCardElement = e.target.closest('.quest-card-js');
-            questsHolder.removeChild(questCardElement);
+            questCardsContainer.removeChild(questCardElement);
         }
     }
 }

@@ -4,6 +4,7 @@ using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
+using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class QuestApiController(IQuestService questService) : ControllerBase
+    public class QuestApiController(IQuestService questService) : Controller
     {
         private readonly IQuestService _questService = questService;
 
@@ -20,9 +21,10 @@ namespace LeaguePlaza.Web.Controllers.Quest
         [HttpPost("createquest")]
         public async Task<IActionResult> CreateQuest([FromBody] CreateQuestDto createQuestDto)
         {
-            QuestDto newQuest = await _questService.CreateQuestAsync(createQuestDto);
+            await _questService.CreateQuestAsync(createQuestDto);
+            UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-            return Ok(JsonSerializer.Serialize(newQuest));
+            return PartialView("~/Views/Shared/Quest/_QuestCardsContainer.cshtml", userQuestsViewModel.UserQuests);
         }
 
         [Authorize(Roles = UserRoleConstants.QuestGiver)]
