@@ -139,13 +139,14 @@ function myQuestsMain() {
     }
 
     function editBtnClick(e) {
-        const ul = e.target.parentElement.children[0];
+        const questInfoEl = e.target.closest('.quest-info-js');
+        const questMetadata = questInfoEl.children[2];
 
-        titleInput.value = ul.children[1].textContent;
-        descriptionTextarea.value = ul.children[2].textContent;
-        rewardInput.value = parseFloat(ul.children[4].textContent.replace(',', '.'));
-        typeSelect.value = getQuestTypeValue(ul.children[5].textContent);
-        questId = ul.children[0].textContent;
+        titleInput.value = questInfoEl.children[0].textContent;
+        descriptionTextarea.value = questInfoEl.children[1].textContent;
+        rewardInput.value = parseFloat(questMetadata.children[2].textContent.replace(',', '.'));
+        typeSelect.value = getQuestTypeValue(questMetadata.children[1].textContent);
+        questId = e.target.parentElement.dataset.questId;
 
         createBtn.setAttribute('disabled', 'disabled');
         updateBtn.removeAttribute('disabled')
