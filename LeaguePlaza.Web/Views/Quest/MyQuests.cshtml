@@ -3,7 +3,10 @@
 
 @model UserQuestsViewModel
 
-<link rel="stylesheet" href="~/css/quest/my-quests.css" asp-append-version="true" />
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/quest/my-quests.css" asp-append-version="true" />
+}
 
 <div class="container">
     @if (User.IsInRole(UserRoleConstants.QuestGiver))
@@ -13,7 +16,7 @@
         <form id="create-quest" class="create-quest-form" novalidate>
             <div>
                 <label for="title">Title</label>
-                <input id="title" type="text" name="title" placeholder="Title" maxlength="50" required />
+                <input id="title" class="create-quest-input-js" type="text" name="title" placeholder="Title" maxlength="50" required />
                 <span class="display-none"></span>
             </div>
             <div>
@@ -22,7 +25,7 @@
             </div>
             <div>
                 <label for="reward">Reward</label>
-                <input id="reward" type="number" step="0.01" name="reward" placeholder="0.00" required />
+                <input id="reward" class="create-quest-input-js" type="number" step="0.01" name="reward" placeholder="0.00" required />
                 <span class="display-none"></span>
             </div>
             <div>
@@ -45,7 +48,74 @@
     <h1>My Quests</h1>
 
     <div id="quests-holder">
+        <div class="controlls-holder">
+            <div>
+                <details>
+                    <summary>
+                        Filters
+                    </summary>
+                    <ul>
+                        <li>
+                            <input id="posted" name="posted" type="checkbox"/>
+                            <label for="posted">Posted</label>
+                        </li>
+                        <li>
+                            <input id="accepted" name="accepted" type="checkbox" />
+                            <label for="accepted">Accepted</label>
+                        </li>
+                        <li>
+                            <input id="completed" name="completed" type="checkbox" />
+                            <label for="completed">Completed</label>
+                        </li>
+                        <li>
+                            <input id="monster-hunt" name="monster-hunt" type="checkbox" />
+                            <label for="monster-hunt">Monster Hunt</label>
+                        </li>
+                        <li>
+                            <input id="escort" name="escort" type="checkbox" />
+                            <label for="escort">Escort</label>
+                        </li>
+                        <li>
+                            <input id="gathering" name="gathering" type="checkbox" />
+                            <label for="gathering">Gathering</label>
+                        </li>
+                    </ul>
+                    <button type="button">Apply filters</button>
+                </details>
+            </div>
+            <div>
+                <div>
+                    <select>
+                        <option value="" disabled selected>Sort by</option>
+                        <option value="1">Date New</option>
+                        <option value="2">Date Old</option>
+                        <option value="3">Reward Most</option>
+                        <option value="4">Reward Least</option>
+                    </select>
+                </div>
+                <div>
+                    <form novalidate>
+                        <label for="search">Search</label>
+                        <input id="search" type="text" name="search" />
+                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
         <partial name="~/Views/Shared/Quest/_QuestCardsContainer.cshtml" model="@Model.UserQuests" />
+        <div class="pagination-holder">
+            <ul>
+                <li><button><<</button></li>
+                <li><button><</button></li>
+                <li><button>1</button></li>
+                <li><button>2</button></li>
+                <li><button>3</button></li>
+                <li><button>...</button></li>
+                <li><button>99</button></li>
+                <li><button>></button></li>
+                <li><button>>></button></li>
+            </ul>
+        </div>
     </div>
 </div>
 

@@ -3,7 +3,7 @@
 function myQuestsMain() {
     const baseUrl = '/api/questapi/';
 
-    const inputs = document.querySelectorAll('input');
+    const createQuestInputs = document.querySelectorAll('.create-quest-input-js');
 
     const titleInput = document.querySelector('#title');
     const descriptionTextarea = document.querySelector('#description');
@@ -18,7 +18,7 @@ function myQuestsMain() {
 
     let questId;
 
-    inputs?.forEach(i => i.addEventListener('blur', e => handleFormElementInput(e.target)));
+    createQuestInputs?.forEach(i => i.addEventListener('blur', e => handleFormElementInput(e.target)));
     typeSelect?.addEventListener('blur', e => handleFormElementInput(e.target));
     createQuestForm?.addEventListener('submit', e => createQuest(e));
     updateBtn?.addEventListener('click', e => updateQuest(e));
