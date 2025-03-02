@@ -5,5 +5,7 @@
         Task EnsureRoleSeedAsync();
 
         Task EnsureDefaultLeagueMasterSeedAsync();
+
+        Task SeedTestDataAsync();
     }
 }

@@ -44,6 +44,7 @@ namespace LeaguePlaza.Web
                 var dataSeeder = scope.ServiceProvider.GetService<IDataSeeder>();
                 await dataSeeder!.EnsureRoleSeedAsync();
                 await dataSeeder!.EnsureDefaultLeagueMasterSeedAsync();
+                await dataSeeder!.SeedTestDataAsync();
             }
 
             if (app.Environment.IsDevelopment())
