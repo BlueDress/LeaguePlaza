@@ -6,6 +6,7 @@
 @section Styles
 {
     <link rel="stylesheet" href="~/css/quest/my-quests.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/quest-cards-container.css" asp-append-version="true" />
 }
 
 <div class="container">
@@ -49,41 +50,57 @@
 
     <div id="quests-holder">
         <div class="controlls-holder">
-            <div>
+            <div class="filters-holder">
                 <details>
                     <summary>
                         Filters
                     </summary>
-                    <ul>
-                        <li>
-                            <input id="posted" name="posted" type="checkbox"/>
-                            <label for="posted">Posted</label>
-                        </li>
-                        <li>
-                            <input id="accepted" name="accepted" type="checkbox" />
-                            <label for="accepted">Accepted</label>
-                        </li>
-                        <li>
-                            <input id="completed" name="completed" type="checkbox" />
-                            <label for="completed">Completed</label>
-                        </li>
-                        <li>
-                            <input id="monster-hunt" name="monster-hunt" type="checkbox" />
-                            <label for="monster-hunt">Monster Hunt</label>
-                        </li>
-                        <li>
-                            <input id="escort" name="escort" type="checkbox" />
-                            <label for="escort">Escort</label>
-                        </li>
-                        <li>
-                            <input id="gathering" name="gathering" type="checkbox" />
-                            <label for="gathering">Gathering</label>
-                        </li>
-                    </ul>
-                    <button type="button">Apply filters</button>
+                    <div class="filters-choice-holder">
+                        <div>
+                            <p>
+                                Status
+                            </p>
+                            <ul>
+                                <li>
+                                    <input id="posted" name="posted" type="checkbox" />
+                                    <label for="posted">Posted</label>
+                                </li>
+                                <li>
+                                    <input id="accepted" name="accepted" type="checkbox" />
+                                    <label for="accepted">Accepted</label>
+                                </li>
+                                <li>
+                                    <input id="completed" name="completed" type="checkbox" />
+                                    <label for="completed">Completed</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>
+                                Type
+                            </p>
+                            <ul>
+                                <li>
+                                    <input id="monster-hunt" name="monster-hunt" type="checkbox" />
+                                    <label for="monster-hunt">Monster Hunt</label>
+                                </li>
+                                <li>
+                                    <input id="escort" name="escort" type="checkbox" />
+                                    <label for="escort">Escort</label>
+                                </li>
+                                <li>
+                                    <input id="gathering" name="gathering" type="checkbox" />
+                                    <label for="gathering">Gathering</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="filters-button-holder">
+                        <button type="button">Apply filters</button>
+                    </div>
                 </details>
             </div>
-            <div>
+            <div class="sort-search-holder">
                 <div>
                     <select>
                         <option value="" disabled selected>Sort by</option>
@@ -94,9 +111,9 @@
                     </select>
                 </div>
                 <div>
-                    <form novalidate>
+                    <form class="search-quest-form" novalidate>
                         <label for="search">Search</label>
-                        <input id="search" type="text" name="search" />
+                        <input id="search" type="text" name="search" placeholder="Search" />
                         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
                 </div>
