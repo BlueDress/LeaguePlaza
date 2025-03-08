@@ -53,8 +53,7 @@
     <div id="quests-holder">
         <partial name="~/Views/Shared/Quest/_QuestControlls.cshtml" />
         <div id="cards-and-pagination">
-            <partial name="~/Views/Shared/Quest/_QuestCardsContainer.cshtml" model="@Model.UserQuests" />
-            <partial name="~/Views/Shared/_Pagination.cshtml" />
+            <partial name="~/Views/Shared/Quest/_QuestCardsContainerWithPagination.cshtml" model="@Model.ViewModel"/>
         </div>
     </div>
 </div>

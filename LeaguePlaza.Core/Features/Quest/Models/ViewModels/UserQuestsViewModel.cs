@@ -4,6 +4,6 @@ namespace LeaguePlaza.Core.Features.Quest.Models.ViewModels
 {
     public class UserQuestsViewModel
     {
-        public IEnumerable<QuestDto> UserQuests { get; set; } = new List<QuestDto>();
+        public QuestCardsContainerWithPaginationViewModel ViewModel { get; set; } = new QuestCardsContainerWithPaginationViewModel();
     }
 }

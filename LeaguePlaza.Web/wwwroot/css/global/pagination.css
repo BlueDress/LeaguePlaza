@@ -21,6 +21,10 @@
                 cursor: pointer;
             }
 
+.active-pagination {
+    color: red;
+}
+
 @media (min-width: 769px) {
     .pagination-holder > ul > li {
         width: 4rem;

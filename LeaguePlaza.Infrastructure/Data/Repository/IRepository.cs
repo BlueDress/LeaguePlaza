@@ -8,6 +8,8 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
 
         Task<IEnumerable<T>> GetAllReadOnlyAsync<T>() where T : class;
 
+        Task<int> GetCountAsync<T>(Expression<Func<T, bool>> filterCondition) where T : class;
+
         Task<T> FindByIdAsync<T>(object id) where T : class;
 
         Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Func<T, bool> filterCondition) where T : class;

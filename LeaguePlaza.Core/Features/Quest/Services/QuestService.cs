@@ -1,4 +1,5 @@
-﻿using LeaguePlaza.Core.Features.Quest.Contracts;
+﻿using LeaguePlaza.Core.Features.Pagination.Models;
+using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
@@ -42,8 +43,9 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
             var userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(1, 6, true, q => q.Created, q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
+            var totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
 
-            return new UserQuestsViewModel()
+            var QuestCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
             {
                 UserQuests = userQuests.Select(q => new QuestDto
                 {
@@ -58,6 +60,16 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     AdventurerId = q.AdventurerId,
                     ShowExtraButtons = true,
                 }),
+                Pagination = new PaginationViewModel()
+                {
+                    CurrentPage = 1,
+                    TotalPages = (int)Math.Ceiling(totalResults / 6d),
+                },
+            };
+
+            return new UserQuestsViewModel()
+            {
+                ViewModel = QuestCardsContainerWithPaginationViewModel,
             };
         }
 

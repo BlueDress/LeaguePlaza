@@ -24,7 +24,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             await _questService.CreateQuestAsync(createQuestDto);
             UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-            return PartialView("~/Views/Shared/Quest/_QuestCardsContainer.cshtml", userQuestsViewModel.UserQuests);
+            return PartialView("~/Views/Shared/Quest/_QuestCardsContainerWithPagination.cshtml", userQuestsViewModel.ViewModel);
         }
 
         [Authorize(Roles = UserRoleConstants.QuestGiver)]

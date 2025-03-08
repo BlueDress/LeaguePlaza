@@ -6,7 +6,7 @@
     <ul>
         @if (Model.CurrentPage > 1)
         {
-            <li><button class="pointer-pagination pagination-button-js" data-value="@Model.CurrentPage - 1">&#8592;</button></li>
+            <li><button class="pointer-pagination pagination-button-js" data-value="@(Model.CurrentPage - 1)">&#8592;</button></li>
         }
         <li><button class="pointer-pagination @(Model.CurrentPage == 1 ? "active-pagination" : string.Empty) pagination-button-js" data-value="1">1</button></li>
         @if (Model.CurrentPage > 3)
@@ -27,7 +27,7 @@
         }
         @if (Model.CurrentPage < Model.TotalPages)
         {
-            <li><button class="pointer-pagination pagination-button-js" data-value="@Model.CurrentPage + 1">&#8594;</button></li>
+            <li><button class="pointer-pagination pagination-button-js" data-value="@(Model.CurrentPage + 1)">&#8594;</button></li>
         }
     </ul>
 </div>
