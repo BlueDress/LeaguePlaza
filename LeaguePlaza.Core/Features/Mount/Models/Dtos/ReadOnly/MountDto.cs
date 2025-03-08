@@ -1,6 +1,4 @@
-﻿using LeaguePlaza.Infrastructure.Data.Enums;
-
-namespace LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly
+﻿namespace LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly
 {
     public class MountDto
     {

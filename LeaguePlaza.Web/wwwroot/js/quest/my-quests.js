@@ -13,7 +13,7 @@ function myQuestsMain() {
     const createQuestForm = document.querySelector('#create-quest');
     const createBtn = document.querySelector('#create-quest-btn');
     const updateBtn = document.querySelector('#update-quest-btn');
-    const questsHolder = document.querySelector('#quests-holder');
+    const cardsAndPaginationHolder = document.querySelector('#cards-and-pagination');
     const questCardsContainer = document.querySelector('#quest-cards-container');
 
     let questId;
@@ -22,7 +22,7 @@ function myQuestsMain() {
     typeSelect?.addEventListener('blur', e => handleFormElementInput(e.target));
     createQuestForm?.addEventListener('submit', e => createQuest(e));
     updateBtn?.addEventListener('click', e => updateQuest(e));
-    questsHolder.addEventListener('click', e => handleQuestButtonClick(e));
+    cardsAndPaginationHolder.addEventListener('click', e => handleQuestButtonClick(e));
 
     function handleFormElementInput(element) {
         const span = element.nextElementSibling;
@@ -72,12 +72,13 @@ function myQuestsMain() {
             });
 
             if (response.status == 200) {
-                const questsHolderView = await response.text();
-                questsHolder.innerHTML = questsHolderView;
+                const cardsAndPaginationHolderView = await response.text();
+                cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
                 ClearInputs();
+                // TODO: clear filters
             }
 
-            //TODO handle server error
+            // TODO: handle server error
         }
 
         createBtn.removeAttribute('disabled');
@@ -101,6 +102,7 @@ function myQuestsMain() {
                 body: JSON.stringify(questToUpdate),
             });
 
+            // TODO: update quest, clear inputs, clear filters
             // TODO: handle response from server
 
             if (response.status == 200) {
@@ -153,6 +155,7 @@ function myQuestsMain() {
     }
 
     function editBtnClick(e) {
+        // TODO: scroll to form
         const questInfoEl = e.target.closest('.quest-info-js');
         const questMetadata = questInfoEl.children[2];
 

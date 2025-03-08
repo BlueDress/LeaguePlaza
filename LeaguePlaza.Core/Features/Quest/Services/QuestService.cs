@@ -20,11 +20,12 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
         public async Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
-            var availableQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.AdventurerId == null);
+            var availableQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(1, 6, true, q => q.Created, q => q.Status == QuestStatus.Posted);
+            var totalResults = await _repository.GetCountAsync<QuestEntity>(q => true);
 
-            return new AvailableQuestsViewModel()
+            var QuestCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
             {
-                AvailableQuests = availableQuests.Select(q => new QuestDto
+                Quests = availableQuests.Select(q => new QuestDto
                 {
                     Id = q.Id,
                     Title = q.Title,
@@ -35,7 +36,17 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     Status = q.Status.ToString(),
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
-                })
+                }),
+                Pagination = new PaginationViewModel()
+                {
+                    CurrentPage = 1,
+                    TotalPages = (int)Math.Ceiling(totalResults / 6d),
+                },
+            };
+
+            return new AvailableQuestsViewModel()
+            {
+                ViewModel = QuestCardsContainerWithPaginationViewModel,
             };
         }
 
@@ -47,7 +58,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             var QuestCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
             {
-                UserQuests = userQuests.Select(q => new QuestDto
+                Quests = userQuests.Select(q => new QuestDto
                 {
                     Id = q.Id,
                     Title = q.Title,

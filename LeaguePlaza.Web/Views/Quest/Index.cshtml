@@ -2,19 +2,18 @@
 
 @model AvailableQuestsViewModel
 
+<div class="container">
+    <h1>All Quests</h1>
+
+    <partial name="~/Views/Shared/Quest/_QuestControlls.cshtml" />
+    <div id="cards-and-pagination">
+        <partial name="~/Views/Shared/Quest/_QuestCardsContainerWithPagination.cshtml" model="@Model.ViewModel" />
+    </div>
+</div>
+
 @section Styles
 {
     <link rel="stylesheet" href="~/css/quest/quest-cards-container.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/quest/quest-controlls.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
 }
-
-<div class="container">
-    <h1>All Quests</h1>
-
-    <partial name="~/Views/Shared/Quest/_QuestControlls.cshtml" />
-    <div id="cards-and-pagination">
-        <partial name="~/Views/Shared/Quest/_QuestCardsContainer.cshtml" model="@Model.AvailableQuests" />
-        <partial name="~/Views/Shared/_Pagination.cshtml" />
-    </div>
-</div>
