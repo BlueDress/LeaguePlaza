@@ -1,13 +1,33 @@
-﻿<div class="pagination-holder">
+﻿@using LeaguePlaza.Core.Features.Pagination.Models
+
+@model PaginationViewModel
+
+<div class="pagination-holder">
     <ul>
-        <li><button><<</button></li>
-        <li><button><</button></li>
-        <li><button>1</button></li>
-        <li><button>2</button></li>
-        <li><button>3</button></li>
-        <li><button>...</button></li>
-        <li><button>99</button></li>
-        <li><button>></button></li>
-        <li><button>>></button></li>
+        @if (Model.CurrentPage > 1)
+        {
+            <li><button class="pointer-pagination pagination-button-js" data-value="@Model.CurrentPage - 1">&#8592;</button></li>
+        }
+        <li><button class="pointer-pagination @(Model.CurrentPage == 1 ? "active-pagination" : string.Empty) pagination-button-js" data-value="1">1</button></li>
+        @if (Model.CurrentPage > 3)
+        {
+            <li><button>...</button></li>
+        }
+        @for (var i = Math.Max(2, Model.CurrentPage - 1); i <= Math.Min(Model.CurrentPage + 1, Model.TotalPages); i++)
+        {
+            <li><button class="pointer-pagination @(Model.CurrentPage == i ? "active-pagination" : string.Empty) pagination-button-js" data-value="i">@i</button></li>
+        }
+        @if (Model.CurrentPage < Model.TotalPages - 2)
+        {
+            <li><button>...</button></li>
+        }
+        @if (Model.TotalPages > 1 && Model.CurrentPage < Model.TotalPages)
+        {
+            <li><button class="pointer-pagination pagination-button-js" data-value="@Model.TotalPages">@Model.TotalPages</button></li>
+        }
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <li><button class="pointer-pagination pagination-button-js" data-value="@Model.CurrentPage + 1">&#8594;</button></li>
+        }
     </ul>
 </div>
