@@ -2,6 +2,7 @@
 using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
+using LeaguePlaza.Core.Features.Quest.Models.RequestData;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
@@ -9,11 +10,13 @@ using LeaguePlaza.Infrastructure.Data.Repository;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System.Linq.Expressions;
 
 namespace LeaguePlaza.Core.Features.Quest.Services
 {
     public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager) : IQuestService
     {
+        // TODO: Add constants
         private readonly IRepository _repository = repository;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
@@ -53,7 +56,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         public async Task<UserQuestsViewModel> CreateUserQuestsViewModelAsync()
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
-            var userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(1, 6, true, q => q.Created, q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
+            var userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, object>(1, 6, true, q => q.Created, q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
             var totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
 
             var QuestCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
@@ -217,6 +220,67 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             _repository.Update(questToAbandon);
             await _repository.SaveChangesAsync();
+        }
+
+        // TODO: Add bool parameter to method signature for user filtering
+        public async Task<QuestCardsContainerWithPaginationViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            // TODO: Refactor expression build and extract it in method
+            Expression<Func<QuestEntity, object>> sortExpression = filterAndSortQuestsRequestData.SortBy == "Reward" ? q => q.RewardAmount : q => q.Created;
+
+            Expression<Func<QuestEntity, bool>> userFilterExpression = q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id;
+
+            Expression<Func<QuestEntity, bool>> searchExpression = string.IsNullOrWhiteSpace(filterAndSortQuestsRequestData.SearchTerm)
+                ? q => true
+                : q => q.Title.Contains(filterAndSortQuestsRequestData.SearchTerm) || (q.Description != null && q.Description.Contains(filterAndSortQuestsRequestData.SearchTerm));
+
+            // TODO: Replace Enum Parse with Try Parse and extract method
+            Expression<Func<QuestEntity, bool>> statusFiltersExpression = filterAndSortQuestsRequestData.StatusFilters.Any()
+                ? q => filterAndSortQuestsRequestData.StatusFilters.Select(f => (QuestStatus)Enum.Parse(typeof(QuestStatus), f)).Contains(q.Status)
+                : q => true;
+
+            Expression<Func<QuestEntity, bool>> typeFiltersExpression = filterAndSortQuestsRequestData.TypeFilters.Any()
+                ? q => filterAndSortQuestsRequestData.TypeFilters.Select(f => (QuestType)Enum.Parse(typeof(QuestType), f)).Contains(q.Type)
+                : q => true;
+
+            var parameter = Expression.Parameter(typeof(QuestEntity), "q");
+            var combinedFilterExpression = Expression.Lambda<Func<QuestEntity, bool>>(
+                Expression.AndAlso(
+                    Expression.AndAlso(
+                        Expression.Invoke(statusFiltersExpression, parameter),
+                        Expression.Invoke(typeFiltersExpression, parameter)),
+                    Expression.AndAlso(
+                        Expression.Invoke(searchExpression, parameter),
+                        Expression.Invoke(userFilterExpression, parameter))),
+                parameter);
+
+            var filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(filterAndSortQuestsRequestData.CurrentPage, 6, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
+            var totalFilteredAndSortedQuestsCount = await _repository.GetCountAsync(combinedFilterExpression);
+
+            return new QuestCardsContainerWithPaginationViewModel()
+            {
+                //TODO : Extract mapping into method
+                Quests = filteredAndSortedQuests.Select(q => new QuestDto
+                {
+                    Id = q.Id,
+                    Title = q.Title,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? "No description available" : q.Description,
+                    Created = q.Created,
+                    RewardAmount = q.RewardAmount,
+                    Type = q.Type.ToString(),
+                    Status = q.Status.ToString(),
+                    CreatorId = q.CreatorId,
+                    AdventurerId = q.AdventurerId,
+                    ShowExtraButtons = true,
+                }),
+                Pagination = new PaginationViewModel()
+                {
+                    CurrentPage = filterAndSortQuestsRequestData.CurrentPage,
+                    TotalPages = (int)Math.Ceiling(totalFilteredAndSortedQuestsCount / 6d),
+                },
+            };
         }
     }
 }

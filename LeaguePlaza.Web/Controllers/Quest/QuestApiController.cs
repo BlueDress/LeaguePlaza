@@ -4,6 +4,7 @@ using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
+using LeaguePlaza.Core.Features.Quest.Models.RequestData;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 
 using Microsoft.AspNetCore.Authorization;
@@ -64,12 +65,20 @@ namespace LeaguePlaza.Web.Controllers.Quest
         }
 
         [Authorize(Roles = UserRoleConstants.Adventurer)]
-        [HttpPut("abandonQuest")]
+        [HttpPut("abandonquest")]
         public async Task<IActionResult> AbandonQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
             await _questService.AbandonQuestAsync(updateQuestStatusDto.Id);
 
             return Ok();
+        }
+
+        [HttpGet("filterandsortquests")]
+        public async Task<IActionResult> FilterAndSortQuests([FromQuery] FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)
+        {
+            QuestCardsContainerWithPaginationViewModel questCardsContainerWithPaginationViewModel = await _questService.CreateQuestCardsContainerWithPaginationViewModelAsync(filterAndSortQuestsRequestData);
+
+            return PartialView("~/Views/Shared/Quest/_QuestCardsContainerWithPagination.cshtml", questCardsContainerWithPaginationViewModel);
         }
     }
 }

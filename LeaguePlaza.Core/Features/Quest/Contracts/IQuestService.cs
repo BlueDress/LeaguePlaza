@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
+using LeaguePlaza.Core.Features.Quest.Models.RequestData;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 
 namespace LeaguePlaza.Core.Features.Quest.Contracts
@@ -23,5 +24,7 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
         Task CompleteQuestAsync(int id);
 
         Task AbandonQuestAsync(int id);
+
+        Task<QuestCardsContainerWithPaginationViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData);
     }
 }
