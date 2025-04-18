@@ -9,17 +9,17 @@
                     <p>
                         Status
                     </p>
-                    <ul>
+                    <ul id="status-filters">
                         <li>
-                            <input id="posted" name="posted" type="checkbox" />
+                            <input id="posted" name="posted" type="checkbox" data-value="Posted" />
                             <label for="posted">Posted</label>
                         </li>
                         <li>
-                            <input id="accepted" name="accepted" type="checkbox" />
+                            <input id="accepted" name="accepted" type="checkbox" data-value="Accepted" />
                             <label for="accepted">Accepted</label>
                         </li>
                         <li>
-                            <input id="completed" name="completed" type="checkbox" />
+                            <input id="completed" name="completed" type="checkbox" data-value="Completed" />
                             <label for="completed">Completed</label>
                         </li>
                     </ul>
@@ -28,30 +28,31 @@
                     <p>
                         Type
                     </p>
-                    <ul>
+                    <ul id="type-filters">
                         <li>
-                            <input id="monster-hunt" name="monster-hunt" type="checkbox" />
+                            <input id="monster-hunt" name="monster-hunt" type="checkbox" data-value="MonsterHunt" />
                             <label for="monster-hunt">Monster Hunt</label>
                         </li>
                         <li>
-                            <input id="escort" name="escort" type="checkbox" />
+                            <input id="escort" name="escort" type="checkbox" data-value="Escort" />
                             <label for="escort">Escort</label>
                         </li>
                         <li>
-                            <input id="gathering" name="gathering" type="checkbox" />
+                            <input id="gathering" name="gathering" type="checkbox" data-value="Gathering" />
                             <label for="gathering">Gathering</label>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="filters-button-holder">
-                <button type="button">Apply filters</button>
+                <button id="apply-filters" type="button">Apply filters</button>
             </div>
         </details>
     </div>
     <div class="sort-search-holder">
         <div>
-            <select>
+            <select id="sort-by">
+                @* TODO: values should not be ints, but string so they are more descriptive *@
                 <option value="" disabled selected>Sort by</option>
                 <option value="1">Date New</option>
                 <option value="2">Date Old</option>
@@ -60,7 +61,7 @@
             </select>
         </div>
         <div>
-            <form class="search-quest-form" novalidate>
+            <form id="search-quest" class="search-quest-form" novalidate>
                 <label for="search">Search</label>
                 <input id="search" type="text" name="search" placeholder="Search" />
                 <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>

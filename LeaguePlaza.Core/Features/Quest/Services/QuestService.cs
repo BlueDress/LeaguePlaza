@@ -237,11 +237,11 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 : q => q.Title.Contains(filterAndSortQuestsRequestData.SearchTerm) || (q.Description != null && q.Description.Contains(filterAndSortQuestsRequestData.SearchTerm));
 
             // TODO: Replace Enum Parse with Try Parse and extract method
-            Expression<Func<QuestEntity, bool>> statusFiltersExpression = filterAndSortQuestsRequestData.StatusFilters.Any()
+            Expression<Func<QuestEntity, bool>> statusFiltersExpression = filterAndSortQuestsRequestData.StatusFilters.Any(f => f != null)
                 ? q => filterAndSortQuestsRequestData.StatusFilters.Select(f => (QuestStatus)Enum.Parse(typeof(QuestStatus), f)).Contains(q.Status)
                 : q => true;
 
-            Expression<Func<QuestEntity, bool>> typeFiltersExpression = filterAndSortQuestsRequestData.TypeFilters.Any()
+            Expression<Func<QuestEntity, bool>> typeFiltersExpression = filterAndSortQuestsRequestData.TypeFilters.Any(f => f != null)
                 ? q => filterAndSortQuestsRequestData.TypeFilters.Select(f => (QuestType)Enum.Parse(typeof(QuestType), f)).Contains(q.Type)
                 : q => true;
 
