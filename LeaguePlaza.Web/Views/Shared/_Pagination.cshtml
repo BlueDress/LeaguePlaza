@@ -27,7 +27,7 @@
             <li><button>...</button></li>
         }
 
-        @if (Model.TotalPages > 1 && Model.CurrentPage < Model.TotalPages)
+        @if (Model.TotalPages > 1 && Model.CurrentPage < Model.TotalPages - 1)
         {
             <li><button class="pointer-pagination pagination-button-js" data-value="@Model.TotalPages">@Model.TotalPages</button></li>
         }
