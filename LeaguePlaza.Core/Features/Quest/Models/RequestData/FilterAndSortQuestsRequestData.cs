@@ -8,9 +8,9 @@
 
         public bool OrderIsDescending { get; set; }
 
-        public IEnumerable<string> StatusFilters { get; set; } = new List<string>();
+        public string? StatusFilters { get; set; }
 
-        public IEnumerable<string> TypeFilters { get; set; } = new List<string>();
+        public string? TypeFilters { get; set; }
 
         public int CurrentPage { get; set; }
     }

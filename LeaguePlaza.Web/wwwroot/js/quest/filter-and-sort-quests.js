@@ -29,8 +29,8 @@ function filterAndSortQuestsMain() {
         const searchTerm = searchInput.value;
         const sortBy = getSortByValue();
         const orderIsDescending = getOrderDirection();
-        const statusFilters = Array.from(statusFilterInputs).filter(input => input.checked).map(input => input.dataset.value);
-        const typeFilters = Array.from(typeFilterInputs).filter(input => input.checked).map(input => input.dataset.value);
+        const statusFilters = Array.from(statusFilterInputs).filter(input => input.checked).map(input => input.dataset.value).join(',');
+        const typeFilters = Array.from(typeFilterInputs).filter(input => input.checked).map(input => input.dataset.value).join(',');
         const currentPage = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination').dataset.value;
 
         const filterAndSortData = {
