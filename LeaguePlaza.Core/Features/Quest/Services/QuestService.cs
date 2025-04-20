@@ -260,8 +260,11 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                         Expression.Invoke(userFilterExpression, parameter))),
                 parameter);
 
-            var filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(filterAndSortQuestsRequestData.CurrentPage, 6, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
             var totalFilteredAndSortedQuestsCount = await _repository.GetCountAsync(combinedFilterExpression);
+
+            var pageToShow = Math.Min(totalFilteredAndSortedQuestsCount, filterAndSortQuestsRequestData.CurrentPage);
+
+            var filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, 6, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
 
             return new QuestCardsContainerWithPaginationViewModel()
             {
@@ -281,7 +284,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = filterAndSortQuestsRequestData.CurrentPage,
+                    CurrentPage = pageToShow,
                     TotalPages = (int)Math.Ceiling(totalFilteredAndSortedQuestsCount / 6d),
                 },
             };
