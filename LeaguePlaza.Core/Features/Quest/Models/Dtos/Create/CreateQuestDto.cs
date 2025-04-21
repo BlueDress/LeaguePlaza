@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace LeaguePlaza.Core.Features.Quest.Models.Dtos.Create
 {
@@ -17,5 +18,7 @@ namespace LeaguePlaza.Core.Features.Quest.Models.Dtos.Create
 
         [Required]
         public string Type { get; set; } = string.Empty;
+
+        public IFormFile? Image { get; set; }
     }
 }

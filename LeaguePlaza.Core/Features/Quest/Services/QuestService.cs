@@ -1,4 +1,7 @@
-﻿using LeaguePlaza.Core.Features.Pagination.Models;
+﻿using Dropbox.Api;
+using Dropbox.Api.Files;
+
+using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
@@ -128,6 +131,21 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         {
             ApplicationUser currentUser = (await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!))!;
 
+            string imageUrl = string.Empty;
+
+            if (createQuestDto.Image != null)
+            {
+                using var dbx = new DropboxClient("");
+                using var memoryStream = new MemoryStream();
+
+                await createQuestDto.Image.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+
+                var uploadResponse = await dbx.Files.UploadAsync(path: "/quests/" + createQuestDto.Image.FileName, mode: WriteMode.Overwrite.Instance, body: memoryStream);
+                var sharedLink = await dbx.Sharing.CreateSharedLinkWithSettingsAsync("/quests/" + createQuestDto.Image.FileName);
+                imageUrl = sharedLink.Url;
+            }
+
             var newQuest = new QuestEntity()
             {
                 Title = createQuestDto.Title,
@@ -137,6 +155,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 Type = (QuestType)Enum.Parse(typeof(QuestType), createQuestDto.Type),
                 Status = QuestStatus.Posted,
                 Creator = currentUser,
+                ImageName = imageUrl,
             };
 
             await _repository.AddAsync(newQuest);

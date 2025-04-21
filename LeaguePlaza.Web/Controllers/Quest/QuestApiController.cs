@@ -20,7 +20,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
 
         [Authorize(Roles = UserRoleConstants.QuestGiver)]
         [HttpPost("createquest")]
-        public async Task<IActionResult> CreateQuest([FromBody] CreateQuestDto createQuestDto)
+        public async Task<IActionResult> CreateQuest([FromForm] CreateQuestDto createQuestDto)
         {
             await _questService.CreateQuestAsync(createQuestDto);
             UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();

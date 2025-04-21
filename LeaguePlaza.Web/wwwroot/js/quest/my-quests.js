@@ -9,6 +9,7 @@ function myQuestsMain() {
     const descriptionTextarea = document.querySelector('#description');
     const rewardInput = document.querySelector('#reward');
     const typeSelect = document.querySelector('#type');
+    const imageInput = document.querySelector('#image');
 
     const createQuestForm = document.querySelector('#create-quest');
     const createBtn = document.querySelector('#create-quest-btn');
@@ -63,12 +64,16 @@ function myQuestsMain() {
                 type: typeSelect.value
             }
 
+            const formData = new FormData();
+            formData.append('title', titleInput.value);
+            formData.append('description', descriptionTextarea.value);
+            formData.append('rewardAmount', rewardInput.value);
+            formData.append('type', typeSelect.value);
+            formData.append('image', imageInput?.files[0]);
+
             const response = await fetch(baseUrl + 'createquest', {
                 method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(newQuest),
+                body: formData,
             });
 
             if (response.status == 200) {
