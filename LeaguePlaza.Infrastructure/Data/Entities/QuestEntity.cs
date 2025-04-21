@@ -30,6 +30,10 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public QuestStatus Status { get; set; }
 
         [Required]
+        [MaxLength(200)]
+        public string ImageName { get; set; } = null!;
+
+        [Required]
         [ForeignKey(nameof(Creator))]
         public string CreatorId { get; set; } = null!;
 
