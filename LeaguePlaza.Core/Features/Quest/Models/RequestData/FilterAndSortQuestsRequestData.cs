@@ -13,5 +13,7 @@
         public string? TypeFilters { get; set; }
 
         public int CurrentPage { get; set; }
+
+        public bool FilterOnlyUserQuests { get; set; }
     }
 }

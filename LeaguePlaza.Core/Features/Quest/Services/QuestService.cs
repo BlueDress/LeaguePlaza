@@ -225,12 +225,14 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         // TODO: Add bool parameter to method signature for user filtering
         public async Task<QuestCardsContainerWithPaginationViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)
         {
+            // TODO: Refactor expression build and extract it in method
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
-            // TODO: Refactor expression build and extract it in method
-            Expression<Func<QuestEntity, object>> sortExpression = filterAndSortQuestsRequestData.SortBy == "Reward" ? q => q.RewardAmount : q => q.Created;
+            Expression<Func<QuestEntity, bool>> userFilterExpression = filterAndSortQuestsRequestData.FilterOnlyUserQuests
+                ? q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id
+                : q => true;
 
-            Expression<Func<QuestEntity, bool>> userFilterExpression = q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id;
+            Expression<Func<QuestEntity, object>> sortExpression = filterAndSortQuestsRequestData.SortBy == "Reward" ? q => q.RewardAmount : q => q.Created;
 
             Expression<Func<QuestEntity, bool>> searchExpression = string.IsNullOrWhiteSpace(filterAndSortQuestsRequestData.SearchTerm)
                 ? q => true
