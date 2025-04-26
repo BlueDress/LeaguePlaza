@@ -7,6 +7,13 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
 {
     public class DataSeeder(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ApplicationDbContext applicationDbContext) : IDataSeeder
     {
+        private readonly Dictionary<string, string> DefaultQuestTypeImages = new()
+        {
+            { "MonsterHunt", "https://www.dropbox.com/scl/fi/zxqv1fy2io88ytcdi3iqa/monster-hunt-default.jpg?rlkey=vkl9dt9q96af2qlv8gx5etsdy&st=03rctf0o&raw=1" },
+            { "Gathering", "https://www.dropbox.com/scl/fi/ns7u5n9zhqw9q3i5g6gsq/gathering-default.jpg?rlkey=zbrno8iqnhxdqgmm2xkg8moyh&st=gm6ja4j6&raw=1" },
+            { "Escort", "https://www.dropbox.com/scl/fi/977mmg7o6fxpr3e4i5k4p/escort-default.jpg?rlkey=fyekeazwrh373cyxqtu6kjxeg&st=2y5oj0ms&raw=1" },
+        };
+
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
@@ -61,7 +68,8 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
                         Type = i % 3 == 0 ? QuestType.MonsterHunt : i % 3 == 1 ? QuestType.Escort : QuestType.Gathering,
                         Status = i % 9 == 0 ? QuestStatus.Accepted : QuestStatus.Posted,
                         CreatorId = questGivers[i % 2].UserId,
-                        AdventurerId = i % 9 == 0 ? adventurers[i % 2].UserId : null
+                        AdventurerId = i % 9 == 0 ? adventurers[i % 2].UserId : null,
+                        ImageName = i % 3 == 0 ? DefaultQuestTypeImages["MonsterHunt"] : i % 3 == 1 ? DefaultQuestTypeImages["Escort"] : DefaultQuestTypeImages["Gathering"],
                     };
 
                     testQuests.Add(newTestQuest);
