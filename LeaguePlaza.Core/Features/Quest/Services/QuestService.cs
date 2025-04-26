@@ -13,16 +13,28 @@ using LeaguePlaza.Infrastructure.Data.Repository;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using System.Linq.Expressions;
 
 namespace LeaguePlaza.Core.Features.Quest.Services
 {
     public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager) : IQuestService
     {
+        private readonly Dictionary<string, string> defaultQuestTypeImages = new()
+        {
+            { "1", "https://www.dropbox.com/scl/fi/zxqv1fy2io88ytcdi3iqa/monster-hunt-default.jpg?rlkey=vkl9dt9q96af2qlv8gx5etsdy&st=03rctf0o&raw=1" },
+            { "2", "https://www.dropbox.com/scl/fi/ns7u5n9zhqw9q3i5g6gsq/gathering-default.jpg?rlkey=zbrno8iqnhxdqgmm2xkg8moyh&st=gm6ja4j6&raw=1" },
+            { "3", "https://www.dropbox.com/scl/fi/977mmg7o6fxpr3e4i5k4p/escort-default.jpg?rlkey=fyekeazwrh373cyxqtu6kjxeg&st=2y5oj0ms&raw=1" },
+        };
+
         // TODO: Add constants
         private readonly IRepository _repository = repository;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
+
+        private const string RefreshToken = "";
+        private const string AppKey = "";
+        private const string AppSecret = "";
 
         public async Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
@@ -42,6 +54,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     Status = q.Status.ToString(),
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
+                    ImageUrl = q.ImageName,
                 }),
                 Pagination = new PaginationViewModel()
                 {
@@ -76,6 +89,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
                     ShowExtraButtons = true,
+                    ImageUrl = q.ImageName,
                 }),
                 Pagination = new PaginationViewModel()
                 {
@@ -110,6 +124,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     Status = quest.Status.ToString(),
                     CreatorId = quest.CreatorId,
                     AdventurerId = quest.AdventurerId,
+                    ImageUrl = quest.ImageName,
                 },
                 RecommendedQuests = recommendedQuests.Select(q => new QuestDto
                 {
@@ -122,6 +137,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     Status = q.Status.ToString(),
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
+                    ImageUrl = q.ImageName,
                 }),
                 CurrentUserId = currentUser.Id,
             };
@@ -130,27 +146,46 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         public async Task<QuestDto> CreateQuestAsync(CreateQuestDto createQuestDto)
         {
             ApplicationUser currentUser = (await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!))!;
-
+            var dateCreated = DateTime.Now;
             string imageUrl = string.Empty;
 
             if (createQuestDto.Image != null)
             {
-                using var dbx = new DropboxClient("");
+                var tokenUrl = "https://api.dropboxapi.com/oauth2/token";
+                var client = new HttpClient();
+                var requestBody = new FormUrlEncodedContent(
+                [
+                    new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                    new KeyValuePair<string, string>("refresh_token", RefreshToken),
+                    new KeyValuePair<string, string>("client_id", AppKey),
+                    new KeyValuePair<string, string>("client_secret", AppSecret)
+                ]);
+
+                var response = await client.PostAsync(tokenUrl, requestBody);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var tokenResult = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
+
+                using var dbx = new DropboxClient(tokenResult.AccessToken);
                 using var memoryStream = new MemoryStream();
 
                 await createQuestDto.Image.CopyToAsync(memoryStream);
                 memoryStream.Position = 0;
 
-                var uploadResponse = await dbx.Files.UploadAsync(path: "/quests/" + createQuestDto.Image.FileName, mode: WriteMode.Overwrite.Instance, body: memoryStream);
-                var sharedLink = await dbx.Sharing.CreateSharedLinkWithSettingsAsync("/quests/" + createQuestDto.Image.FileName);
-                imageUrl = sharedLink.Url;
+                var uploadResponse = await dbx.Files.UploadAsync(path: "/quests/" + currentUser.Id.GetHashCode() + "/" + dateCreated.ToLongTimeString() + "/" + createQuestDto.Image.FileName, mode: WriteMode.Overwrite.Instance, body: memoryStream);
+                var sharedLink = await dbx.Sharing.CreateSharedLinkWithSettingsAsync("/quests/" + currentUser.Id.GetHashCode() + "/" + dateCreated.ToLongTimeString() + "/" + createQuestDto.Image.FileName);
+
+                imageUrl = sharedLink.Url.Replace("dl=0", "raw=1");
+            }
+            else
+            {
+                imageUrl = defaultQuestTypeImages[createQuestDto.Type];
             }
 
             var newQuest = new QuestEntity()
             {
                 Title = createQuestDto.Title,
                 Description = createQuestDto.Description,
-                Created = DateTime.Now,
+                Created = dateCreated,
                 RewardAmount = createQuestDto.RewardAmount,
                 Type = (QuestType)Enum.Parse(typeof(QuestType), createQuestDto.Type),
                 Status = QuestStatus.Posted,
@@ -166,11 +201,12 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 Id = newQuest.Id,
                 Title = newQuest.Title,
                 Description = newQuest.Description,
-                Created = DateTime.Now,
+                Created = newQuest.Created,
                 RewardAmount = newQuest.RewardAmount,
                 Type = newQuest.Type.ToString(),
                 Status = newQuest.Status.ToString(),
                 CreatorId = currentUser.Id,
+                ImageUrl = imageUrl,
             };
         }
 
@@ -196,6 +232,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 Type = questToUpdate.Type.ToString(),
                 Status = questToUpdate.Status.ToString(),
                 CreatorId = questToUpdate.CreatorId,
+                ImageUrl = questToUpdate.ImageName,
             };
         }
 
@@ -302,6 +339,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
                     ShowExtraButtons = true,
+                    ImageUrl = q.ImageName,
                 }),
                 Pagination = new PaginationViewModel()
                 {
@@ -310,5 +348,17 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 },
             };
         }
+    }
+
+    public class TokenResponse
+    {
+        [JsonProperty("access_token")]
+        public string AccessToken { get; set; }
+
+        [JsonProperty("token_type")]
+        public string TokenType { get; set; }
+
+        [JsonProperty("expires_in")]
+        public int ExpiresIn { get; set; }
     }
 }

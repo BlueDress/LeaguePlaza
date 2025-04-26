@@ -24,6 +24,7 @@ namespace LeaguePlaza.Core.Features.Home.Services
                     Created = q.Created,
                     RewardAmount = q.RewardAmount,
                     Type = q.Type.ToString(),
+                    ImageUrl = q.ImageName,
                 }),
             };
         }

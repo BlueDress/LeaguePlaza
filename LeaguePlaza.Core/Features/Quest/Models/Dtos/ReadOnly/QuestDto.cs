@@ -21,5 +21,7 @@
         public string? AdventurerId { get; set; }
 
         public bool ShowExtraButtons { get; set; }
+
+        public string ImageUrl { get; set; } = null!;
     }
 }
