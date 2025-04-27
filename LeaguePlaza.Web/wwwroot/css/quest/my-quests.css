@@ -32,6 +32,10 @@
             font-size: 12px;
         }
 
+        .create-quest-form > div > input[type=file] {
+            background-color: white;
+        }
+
 .create-quest-form-buttons {
     justify-content: space-between;
     margin-top: 1rem;
