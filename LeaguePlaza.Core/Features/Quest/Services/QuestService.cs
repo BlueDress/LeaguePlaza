@@ -194,6 +194,22 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             questToUpdate.RewardAmount = updateQuestDto.RewardAmount;
             questToUpdate.Type = (QuestType)Enum.Parse(typeof(QuestType), updateQuestDto.Type);
 
+            if (updateQuestDto.Image != null)
+            {
+                string accessToken = await _dropboxService.GetAccessToken();
+
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    string uploadPath = "/quests/" + updateQuestDto.Title + "/" + questToUpdate.Created.ToLongTimeString() + "/" + updateQuestDto.Image.FileName;
+                    string imageUrl = await _dropboxService.UploadImage(updateQuestDto.Image, uploadPath, accessToken);
+
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        questToUpdate.ImageName = imageUrl;
+                    }
+                }
+            }
+
             _repository.Update(questToUpdate);
             await _repository.SaveChangesAsync();
 

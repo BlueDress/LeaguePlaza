@@ -57,13 +57,6 @@ function myQuestsMain() {
         e.preventDefault();
 
         if (formIsValid([titleInput, rewardInput, typeSelect])) {
-            const newQuest = {
-                title: titleInput.value,
-                description: descriptionTextarea.value,
-                rewardAmount: rewardInput.value,
-                type: typeSelect.value
-            }
-
             const formData = new FormData();
             formData.append('title', titleInput.value);
             formData.append('description', descriptionTextarea.value);
@@ -90,29 +83,28 @@ function myQuestsMain() {
     }
 
     async function updateQuest(e) {
+        updateBtn.setAttribute('disabled', 'disabled');
+
         if (formIsValid([titleInput, rewardInput, typeSelect])) {
-            const questToUpdate = {
-                id: questId,
-                title: titleInput.value,
-                description: descriptionTextarea.value,
-                rewardAmount: rewardInput.value,
-                type: typeSelect.value
-            }
+            const formData = new FormData();
+            formData.append('id', questId);
+            formData.append('title', titleInput.value);
+            formData.append('description', descriptionTextarea.value);
+            formData.append('rewardAmount', rewardInput.value);
+            formData.append('type', typeSelect.value);
+            formData.append('image', imageInput?.files[0]);
 
             const response = await fetch(baseUrl + 'updatequest', {
                 method: 'PUT',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify(questToUpdate),
+                body: formData,
             });
 
-            // TODO: update quest, clear inputs, clear filters
+            // TODO: update quest, clear filters
             // TODO: handle response from server
 
             if (response.status == 200) {
                 createBtn.removeAttribute('disabled');
-                updateBtn.setAttribute('disabled', 'disabled');
+                ClearInputs();
             }
         }
     }
@@ -140,6 +132,7 @@ function myQuestsMain() {
         descriptionTextarea.value = '';
         rewardInput.value = '';
         typeSelect.value = '';
+        imageInput.value = '';
     }
 
     async function handleQuestButtonClick(e) {

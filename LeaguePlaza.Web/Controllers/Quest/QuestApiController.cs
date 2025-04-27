@@ -30,7 +30,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
 
         [Authorize(Roles = UserRoleConstants.QuestGiver)]
         [HttpPut("updatequest")]
-        public async Task<IActionResult> UpdateQuest([FromBody] UpdateQuestDataDto updateQuestDto)
+        public async Task<IActionResult> UpdateQuest([FromForm] UpdateQuestDataDto updateQuestDto)
         {
             QuestDto updatedQuest = await _questService.UpdateQuestAsync(updateQuestDto);
 
