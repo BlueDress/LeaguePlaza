@@ -153,7 +153,8 @@ function myQuestsMain() {
     }
 
     function editBtnClick(e) {
-        // TODO: scroll to form
+        createQuestForm.scrollIntoView({ behavior: 'smooth' });
+
         const questInfoEl = e.target.closest('.quest-info-js');
         const questMetadata = questInfoEl.children[2];
 
