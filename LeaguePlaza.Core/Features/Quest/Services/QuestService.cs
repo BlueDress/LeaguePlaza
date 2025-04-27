@@ -1,7 +1,4 @@
-﻿using Dropbox.Api;
-using Dropbox.Api.Files;
-
-using LeaguePlaza.Core.Features.Pagination.Models;
+﻿using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
@@ -10,19 +7,17 @@ using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
-
+using LeaguePlaza.Infrastructure.Dropbox.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System.Linq.Expressions;
 
 namespace LeaguePlaza.Core.Features.Quest.Services
 {
-    public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IConfiguration configuration) : IQuestService
+    public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IQuestService
     {
         // TODO: Add constants
-        private readonly Dictionary<string, string> defaultQuestTypeImages = new()
+        private readonly Dictionary<string, string> DefaultQuestTypeImageUrls = new()
         {
             { "1", "https://www.dropbox.com/scl/fi/zxqv1fy2io88ytcdi3iqa/monster-hunt-default.jpg?rlkey=vkl9dt9q96af2qlv8gx5etsdy&st=03rctf0o&raw=1" },
             { "2", "https://www.dropbox.com/scl/fi/ns7u5n9zhqw9q3i5g6gsq/gathering-default.jpg?rlkey=zbrno8iqnhxdqgmm2xkg8moyh&st=gm6ja4j6&raw=1" },
@@ -32,7 +27,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         private readonly IRepository _repository = repository;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly IConfiguration _configuration = configuration;
+        private readonly IDropboxService _dropboxService = dropboxService;
 
         public async Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
@@ -145,39 +140,21 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         {
             ApplicationUser currentUser = (await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!))!;
             var dateCreated = DateTime.Now;
+
             string imageUrl = string.Empty;
 
             if (createQuestDto.Image != null)
             {
-                var tokenUrl = "https://api.dropboxapi.com/oauth2/token";
-                using var client = new HttpClient();
-                var requestBody = new FormUrlEncodedContent(
-                [
-                    new KeyValuePair<string, string>("grant_type", "refresh_token"),
-                    new KeyValuePair<string, string>("refresh_token", _configuration["Dropbox:RefreshToken"] ?? ""),
-                    new KeyValuePair<string, string>("client_id", _configuration["Dropbox:AppKey"] ?? ""),
-                    new KeyValuePair<string, string>("client_secret", _configuration["Dropbox:AppSecret"] ?? "")
-                ]);
+                string accessToken = await _dropboxService.GetAccessToken();
 
-                var response = await client.PostAsync(tokenUrl, requestBody);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var tokenResult = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
-
-                using var dbx = new DropboxClient(tokenResult.AccessToken);
-                using var memoryStream = new MemoryStream();
-
-                await createQuestDto.Image.CopyToAsync(memoryStream);
-                memoryStream.Position = 0;
-
-                var uploadResponse = await dbx.Files.UploadAsync(path: "/quests/" + currentUser.Id.GetHashCode() + "/" + dateCreated.ToLongTimeString() + "/" + createQuestDto.Image.FileName, mode: WriteMode.Overwrite.Instance, body: memoryStream);
-                var sharedLink = await dbx.Sharing.CreateSharedLinkWithSettingsAsync("/quests/" + currentUser.Id.GetHashCode() + "/" + dateCreated.ToLongTimeString() + "/" + createQuestDto.Image.FileName);
-
-                imageUrl = sharedLink.Url.Replace("dl=0", "raw=1");
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    string uploadPath = "/quests/" + createQuestDto.Title + "/" + dateCreated.ToLongTimeString() + "/" + createQuestDto.Image.FileName;
+                    imageUrl = await _dropboxService.UploadImage(createQuestDto.Image, uploadPath, accessToken);
+                }
             }
-            else
-            {
-                imageUrl = defaultQuestTypeImages[createQuestDto.Type];
-            }
+
+            imageUrl = string.IsNullOrEmpty(imageUrl) ? DefaultQuestTypeImageUrls[createQuestDto.Type] : imageUrl;
 
             var newQuest = new QuestEntity()
             {
@@ -276,7 +253,6 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             await _repository.SaveChangesAsync();
         }
 
-        // TODO: Add bool parameter to method signature for user filtering
         public async Task<QuestCardsContainerWithPaginationViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)
         {
             // TODO: Refactor expression build and extract it in method
@@ -346,17 +322,5 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 },
             };
         }
-    }
-
-    public class TokenResponse
-    {
-        [JsonProperty("access_token")]
-        public string AccessToken { get; set; }
-
-        [JsonProperty("token_type")]
-        public string TokenType { get; set; }
-
-        [JsonProperty("expires_in")]
-        public int ExpiresIn { get; set; }
     }
 }

@@ -8,7 +8,8 @@ using LeaguePlaza.Infrastructure.Data;
 using LeaguePlaza.Infrastructure.Data.DataSeed;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Repository;
-
+using LeaguePlaza.Infrastructure.Dropbox.Contracts;
+using LeaguePlaza.Infrastructure.Dropbox.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +37,7 @@ namespace LeaguePlaza.Web
             builder.Services.AddTransient(typeof(IHomeService), typeof(HomeService));
             builder.Services.AddTransient(typeof(IQuestService), typeof(QuestService));
             builder.Services.AddTransient(typeof(IMountService), typeof(MountService));
+            builder.Services.AddTransient(typeof(IDropboxService), typeof(DropboxService));
 
             var app = builder.Build();
 
