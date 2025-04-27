@@ -13,13 +13,15 @@ using LeaguePlaza.Infrastructure.Data.Repository;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
 
 namespace LeaguePlaza.Core.Features.Quest.Services
 {
-    public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager) : IQuestService
+    public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IConfiguration configuration) : IQuestService
     {
+        // TODO: Add constants
         private readonly Dictionary<string, string> defaultQuestTypeImages = new()
         {
             { "1", "https://www.dropbox.com/scl/fi/zxqv1fy2io88ytcdi3iqa/monster-hunt-default.jpg?rlkey=vkl9dt9q96af2qlv8gx5etsdy&st=03rctf0o&raw=1" },
@@ -27,14 +29,10 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             { "3", "https://www.dropbox.com/scl/fi/977mmg7o6fxpr3e4i5k4p/escort-default.jpg?rlkey=fyekeazwrh373cyxqtu6kjxeg&st=2y5oj0ms&raw=1" },
         };
 
-        // TODO: Add constants
         private readonly IRepository _repository = repository;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
-
-        private const string RefreshToken = "";
-        private const string AppKey = "";
-        private const string AppSecret = "";
+        private readonly IConfiguration _configuration = configuration;
 
         public async Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
@@ -152,13 +150,13 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             if (createQuestDto.Image != null)
             {
                 var tokenUrl = "https://api.dropboxapi.com/oauth2/token";
-                var client = new HttpClient();
+                using var client = new HttpClient();
                 var requestBody = new FormUrlEncodedContent(
                 [
                     new KeyValuePair<string, string>("grant_type", "refresh_token"),
-                    new KeyValuePair<string, string>("refresh_token", RefreshToken),
-                    new KeyValuePair<string, string>("client_id", AppKey),
-                    new KeyValuePair<string, string>("client_secret", AppSecret)
+                    new KeyValuePair<string, string>("refresh_token", _configuration["Dropbox:RefreshToken"] ?? ""),
+                    new KeyValuePair<string, string>("client_id", _configuration["Dropbox:AppKey"] ?? ""),
+                    new KeyValuePair<string, string>("client_secret", _configuration["Dropbox:AppSecret"] ?? "")
                 ]);
 
                 var response = await client.PostAsync(tokenUrl, requestBody);
