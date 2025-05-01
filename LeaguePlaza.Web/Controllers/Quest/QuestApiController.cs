@@ -51,8 +51,9 @@ namespace LeaguePlaza.Web.Controllers.Quest
         public async Task<IActionResult> RemoveQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
             await _questService.RemoveQuestAsync(updateQuestStatusDto.Id);
+            UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-            return Ok();
+            return PartialView("~/Views/Shared/Quest/_QuestCardsContainerWithPagination.cshtml", userQuestsViewModel.ViewModel);
         }
 
         [Authorize(Roles = UserRoleConstants.QuestGiver)]

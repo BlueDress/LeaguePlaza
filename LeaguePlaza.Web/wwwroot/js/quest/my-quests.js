@@ -238,9 +238,11 @@ function myQuestsMain() {
 
         // TODO: handle response from server
 
-        if (response.status === 200) {
-            const questCardElement = e.target.closest('.quest-card-js');
-            document.querySelector('#quest-cards-container').removeChild(questCardElement);
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+            ClearInputs();
+            // TODO: clear filters
         }
     }
 
