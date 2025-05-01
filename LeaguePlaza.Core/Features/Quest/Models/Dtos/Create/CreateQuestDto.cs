@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LeaguePlaza.Core.Features.Quest.Attributes;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace LeaguePlaza.Core.Features.Quest.Models.Dtos.Create
@@ -19,6 +20,8 @@ namespace LeaguePlaza.Core.Features.Quest.Models.Dtos.Create
         [Required]
         public string Type { get; set; } = string.Empty;
 
+        [MaxFileSize(5 * 1024 * 1024)]
+        [ValidateImageFileSignature]
         public IFormFile? Image { get; set; }
     }
 }

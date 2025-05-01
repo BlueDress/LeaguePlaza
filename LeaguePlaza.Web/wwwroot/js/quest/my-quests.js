@@ -21,6 +21,7 @@ function myQuestsMain() {
 
     createQuestInputs?.forEach(i => i.addEventListener('blur', e => handleFormElementInput(e.target)));
     typeSelect?.addEventListener('blur', e => handleFormElementInput(e.target));
+    imageInput?.addEventListener('blur', e => handleFormFileInput(e.target));
     createQuestForm?.addEventListener('submit', e => createQuest(e));
     updateBtn?.addEventListener('click', e => updateQuest(e));
     cardsAndPaginationHolder.addEventListener('click', e => handleQuestButtonClick(e));
@@ -34,6 +35,28 @@ function myQuestsMain() {
         }
 
         displayErrorMessage(span, `${element.name} is required`);
+    }
+
+    function handleFormFileInput(element) {
+        const imageSpan = element.nextElementSibling;
+        hideErrorMessage(imageSpan);
+
+        const file = element.files[0];
+
+        if (file) {
+            const fileType = file.type;
+            const fileSize = file.size;
+
+            if (!fileType.startsWith('image/')) {
+                displayErrorMessage(imageSpan, 'Only image files can be uploaded');
+                return;
+            }
+
+            if (fileSize > 5 * 1024 * 1024) {
+                displayErrorMessage(imageSpan, 'Only files with size 5MB or less can be uploaded');
+                return;
+            }
+        } 
     }
 
     function elementInputIsValid(element) {
@@ -56,7 +79,7 @@ function myQuestsMain() {
         createBtn.setAttribute('disabled', 'disabled');
         e.preventDefault();
 
-        if (formIsValid([titleInput, rewardInput, typeSelect])) {
+        if (formIsValid([titleInput, rewardInput, typeSelect], imageInput)) {
             const formData = new FormData();
             formData.append('title', titleInput.value);
             formData.append('description', descriptionTextarea.value);
@@ -85,7 +108,7 @@ function myQuestsMain() {
     async function updateQuest(e) {
         updateBtn.setAttribute('disabled', 'disabled');
 
-        if (formIsValid([titleInput, rewardInput, typeSelect])) {
+        if (formIsValid([titleInput, rewardInput, typeSelect], imageInput)) {
             const formData = new FormData();
             formData.append('id', questId);
             formData.append('title', titleInput.value);
@@ -109,20 +132,42 @@ function myQuestsMain() {
         }
     }
 
-    function formIsValid(elements) {
+    function formIsValid(inputs, imageInput) {
         let formIsValid = true;
 
-        for (const element of elements) {
-            const span = element.nextElementSibling;
+        for (const input of inputs) {
+            const span = input.nextElementSibling;
 
-            if (elementInputIsValid(element)) {
+            if (elementInputIsValid(input)) {
                 hideErrorMessage(span);
                 continue;
             }
 
-            displayErrorMessage(span, `${element.name} is required`);
+            displayErrorMessage(span, `${input.name} is required`);
             formIsValid = false;
         }
+
+        const imageSpan = imageInput.nextElementSibling;
+        hideErrorMessage(imageSpan);
+
+        const file = imageInput.files[0];
+
+        if (file) {
+            const fileType = file.type;
+            const fileSize = file.size;
+
+            if (fileSize > 5 * 1024 * 1024) {
+                displayErrorMessage(imageSpan, 'Only files with size 5MB or less can be uploaded');
+                formIsValid = false;
+                return formIsValid;
+            }
+
+            if (!fileType.startsWith('image/')) {
+                displayErrorMessage(imageSpan, 'Only image files can be uploaded');
+                formIsValid = false;
+                return formIsValid;
+            }
+        } 
 
         return formIsValid;
     }
