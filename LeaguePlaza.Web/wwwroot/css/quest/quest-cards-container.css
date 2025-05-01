@@ -11,6 +11,7 @@
     border: 1px solid black;
     border-radius: 15px;
     overflow: hidden;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
 .quest-image {
