@@ -240,7 +240,7 @@ function myQuestsMain() {
 
         if (response.status === 200) {
             const questCardElement = e.target.closest('.quest-card-js');
-            questCardsContainer.removeChild(questCardElement);
+            document.querySelector('#quest-cards-container').removeChild(questCardElement);
         }
     }
 
