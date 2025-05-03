@@ -310,6 +310,11 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             var totalFilteredAndSortedQuestsCount = await _repository.GetCountAsync(combinedFilterExpression);
 
+            if (totalFilteredAndSortedQuestsCount == 0)
+            {
+                return new QuestCardsContainerWithPaginationViewModel();
+            }
+
             var pageToShow = Math.Min(totalFilteredAndSortedQuestsCount, filterAndSortQuestsRequestData.CurrentPage);
 
             var filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, 6, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
