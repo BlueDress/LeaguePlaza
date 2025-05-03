@@ -96,7 +96,7 @@ function myQuestsMain() {
                 const cardsAndPaginationHolderView = await response.text();
                 cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
                 ClearInputs();
-                // TODO: clear filters
+                ClearFilters();
             }
 
             // TODO: handle server error
@@ -180,6 +180,13 @@ function myQuestsMain() {
         imageInput.value = '';
     }
 
+    function ClearFilters() {
+        document.querySelectorAll('#status-filters input').forEach(f => f.checked = false);
+        document.querySelectorAll('#type-filters input').forEach(f => f.checked = false);
+        document.querySelector('#sort-by').value = 1;
+        document.querySelector('#search').value = '';
+    }
+
     async function handleQuestButtonClick(e) {
         if (e.target) {
             if (e.target.classList.contains('edit-btn-js')) {
@@ -242,7 +249,7 @@ function myQuestsMain() {
             const cardsAndPaginationHolderView = await response.text();
             cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
             ClearInputs();
-            // TODO: clear filters
+            ClearFilters();
         }
     }
 
