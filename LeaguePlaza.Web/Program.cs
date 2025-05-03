@@ -12,6 +12,7 @@ using LeaguePlaza.Infrastructure.Dropbox.Contracts;
 using LeaguePlaza.Infrastructure.Dropbox.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace LeaguePlaza.Web
 {
@@ -38,6 +39,8 @@ namespace LeaguePlaza.Web
             builder.Services.AddTransient(typeof(IQuestService), typeof(QuestService));
             builder.Services.AddTransient(typeof(IMountService), typeof(MountService));
             builder.Services.AddTransient(typeof(IDropboxService), typeof(DropboxService));
+
+            builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
             var app = builder.Build();
 
