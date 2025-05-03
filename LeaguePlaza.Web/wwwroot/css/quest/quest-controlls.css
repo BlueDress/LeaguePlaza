@@ -77,7 +77,7 @@
 
 .filters-button-holder {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
     .filters-button-holder > button {

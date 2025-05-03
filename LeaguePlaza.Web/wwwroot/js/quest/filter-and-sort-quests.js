@@ -4,6 +4,7 @@ function filterAndSortQuestsMain() {
     const baseUrl = '/api/questapi/';
 
     const applyFiltersBtn = document.querySelector('#apply-filters');
+    const resetFiltersBtn = document.querySelector('#reset-filters');
     const searchQuestForm = document.querySelector('#search-quest');
     const cardsAndPaginationHolder = document.querySelector('#cards-and-pagination');
 
@@ -13,6 +14,7 @@ function filterAndSortQuestsMain() {
     const searchInput = document.querySelector('#search');
 
     cardsAndPaginationHolder.addEventListener('click', e => handlePaginationClick(e));
+    resetFiltersBtn.addEventListener('click', e => resetFiltersAndSearch(e));
     applyFiltersBtn.addEventListener('click', e => filterAndSortQuests(e));
     searchQuestForm.addEventListener('submit', e => filterAndSortQuests(e));
     sortBySelect.addEventListener('blur', e => filterAndSortQuests(e));
@@ -21,6 +23,14 @@ function filterAndSortQuestsMain() {
         if (e.target && e.target.classList.contains('pagination-button-js')) {
             filterAndSortQuests(e);
         }
+    }
+
+    function resetFiltersAndSearch(e) {
+        statusFilterInputs.forEach(f => f.checked = false);
+        typeFilterInputs.forEach(f => f.checked = false);
+        sortBySelect.value = 1;
+        searchInput.value = '';
+        filterAndSortQuests(e);
     }
 
     async function filterAndSortQuests(e) {
