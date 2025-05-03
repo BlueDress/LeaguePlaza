@@ -122,12 +122,14 @@ function myQuestsMain() {
                 body: formData,
             });
 
-            // TODO: update quest, clear filters
             // TODO: handle response from server
 
             if (response.status == 200) {
                 createBtn.removeAttribute('disabled');
+                const cardsAndPaginationHolderView = await response.text();
+                cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
                 ClearInputs();
+                ClearFilters();
             }
         }
     }

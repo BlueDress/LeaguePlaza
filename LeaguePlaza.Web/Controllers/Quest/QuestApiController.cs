@@ -32,9 +32,10 @@ namespace LeaguePlaza.Web.Controllers.Quest
         [HttpPut("updatequest")]
         public async Task<IActionResult> UpdateQuest([FromForm] UpdateQuestDataDto updateQuestDto)
         {
-            QuestDto updatedQuest = await _questService.UpdateQuestAsync(updateQuestDto);
+            await _questService.UpdateQuestAsync(updateQuestDto);
+            UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-            return Ok(JsonSerializer.Serialize(updatedQuest));
+            return PartialView("~/Views/Shared/Quest/_QuestCardsContainerWithPagination.cshtml", userQuestsViewModel.ViewModel);
         }
 
         [Authorize(Roles = UserRoleConstants.Adventurer)]
