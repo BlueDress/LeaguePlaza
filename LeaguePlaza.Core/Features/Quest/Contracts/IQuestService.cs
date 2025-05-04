@@ -1,5 +1,4 @@
 ﻿using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
-using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Quest.Models.RequestData;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 
@@ -13,11 +12,11 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
 
         Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id);
 
-        Task<QuestDto> CreateQuestAsync(CreateQuestDto createQuestDto);
+        Task CreateQuestAsync(CreateQuestDto createQuestDto);
 
-        Task<QuestDto> UpdateQuestAsync(UpdateQuestDataDto updateQuestDto);
+        Task UpdateQuestAsync(UpdateQuestDataDto updateQuestDto);
 
-        Task AcceptQuest(int id);
+        Task AcceptQuestAsync(int id);
 
         Task RemoveQuestAsync(int id);
 

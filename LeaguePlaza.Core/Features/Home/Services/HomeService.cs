@@ -1,4 +1,5 @@
-﻿using LeaguePlaza.Core.Features.Home.Contracts;
+﻿using LeaguePlaza.Common.Constants;
+using LeaguePlaza.Core.Features.Home.Contracts;
 using LeaguePlaza.Core.Features.Home.Models.ViewModels;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
 using LeaguePlaza.Infrastructure.Data.Entities;
@@ -12,7 +13,7 @@ namespace LeaguePlaza.Core.Features.Home.Services
 
         public async Task<HomePageViewModel> CreateHomePageViewModelAsync()
         {
-            var latestQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(1, 3, true, q => q.Created, q => q.AdventurerId == null);
+            var latestQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(QuestConstants.PageOne, QuestConstants.CountForHomePage, true, q => q.Created, q => q.AdventurerId == null);
 
             return new HomePageViewModel()
             {
@@ -20,7 +21,7 @@ namespace LeaguePlaza.Core.Features.Home.Services
                 {
                     Id = q.Id,
                     Title = q.Title,
-                    Description = string.IsNullOrWhiteSpace(q.Description) ? "No description available" : q.Description,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? QuestConstants.NoDescriptionAvailable : q.Description,
                     Created = q.Created,
                     RewardAmount = q.RewardAmount,
                     Type = q.Type.ToString(),

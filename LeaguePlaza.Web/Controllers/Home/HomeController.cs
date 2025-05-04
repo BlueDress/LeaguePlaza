@@ -1,5 +1,5 @@
 using System.Diagnostics;
-
+using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Home.Contracts;
 using LeaguePlaza.Core.Features.Home.Models.ViewModels;
 using LeaguePlaza.Web.Models;
@@ -8,16 +8,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LeaguePlaza.Web.Controllers.Home
 {
-    public class HomeController(ILogger<HomeController> logger, IHomeService homeService) : Controller
+    public class HomeController(IHomeService homeService, ILogger<HomeController> logger) : Controller
     {
-        private readonly ILogger<HomeController> _logger = logger;
         private readonly IHomeService _homeService = homeService;
+        private readonly ILogger<HomeController> _logger = logger;
 
         public async Task<IActionResult> Index()
         {
-            HomePageViewModel homePageViewModel = await _homeService.CreateHomePageViewModelAsync();
+            try
+            {
+                HomePageViewModel homePageViewModel = await _homeService.CreateHomePageViewModelAsync();
 
-            return View(homePageViewModel);
+                return View(homePageViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(Index));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return View(new HomePageViewModel());
+            }
         }
 
         public IActionResult Privacy()

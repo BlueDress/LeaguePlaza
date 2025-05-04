@@ -5,18 +5,22 @@ using LeaguePlaza.Infrastructure.Dropbox.Models.ResponseData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
+using LeaguePlaza.Common.Constants;
 
 namespace LeaguePlaza.Infrastructure.Dropbox.Services
 {
-    public class DropboxService(IConfiguration configuration) : IDropboxService
+    public class DropboxService(IConfiguration configuration, ILogger<DropboxService> logger) : IDropboxService
     {
         private const string TokenUrl = "https://api.dropboxapi.com/oauth2/token";
 
         private readonly IConfiguration _configuration = configuration;
+        private readonly ILogger<DropboxService> _logger = logger;
 
         public async Task<string> GetAccessToken()
         {
             using var client = new HttpClient();
+
             var requestBody = new FormUrlEncodedContent(
             [
                 new KeyValuePair<string, string>("grant_type", "refresh_token"),
@@ -35,9 +39,11 @@ namespace LeaguePlaza.Infrastructure.Dropbox.Services
 
                 return tokenResult?.AccessToken ?? string.Empty;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: add logging
+                _logger.LogError(ErrorConstants.FailedAt, nameof(GetAccessToken));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
                 return string.Empty;
             }
         }
@@ -57,9 +63,11 @@ namespace LeaguePlaza.Infrastructure.Dropbox.Services
 
                 return sharedLink.Url.Replace("dl=0", "raw=1");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: add logging
+                _logger.LogError(ErrorConstants.FailedAt, nameof(UploadImage));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
                 return string.Empty;
             }
         }
