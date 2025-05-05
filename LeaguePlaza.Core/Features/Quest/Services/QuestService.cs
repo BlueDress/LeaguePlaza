@@ -17,7 +17,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 {
     public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IQuestService
     {
-        private const string ImageUploadPath = "/quests/{Image Title}/{Date Created}/{Image File Name}";
+        private const string ImageUploadPath = "/quests/{0}/{1}/{2}";
 
         private readonly Dictionary<string, string> DefaultQuestTypeImageUrls = new()
         {
