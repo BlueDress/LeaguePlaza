@@ -21,11 +21,11 @@
         <div id="button-holder">
             @if (Model.Quest.AdventurerId == null)
             {
-                <button id="accept-btn" type="button" data-quest-id="@Model.Quest.Id">Accept</button>
+                <button id="accept-btn" class="accept-btn" type="button" data-quest-id="@Model.Quest.Id">Accept</button>
             }
             @if (Model.Quest.AdventurerId == Model.CurrentUserId)
             {
-                <button id="abandon-btn" type="button" data-quest-id="@Model.Quest.Id">Abandon</button>
+                <button id="abandon-btn" class="abandon-btn" type="button" data-quest-id="@Model.Quest.Id">Abandon</button>
             }
         </div>
     }

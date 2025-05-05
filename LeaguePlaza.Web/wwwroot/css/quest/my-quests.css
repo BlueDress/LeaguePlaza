@@ -7,6 +7,8 @@
     gap: 0.7rem;
     font-size: 12px;
     margin-bottom: 2rem;
+    background-color: #FFF8DC;
+    color: #8B4513;
 }
 
     .create-quest-form > div {
@@ -32,9 +34,9 @@
             font-size: 12px;
         }
 
-        .create-quest-form > div > input[type=file] {
-            background-color: white;
-        }
+            .create-quest-form > div > input[type=file] {
+                background-color: white;
+            }
 
 .create-quest-form-buttons {
     justify-content: space-between;
@@ -46,6 +48,28 @@
         padding: 0.2rem 1.6rem;
         border: 1px solid black;
         border-radius: 5px;
+    }
+
+#create-quest-btn:not(:disabled) {
+    background-color: #BEBEFF;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    #create-quest-btn:not(:disabled):hover {
+        background-color: #A9A9FF;
+        color: #F8F8FF;
+    }
+
+#update-quest-btn:not(:disabled) {
+    background-color: #FFD700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    #update-quest-btn:not(:disabled):hover {
+        background-color: #FFC107;
+        color: #F8F8FF;
     }
 
 @media (min-width: 601px) {

@@ -26,19 +26,19 @@
                         {
                             @if (quest.AdventurerId == null)
                             {
-                                <button class="edit-btn-js" type="button">Edit</button>
-                                <button class="remove-btn-js" type="button">Remove</button>
+                                <button class="edit-btn edit-btn-js" type="button">Edit</button>
+                                <button class="remove-btn remove-btn-js" type="button">Remove</button>
                             }
 
                             @if (quest.AdventurerId != null && quest.Status != "Completed")
                             {
-                                <button class="complete-btn-js" type="button">Mark as complete</button>
+                                <button class="complete-btn complete-btn-js" type="button">Mark as complete</button>
                             }
                         }
 
                         @if (User.IsInRole(UserRoleConstants.Adventurer) && quest.Status != "Completed")
                         {
-                            <button class="abandon-btn-js" type="button">Abandon</button>
+                            <button class="abandon-btn abandon-btn-js" type="button">Abandon</button>
                         }
                     </div>
                 }

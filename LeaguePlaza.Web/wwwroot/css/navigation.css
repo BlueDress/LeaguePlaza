@@ -1,4 +1,9 @@
-﻿.logo-holder {
+﻿header {
+    background-color: #4B0082;
+    color: #FFD700;
+}
+
+.logo-holder {
     height: 60px;
 }
 
@@ -50,6 +55,13 @@
     gap: 10px;
 }
 
+    .identity-links button {
+        background-color: #4B0082;
+        color: #FFD700;
+        border: none;
+        cursor: pointer;
+    }
+
 @media (min-width: 769px) {
     .links-holder {
         flex: 1 0 auto;
@@ -78,6 +90,5 @@
 @media (min-width: 1200px) {
     .main-nav {
         max-width: 1200px;
-        padding: 0 60px;
     }
 }

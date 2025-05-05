@@ -54,6 +54,7 @@
     border-radius: 5px;
     margin-bottom: 0.5rem;
     font-size: 12px;
+    background-color: #FFF8DC;
 }
 
 .filters-holder summary,
@@ -87,9 +88,30 @@
         border-radius: 5px;
     }
 
+#apply-filters {
+    background-color: #9370DB;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    #apply-filters:hover {
+        background-color: #BA55D3;
+        color: #F8F8FF;
+    }
+
+#reset-filters {
+    background-color: #D2B48C;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    #reset-filters:hover {
+        background-color: #DEB887;
+        color: #FFFFF0;
+    }
+
 @media (min-width: 601px) {
-    .sort-search-holder select,
-    .sort-search-holder input {
+    .sort-search-holder select, .sort-search-holder input {
         font-size: 16px;
     }
 

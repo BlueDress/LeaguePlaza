@@ -72,9 +72,64 @@
             border-left: 1px solid black;
         }
 
-        .quest-info i {
-            margin-right: 0.2rem;
-        }
+    .quest-info i {
+        margin-right: 0.2rem;
+    }
+
+.edit-btn {
+    background-color: #FFD700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .edit-btn:hover {
+        background-color: #FFC107;
+        color: #F8F8FF;
+    }
+
+.remove-btn {
+    background-color: #D33939;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .remove-btn:hover {
+        background-color: #B22222;
+        color: #FFFFF0;
+    }
+
+.complete-btn {
+    background-color: #BEBEFF;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .complete-btn:hover {
+        background-color: #A9A9FF;
+        color: #F8F8FF;
+    }
+
+.accept-btn {
+    background-color: #BEBEFF;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .accept-btn:hover {
+        background-color: #A9A9FF;
+        color: #F8F8FF;
+    }
+
+.abandon-btn {
+    background-color: #D33939;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .abandon-btn:hover {
+        background-color: #B22222;
+        color: #FFFFF0;
+    }
 
 @media (min-width: 601px) {
     .quest-card {
