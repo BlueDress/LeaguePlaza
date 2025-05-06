@@ -48,7 +48,19 @@
         top: 4%;
         border: 1px solid black;
         border-radius: 5px;
+        background-color: #9370DB;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
+
+        .search-quest-form > button:hover {
+            background-color: #BA55D3;
+            color: #F8F8FF;
+        }
+
+        .search-quest-form > button:active {
+            transform: scale(0.98);
+        }
 
         .search-quest-form > button > i {
             padding: 0.3rem;
@@ -129,7 +141,7 @@
     }
 
         .search-quest-form > button > i {
-            padding: 0.48rem;
+            padding: 0.47rem;
         }
 
     .filters-holder details {
