@@ -2,7 +2,7 @@
 {
     public static class ErrorConstants
     {
-        public const string FailedAt = "Failed at {0}";
-        public const string ErrorMessage = "Error message: {0}";
+        public const string FailedAt = "Failed at {MethodName}";
+        public const string ErrorMessage = "Error message: {Message}";
     }
 }
