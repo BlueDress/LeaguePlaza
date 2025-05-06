@@ -116,6 +116,10 @@
         color: #F8F8FF;
     }
 
+    #apply-filters:active {
+        transform: scale(0.98);
+    }
+
 #reset-filters {
     background-color: #D2B48C;
     cursor: pointer;
@@ -125,6 +129,10 @@
     #reset-filters:hover {
         background-color: #DEB887;
         color: #FFFFF0;
+    }
+
+    #reset-filters:active {
+        transform: scale(0.98);
     }
 
 @media (min-width: 601px) {

@@ -87,6 +87,10 @@
         color: #F8F8FF;
     }
 
+    .edit-btn:active {
+        transform: scale(0.98);
+    }
+
 .remove-btn {
     background-color: #D33939;
     cursor: pointer;
@@ -96,6 +100,10 @@
     .remove-btn:hover {
         background-color: #B22222;
         color: #FFFFF0;
+    }
+
+    .remove-btn:active {
+        transform: scale(0.98);
     }
 
 .complete-btn {
@@ -109,6 +117,10 @@
         color: #F8F8FF;
     }
 
+    .complete-btn:active {
+        transform: scale(0.98);
+    }
+
 .accept-btn {
     background-color: #BEBEFF;
     cursor: pointer;
@@ -120,6 +132,10 @@
         color: #F8F8FF;
     }
 
+    .accept-btn:active {
+        transform: scale(0.98);
+    }
+
 .abandon-btn {
     background-color: #D33939;
     cursor: pointer;
@@ -129,6 +145,10 @@
     .abandon-btn:hover {
         background-color: #B22222;
         color: #FFFFF0;
+    }
+
+    .abandon-btn:active {
+        transform: scale(0.98);
     }
 
 @media (min-width: 601px) {

@@ -17,26 +17,26 @@
         flex-wrap: wrap;
     }
 
-    .create-quest-form > div > label,
-    .create-quest-form > div > input,
-    .create-quest-form > div > textarea,
-    .create-quest-form > div > span,
-    .create-quest-form > div > select {
-        flex: 1 0 100%;
-    }
-
-    .create-quest-form > div > input,
-    .create-quest-form > div > textarea,
-    .create-quest-form > div > select {
-        padding: 0.2rem;
-        border-radius: 5px;
-        border: 1px solid black;
-        font-size: 12px;
-    }
-
-        .create-quest-form > div > input[type=file] {
-            background-color: white;
+        .create-quest-form > div > label,
+        .create-quest-form > div > input,
+        .create-quest-form > div > textarea,
+        .create-quest-form > div > span,
+        .create-quest-form > div > select {
+            flex: 1 0 100%;
         }
+
+        .create-quest-form > div > input,
+        .create-quest-form > div > textarea,
+        .create-quest-form > div > select {
+            padding: 0.2rem;
+            border-radius: 5px;
+            border: 1px solid black;
+            font-size: 12px;
+        }
+
+            .create-quest-form > div > input[type=file] {
+                background-color: white;
+            }
 
 .create-quest-form-buttons {
     justify-content: space-between;
@@ -61,6 +61,10 @@
         color: #F8F8FF;
     }
 
+    #create-quest-btn:not(:disabled):active {
+        transform: scale(0.98);
+    }
+
 #update-quest-btn:not(:disabled) {
     background-color: #FFD700;
     cursor: pointer;
@@ -70,6 +74,10 @@
     #update-quest-btn:not(:disabled):hover {
         background-color: #FFC107;
         color: #F8F8FF;
+    }
+
+    #update-quest-btn:not(:disabled):active {
+        transform: scale(0.98);
     }
 
 @media (min-width: 601px) {
