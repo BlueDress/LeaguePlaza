@@ -68,7 +68,18 @@ function filterAndSortQuestsMain() {
             cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
         }
 
-        // TODO: handle server error
+        if (response.status == 400) {
+            const filtersMessageElement = document.querySelector('.filters-message-js');
+            filtersMessageElement.innerText = 'Something went wrong';
+            filtersMessageElement.classList.add('error-message');
+            filtersMessageElement.classList.remove('display-none');
+
+            setTimeout(() => {
+                filtersMessageElement.classList.add('display-none');
+                filtersMessageElement.classList.remove('error-message');
+                filtersMessageElement.innerText = '';
+            }, 3000);
+        }
     }
 
     function getSortByValue() {

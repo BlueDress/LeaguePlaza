@@ -81,6 +81,10 @@ button {
     margin: 0 auto;
 }
 
+.success-message {
+    color: green;
+}
+
 .error-message {
     color: red;
 }

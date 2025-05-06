@@ -104,8 +104,9 @@ namespace LeaguePlaza.Web.Controllers.Quest
             try
             {
                 await _questService.CompleteQuestAsync(updateQuestStatusDto.Id);
+                UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-                return Ok();
+                return PartialView(QuestCardsContainerWithPagination, userQuestsViewModel.ViewModel);
             }
             catch (Exception ex)
             {

@@ -17,26 +17,26 @@
         flex-wrap: wrap;
     }
 
-        .create-quest-form > div > label,
-        .create-quest-form > div > input,
-        .create-quest-form > div > textarea,
-        .create-quest-form > div > span,
-        .create-quest-form > div > select {
-            flex: 1 0 100%;
-        }
+    .create-quest-form > div > label,
+    .create-quest-form > div > input,
+    .create-quest-form > div > textarea,
+    .create-quest-form > div > span,
+    .create-quest-form > div > select {
+        flex: 1 0 100%;
+    }
 
-        .create-quest-form > div > input,
-        .create-quest-form > div > textarea,
-        .create-quest-form > div > select {
-            padding: 0.2rem;
-            border-radius: 5px;
-            border: 1px solid black;
-            font-size: 12px;
-        }
+    .create-quest-form > div > input,
+    .create-quest-form > div > textarea,
+    .create-quest-form > div > select {
+        padding: 0.2rem;
+        border-radius: 5px;
+        border: 1px solid black;
+        font-size: 12px;
+    }
 
-            .create-quest-form > div > input[type=file] {
-                background-color: white;
-            }
+        .create-quest-form > div > input[type=file] {
+            background-color: white;
+        }
 
 .create-quest-form-buttons {
     justify-content: space-between;

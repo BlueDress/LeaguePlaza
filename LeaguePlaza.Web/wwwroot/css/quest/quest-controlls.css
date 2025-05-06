@@ -8,6 +8,11 @@
         flex: 1 0 100%;
     }
 
+    .controlls-holder > span {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
 .sort-search-holder {
     display: flex;
     justify-content: space-between;
@@ -111,6 +116,10 @@
     }
 
 @media (min-width: 601px) {
+    .controlls-holder > span {
+        font-size: 16px;
+    }
+
     .sort-search-holder select, .sort-search-holder input {
         font-size: 16px;
     }

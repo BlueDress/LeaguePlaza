@@ -56,7 +56,7 @@ function myQuestsMain() {
                 displayErrorMessage(imageSpan, 'Only files with size 5MB or less can be uploaded');
                 return;
             }
-        } 
+        }
     }
 
     function elementInputIsValid(element) {
@@ -95,20 +95,23 @@ function myQuestsMain() {
             if (response.status == 200) {
                 const cardsAndPaginationHolderView = await response.text();
                 cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+                ShowFormMessage('success-message', 'The quest was created successfully');
                 ClearInputs();
                 ClearFilters();
             }
 
-            // TODO: handle server error
+            if (response.status == 400) {
+                ShowFormMessage('error-message', 'Something went wrong');
+            }
         }
 
         createBtn.removeAttribute('disabled');
     }
 
     async function updateQuest(e) {
-        updateBtn.setAttribute('disabled', 'disabled');
-
         if (formIsValid([titleInput, rewardInput, typeSelect], imageInput)) {
+            updateBtn.setAttribute('disabled', 'disabled');
+
             const formData = new FormData();
             formData.append('id', questId);
             formData.append('title', titleInput.value);
@@ -122,14 +125,18 @@ function myQuestsMain() {
                 body: formData,
             });
 
-            // TODO: handle response from server
-
             if (response.status == 200) {
                 createBtn.removeAttribute('disabled');
                 const cardsAndPaginationHolderView = await response.text();
                 cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+                ShowFormMessage('success-message', 'The quest was updated successfully');
                 ClearInputs();
                 ClearFilters();
+            }
+
+            if (response.status == 400) {
+                updateBtn.removeAttribute('disabled');
+                ShowFormMessage('error-message', 'Something went wrong');
             }
         }
     }
@@ -169,9 +176,22 @@ function myQuestsMain() {
                 formIsValid = false;
                 return formIsValid;
             }
-        } 
+        }
 
         return formIsValid;
+    }
+
+    function ShowFormMessage(styleClass, message) {
+        const formMessageElement = document.querySelector('.form-message-js');
+        formMessageElement.classList.add(styleClass);
+        formMessageElement.innerText = message;
+        formMessageElement.classList.remove('display-none');
+
+        setTimeout(() => {
+            formMessageElement.classList.add('display-none');
+            formMessageElement.classList.remove(styleClass);
+            formMessageElement.innerText = '';
+        }, 5000);
     }
 
     function ClearInputs() {
@@ -269,8 +289,10 @@ function myQuestsMain() {
         // TODO: handle response from server
 
         if (response.status === 200) {
-            const questInfoDiv = e.target.closest('.quest-info-js');
-            questInfoDiv.removeChild(e.target.parentNode);
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+            ClearInputs();
+            ClearFilters();
         }
     }
 
