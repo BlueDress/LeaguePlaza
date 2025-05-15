@@ -2,39 +2,42 @@
 
 @model PaginationViewModel
 
-<div class="pagination-holder">
-    <ul>
-        @if (Model.CurrentPage > 1)
-        {
-            @* TODO: change data attribute to data-page-number *@
-            <li><button class="pointer-pagination pagination-button-js" data-value="@(Model.CurrentPage - 1)">&#8592;</button></li>
-        }
+@if (Model.TotalPages > 1)
+{
+    <div class="pagination-holder">
+        <ul>
+            @if (Model.CurrentPage > 1)
+            {
+                @* TODO: change data attribute to data-page-number *@
+                <li><button class="pointer-pagination pagination-button-js" data-value="@(Model.CurrentPage - 1)">&#8592;</button></li>
+            }
 
-        <li><button class="@(Model.CurrentPage == 1 ? "active-pagination" : "pointer-pagination pagination-button-js")" data-value="1">1</button></li>
+            <li><button class="@(Model.CurrentPage == 1 ? "active-pagination" : "pointer-pagination pagination-button-js")" data-value="1">1</button></li>
 
-        @if (Model.CurrentPage > 3)
-        {
-            <li><button>...</button></li>
-        }
+            @if (Model.CurrentPage > 3)
+            {
+                <li><button>...</button></li>
+            }
 
-        @for (var i = Math.Max(2, Model.CurrentPage - 1); i <= Math.Min(Model.CurrentPage + 1, Model.TotalPages); i++)
-        {
-            <li><button class="@(Model.CurrentPage == i ? "active-pagination" : "pointer-pagination pagination-button-js")" data-value="@i">@i</button></li>
-        }
+            @for (var i = Math.Max(2, Model.CurrentPage - 1); i <= Math.Min(Model.CurrentPage + 1, Model.TotalPages); i++)
+            {
+                <li><button class="@(Model.CurrentPage == i ? "active-pagination" : "pointer-pagination pagination-button-js")" data-value="@i">@i</button></li>
+            }
 
-        @if (Model.CurrentPage < Model.TotalPages - 2)
-        {
-            <li><button>...</button></li>
-        }
+            @if (Model.CurrentPage < Model.TotalPages - 2)
+            {
+                <li><button>...</button></li>
+            }
 
-        @if (Model.TotalPages > 1 && Model.CurrentPage < Model.TotalPages - 1)
-        {
-            <li><button class="pointer-pagination pagination-button-js" data-value="@Model.TotalPages">@Model.TotalPages</button></li>
-        }
+            @if (Model.TotalPages > 1 && Model.CurrentPage < Model.TotalPages - 1)
+            {
+                <li><button class="pointer-pagination pagination-button-js" data-value="@Model.TotalPages">@Model.TotalPages</button></li>
+            }
 
-        @if (Model.CurrentPage < Model.TotalPages)
-        {
-            <li><button class="pointer-pagination pagination-button-js" data-value="@(Model.CurrentPage + 1)">&#8594;</button></li>
-        }
-    </ul>
-</div>
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li><button class="pointer-pagination pagination-button-js" data-value="@(Model.CurrentPage + 1)">&#8594;</button></li>
+            }
+        </ul>
+    </div>
+}
