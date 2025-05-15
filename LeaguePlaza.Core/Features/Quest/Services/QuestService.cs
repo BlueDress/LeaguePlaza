@@ -113,7 +113,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             if (currentUser != null)
             {
-                QuestEntity quest = await _repository.FindByIdAsync<QuestEntity>(id);
+                var quest = await _repository.FindByIdAsync<QuestEntity>(id) ?? new();
                 IEnumerable<QuestEntity> recommendedQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.Id != id && q.Type == quest.Type && q.Status == QuestStatus.Posted);
 
                 return new ViewQuestViewModel()
@@ -197,39 +197,41 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         {
             var questToUpdate = await _repository.FindByIdAsync<QuestEntity>(updateQuestDto.Id);
 
-            questToUpdate.Title = updateQuestDto.Title;
-            questToUpdate.Description = updateQuestDto.Description;
-            questToUpdate.RewardAmount = updateQuestDto.RewardAmount;
-            questToUpdate.Type = (QuestType)Enum.Parse(typeof(QuestType), updateQuestDto.Type);
-
-            if (updateQuestDto.Image != null)
+            if (questToUpdate != null)
             {
-                string accessToken = await _dropboxService.GetAccessToken();
+                questToUpdate.Title = updateQuestDto.Title;
+                questToUpdate.Description = updateQuestDto.Description;
+                questToUpdate.RewardAmount = updateQuestDto.RewardAmount;
+                questToUpdate.Type = (QuestType)Enum.Parse(typeof(QuestType), updateQuestDto.Type);
 
-                if (!string.IsNullOrEmpty(accessToken))
+                if (updateQuestDto.Image != null)
                 {
-                    string uploadPath = string.Format(ImageUploadPath, updateQuestDto.Title, questToUpdate.Created.ToLongTimeString(), updateQuestDto.Image.FileName);
-                    string imageUrl = await _dropboxService.UploadImage(updateQuestDto.Image, uploadPath, accessToken);
+                    string accessToken = await _dropboxService.GetAccessToken();
 
-                    if (!string.IsNullOrEmpty(imageUrl))
+                    if (!string.IsNullOrEmpty(accessToken))
                     {
-                        questToUpdate.ImageName = imageUrl;
+                        string uploadPath = string.Format(ImageUploadPath, updateQuestDto.Title, questToUpdate.Created.ToLongTimeString(), updateQuestDto.Image.FileName);
+                        string imageUrl = await _dropboxService.UploadImage(updateQuestDto.Image, uploadPath, accessToken);
+
+                        if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            questToUpdate.ImageName = imageUrl;
+                        }
                     }
                 }
-            }
 
-            _repository.Update(questToUpdate);
-            await _repository.SaveChangesAsync();
+                _repository.Update(questToUpdate);
+                await _repository.SaveChangesAsync();
+            }
         }
 
         public async Task AcceptQuestAsync(int id)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+            var questToAccept = await _repository.FindByIdAsync<QuestEntity>(id);
 
-            if (currentUser != null)
+            if (currentUser != null && questToAccept != null)
             {
-                var questToAccept = await _repository.FindByIdAsync<QuestEntity>(id);
-
                 questToAccept.Status = QuestStatus.Accepted;
                 questToAccept.AdventurerId = currentUser.Id;
 
@@ -242,29 +244,38 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         {
             var questToRemove = await _repository.FindByIdAsync<QuestEntity>(id);
 
-            _repository.Remove(questToRemove);
-            await _repository.SaveChangesAsync();
+            if (questToRemove != null)
+            {
+                _repository.Remove(questToRemove);
+                await _repository.SaveChangesAsync();
+            }
         }
 
         public async Task CompleteQuestAsync(int id)
         {
             var questToComplete = await _repository.FindByIdAsync<QuestEntity>(id);
 
-            questToComplete.Status = QuestStatus.Completed;
+            if (questToComplete != null)
+            {
+                questToComplete.Status = QuestStatus.Completed;
 
-            _repository.Update(questToComplete);
-            await _repository.SaveChangesAsync();
+                _repository.Update(questToComplete);
+                await _repository.SaveChangesAsync();
+            }
         }
 
         public async Task AbandonQuestAsync(int id)
         {
             var questToAbandon = await _repository.FindByIdAsync<QuestEntity>(id);
 
-            questToAbandon.Status = QuestStatus.Posted;
-            questToAbandon.AdventurerId = null;
+            if (questToAbandon != null)
+            {
+                questToAbandon.Status = QuestStatus.Posted;
+                questToAbandon.AdventurerId = null;
 
-            _repository.Update(questToAbandon);
-            await _repository.SaveChangesAsync();
+                _repository.Update(questToAbandon);
+                await _repository.SaveChangesAsync();
+            }
         }
 
         public async Task<QuestCardsContainerWithPaginationViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)

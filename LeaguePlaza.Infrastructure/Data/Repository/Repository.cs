@@ -23,7 +23,7 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             return await DbSet<T>().AsNoTracking().Where(filterCondition).CountAsync();
         }
 
-        public async Task<T> FindByIdAsync<T>(object id) where T : class
+        public async Task<T?> FindByIdAsync<T>(object id) where T : class
         {
             return await DbSet<T>().FindAsync(id);
         }
