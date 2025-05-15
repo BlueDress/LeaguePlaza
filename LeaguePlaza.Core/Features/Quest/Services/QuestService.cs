@@ -114,7 +114,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             if (currentUser != null)
             {
                 var quest = await _repository.FindByIdAsync<QuestEntity>(id) ?? new();
-                IEnumerable<QuestEntity> recommendedQuests = await _repository.FindAllReadOnlyAsync<QuestEntity>(q => q.Id != id && q.Type == quest.Type && q.Status == QuestStatus.Posted);
+                IEnumerable<QuestEntity> recommendedQuests = await _repository.FindSpecificCountReadOnlyAsync<QuestEntity>(QuestConstants.RecommendedQuestsCount, q => q.Id != id && q.Type == quest.Type && q.Status == QuestStatus.Posted);
 
                 return new ViewQuestViewModel()
                 {

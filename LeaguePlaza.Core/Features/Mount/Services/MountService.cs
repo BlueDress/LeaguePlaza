@@ -32,7 +32,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
         public async Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id)
         {
             var mount = await _repository.FindByIdAsync<MountEntity>(id);
-            var recommendedMounts = await _repository.FindAllReadOnlyAsync<MountEntity>(m => m.Id != id && m.MountType == mount.MountType);
+            var recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(3, m => m.Id != id && m.MountType == mount.MountType);
 
             return new ViewMountViewModel()
             {

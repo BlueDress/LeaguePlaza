@@ -7,5 +7,7 @@
         public const int PageOne = 1;
         public const int CountForHomePage = 3;
         public const int CountForPagination = 6;
+
+        public const int RecommendedQuestsCount = 3;
     }
 }
