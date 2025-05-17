@@ -283,7 +283,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             // TODO: Refactor expression build and extract it in method
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
-            Expression<Func<QuestEntity, bool>> userFilterExpression = filterAndSortQuestsRequestData.FilterOnlyUserQuests && currentUser != null
+            Expression<Func<QuestEntity, bool>> userFilterExpression = filterAndSortQuestsRequestData.PageIsMyQuests && currentUser != null
                 ? q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id
                 : q => true;
 
@@ -342,7 +342,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     Status = q.Status.ToString(),
                     CreatorId = q.CreatorId,
                     AdventurerId = q.AdventurerId,
-                    ShowExtraButtons = true,
+                    ShowExtraButtons = filterAndSortQuestsRequestData.PageIsMyQuests,
                     ImageUrl = q.ImageName,
                 }),
                 Pagination = new PaginationViewModel()

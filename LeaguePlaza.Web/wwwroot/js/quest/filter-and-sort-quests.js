@@ -42,7 +42,7 @@ function filterAndSortQuestsMain() {
         const statusFilters = Array.from(statusFilterInputs).filter(input => input.checked).map(input => input.dataset.value).join(',');
         const typeFilters = Array.from(typeFilterInputs).filter(input => input.checked).map(input => input.dataset.value).join(',');
         const currentPage = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;
-        const filterOnlyUserQuests = document.querySelector('.container').dataset.pageName === 'my-quests';
+        const pageIsMyQuests = document.querySelector('.container').dataset.pageName === 'my-quests';
 
         const filterAndSortData = {
             searchTerm: searchTerm,
@@ -51,7 +51,7 @@ function filterAndSortQuestsMain() {
             statusFilters: statusFilters,
             typeFilters: typeFilters,
             currentPage: currentPage,
-            filterOnlyUserQuests: filterOnlyUserQuests
+            pageIsMyQuests: pageIsMyQuests
         }
 
         const queryParams = new URLSearchParams(filterAndSortData).toString();

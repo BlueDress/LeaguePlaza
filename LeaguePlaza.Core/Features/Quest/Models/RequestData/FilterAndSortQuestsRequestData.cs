@@ -14,6 +14,6 @@
 
         public int CurrentPage { get; set; }
 
-        public bool FilterOnlyUserQuests { get; set; }
+        public bool PageIsMyQuests { get; set; }
     }
 }
