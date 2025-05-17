@@ -1,0 +1,92 @@
+﻿.view-quest-card {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    margin: 1rem 0;
+}
+
+.view-quest-image {
+    display: flex;
+}
+
+.view-quest-info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .view-quest-info > * {
+        flex: 1 1 100%;
+    }
+
+    .view-quest-info > h6 {
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .view-quest-info > h6,
+    .view-quest-info > p,
+    .view-quest-info > div.view-quest-metadata {
+        border-bottom: 1px solid black;
+    }
+
+    .view-quest-info > h6,
+    .view-quest-info > p,
+    .view-quest-metadata > span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .view-quest-info > p {
+        padding: 0.7rem 0.3rem;
+    }
+
+    .view-quest-info > div {
+        display: flex;
+        justify-content: flex-start;
+        text-align: center;
+    }
+
+        .view-quest-info > div.view-quest-metadata > * {
+            font-size: 14px;
+            padding: 0.7rem 0.3rem;
+            flex: 1 1 auto;
+        }
+
+        .view-quest-info > div.view-quest-metadata > :nth-child(1),
+        .view-quest-info > div.view-quest-metadata > :nth-child(2) {
+            border-right: 1px solid black;
+        }
+
+    .view-quest-info i {
+        margin-right: 0.2rem;
+    }
+
+#button-holder {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem 0;
+}
+
+    #button-holder > button {
+        padding: 0.3rem 0.8rem;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+
+@media (min-width: 601px) {
+    .view-quest-card {
+        flex-wrap: nowrap;
+    }
+
+    .view-quest-image {
+        flex: 1 0 40%;
+    }
+
+    #button-holder > button {
+        font-size: 16px;
+    }
+}

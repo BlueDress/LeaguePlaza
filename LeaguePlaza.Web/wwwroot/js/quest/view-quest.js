@@ -3,9 +3,9 @@
 function viewQuestMain() {
     const baseUrl = '/api/questapi/';
 
-    const questInfo = document.querySelector('#quest-info');
+    const btnHolder = document.querySelector('#button-holder');
 
-    questInfo.addEventListener('click', e => handleButtonClick(e));
+    btnHolder.addEventListener('click', e => handleButtonClick(e));
 
     async function handleButtonClick(e) {
         if (e.target) {
@@ -20,8 +20,7 @@ function viewQuestMain() {
                 });
 
                 if (response.status == 200) {
-                    const btnHolder = document.querySelector('#button-holder');
-                    btnHolder.appendChild(createElement('button', 'Abandon', { id: 'abandon-btn', type: 'button', 'data-quest-id': e.target.dataset.questId }));
+                    btnHolder.appendChild(createElement('button', 'Abandon Quest', { id: 'abandon-btn', class: 'abandon-btn', type: 'button', 'data-quest-id': e.target.dataset.questId }));
                     btnHolder.removeChild(e.target);
                 }
             }
@@ -36,8 +35,7 @@ function viewQuestMain() {
                 });
 
                 if (response.status == 200) {
-                    const btnHolder = document.querySelector('#button-holder');
-                    btnHolder.appendChild(createElement('button', 'Accept', { id: 'accept-btn', type: 'button', 'data-quest-id': e.target.dataset.questId }));
+                    btnHolder.appendChild(createElement('button', 'Accept Quest', { id: 'accept-btn', class: 'accept-btn', type: 'button', 'data-quest-id': e.target.dataset.questId }));
                     btnHolder.removeChild(e.target);
                 }
             }
