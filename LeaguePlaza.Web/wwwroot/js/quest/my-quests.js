@@ -220,6 +220,9 @@ function myQuestsMain() {
             if (e.target.classList.contains('complete-btn-js')) {
                 await completeQuest(e);
             }
+            if (e.target.classList.contains('accept-btn-js')) {
+                await acceptQuest(e);
+            }
             if (e.target.classList.contains('abandon-btn-js')) {
                 await abandonQuest(e);
             }
@@ -296,10 +299,10 @@ function myQuestsMain() {
         }
     }
 
-    async function abandonQuest(e) {
+    async function acceptQuest(e) {
         const questId = e.target.parentElement.dataset.questId;
 
-        const response = await fetch(baseUrl + 'abandonQuest', {
+        const response = await fetch(baseUrl + 'acceptquest', {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
@@ -310,8 +313,27 @@ function myQuestsMain() {
         // TODO: handle response from server
 
         if (response.status == 200) {
-            const questCardElement = e.target.closest('.quest-card-js');
-            questCardsContainer.removeChild(questCardElement);
+            e.target.parentElement.appendChild(createElement('button', 'Abandon', { class: 'abandon-btn abandon-btn-js', type: 'button' }));
+            e.target.parentElement.removeChild(e.target);
+        }
+    }
+
+    async function abandonQuest(e) {
+        const questId = e.target.parentElement.dataset.questId;
+
+        const response = await fetch(baseUrl + 'abandonquest', {
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({ id: questId })
+        });
+
+        // TODO: handle response from server
+
+        if (response.status == 200) {
+            e.target.parentElement.appendChild(createElement('button', 'Accept', { class: 'accept-btn accept-btn-js', type: 'button' }));
+            e.target.parentElement.removeChild(e.target);
         }
     }
 }
