@@ -7,5 +7,7 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public ICollection<QuestEntity> PostedQuests { get; set; } = new HashSet<QuestEntity>();
 
         public ICollection<QuestEntity> AcceptedQuests { get; set; } = new HashSet<QuestEntity>();
+
+        public ICollection<MountRentalEntity> MountRentals { get; set; } = new HashSet<MountRentalEntity>();
     }
 }
