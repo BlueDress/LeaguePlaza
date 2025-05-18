@@ -24,7 +24,6 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
-                    Rating = m.Rating,
                 })
             };
         }
@@ -44,7 +43,6 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     RentPrice = mount.RentPrice,
                     ImageUrl = mount.ImageUrl,
                     Type = mount.MountType.ToString(),
-                    Rating = mount.Rating,
                 },
                 RecommendedMounts = recommendedMounts.Select(m => new MountDto
                 {
@@ -54,7 +52,6 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
-                    Rating = m.Rating,
                 }),
             };
         }

@@ -4,5 +4,6 @@
     {
         Ground = 0,
         Flying = 1,
+        Aquatic = 2,
     }
 }
