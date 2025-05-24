@@ -1,9 +1,7 @@
-﻿using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
-
-namespace LeaguePlaza.Core.Features.Mount.Models.ViewModels
+﻿namespace LeaguePlaza.Core.Features.Mount.Models.ViewModels
 {
     public class MountsViewModel
     {
-        public IEnumerable<MountDto> Mounts { get; set; } = new List<MountDto>();
+        public MountCardsContainerWithPaginationViewModel ViewModel { get; set; } = new MountCardsContainerWithPaginationViewModel();
     }
 }

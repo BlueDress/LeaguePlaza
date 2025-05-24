@@ -6,10 +6,14 @@
     <h1>Rent a Mount</h1>
 
     <partial name="~/Views/Shared/Mount/_MountControlls.cshtml" />
+    <div id="cards-and-pagination">
+        <partial name="~/Views/Shared/Mount/_MountCardsContainerWithPagination.cshtml" model="@Model.ViewModel" />
+    </div>
 </div>
 
 @section Styles
 {
+    <link rel="stylesheet" href="~/css/mount/mount-cards-container.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/global/controlls.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
 }

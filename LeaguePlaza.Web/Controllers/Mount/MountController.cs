@@ -7,16 +7,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LeaguePlaza.Web.Controllers.Mount
 {
-    public class MountController(IMountService mountService) : Controller
+    public class MountController(IMountService mountService, ILogger<MountController> logger) : Controller
     {
         private readonly IMountService _mountService = mountService;
+        private readonly ILogger<MountController> _logger = logger;
 
         [Authorize(Roles = UserRoleConstants.Adventurer)]
         public async Task<IActionResult> Index()
         {
-            MountsViewModel mountsViewModel = await _mountService.CreateMountsViewModelAsync();
+            try
+            {
+                MountsViewModel mountsViewModel = await _mountService.CreateMountsViewModelAsync();
 
-            return View(mountsViewModel);
+                return View(mountsViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(Index));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return View(new MountsViewModel());
+            }
         }
 
         [Authorize(Roles = UserRoleConstants.Adventurer)]

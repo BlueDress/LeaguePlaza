@@ -36,7 +36,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             IEnumerable<QuestEntity> availableQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(QuestConstants.PageOne, QuestConstants.CountForPagination, true, q => q.Created, q => q.Status == QuestStatus.Posted);
             int totalResults = await _repository.GetCountAsync<QuestEntity>(q => true);
 
-            var QuestCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
+            var questCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
             {
                 Quests = availableQuests.Select(q => new QuestDto
                 {
@@ -60,7 +60,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             return new AvailableQuestsViewModel()
             {
-                ViewModel = QuestCardsContainerWithPaginationViewModel,
+                ViewModel = questCardsContainerWithPaginationViewModel,
             };
         }
 
@@ -73,7 +73,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 IEnumerable<QuestEntity> userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, object>(QuestConstants.PageOne, QuestConstants.CountForPagination, true, q => q.Created, q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
                 int totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
 
-                var QuestCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
+                var questCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
                 {
                     Quests = userQuests.Select(q => new QuestDto
                     {
@@ -98,7 +98,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
                 return new UserQuestsViewModel()
                 {
-                    ViewModel = QuestCardsContainerWithPaginationViewModel,
+                    ViewModel = questCardsContainerWithPaginationViewModel,
                 };
             }
             else
