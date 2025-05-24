@@ -104,6 +104,8 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
 
                     if (i % 3 == 0)
                     {
+                        double rating = 0;
+
                         for (int j = 0; j < adventurers.Length; j++)
                         {
                             newTestMount.MountRatings.Add(new MountRatingEntity()
@@ -112,6 +114,8 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
                                 UserId = adventurers[j].UserId,
                             });
 
+                            rating += (i + j) % 6;
+
                             newTestMount.MountRentals.Add(new MountRentalEntity()
                             {
                                 StartDate = DateTime.UtcNow.AddMonths(j).AddDays(i),
@@ -119,6 +123,8 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
                                 UserId = adventurers[j].UserId,
                             });
                         }
+
+                        newTestMount.Rating = Math.Round(rating / adventurers.Length, 2);
                     }
                     else if (i % 3 == 1)
                     {
@@ -127,6 +133,8 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
                             Rating = i % 6,
                             UserId = adventurers[i % 2].UserId,
                         });
+
+                        newTestMount.Rating = Math.Round(i % 6d, 2);
 
                         newTestMount.MountRentals.Add(new MountRentalEntity()
                         {
