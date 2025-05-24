@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using LeaguePlaza.Common.Constants
+<!DOCTYPE html>
 <html lang="en">
 <head>
     @* TODO: Add SEO *@
@@ -38,6 +39,12 @@
                     <li>
                         <a asp-controller="Quest" asp-action="MyQuests">My Quests</a>
                     </li>
+                    @if (User.IsInRole(UserRoleConstants.Adventurer))
+                    {
+                        <li>
+                            <a asp-controller="Mount" asp-action="Index">Mounts</a>
+                        </li>
+                    }
                 </ul>
 
                 <partial name="_LoginPartial" />
@@ -110,7 +117,7 @@
                 </ul>
             </div>
         </div>
-        <div class="footer-copyright"> 
+        <div class="footer-copyright">
             © 2025 - The League - All Rights Reserved.
         </div>
     </footer>

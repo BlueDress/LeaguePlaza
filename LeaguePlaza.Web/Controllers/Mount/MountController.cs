@@ -9,7 +9,7 @@ namespace LeaguePlaza.Web.Controllers.Mount
 {
     public class MountController(IMountService mountService) : Controller
     {
-        private IMountService _mountService = mountService;
+        private readonly IMountService _mountService = mountService;
 
         [Authorize(Roles = UserRoleConstants.Adventurer)]
         public async Task<IActionResult> Index()
