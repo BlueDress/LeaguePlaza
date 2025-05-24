@@ -1,1 +1,63 @@
-﻿
+﻿<div class="controlls-holder">
+    <div class="filters-holder">
+        <details>
+            <summary>
+                Filters
+            </summary>
+            <div class="filters-choice-holder">
+                <div>
+                    <p>
+                        Type
+                    </p>
+                    <ul id="type-filters">
+                        <li>
+                            <input id="ground" name="ground" type="checkbox" data-value="Ground" />
+                            <label for="ground">Ground</label>
+                        </li>
+                        <li>
+                            <input id="flying" name="flying" type="checkbox" data-value="Flying" />
+                            <label for="flying">Flying</label>
+                        </li>
+                        <li>
+                            <input id="aquatic" name="aquatic" type="checkbox" data-value="Aquatic" />
+                            <label for="aquatic">Aquatic</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="filters-button-holder">
+                <button id="apply-filters" type="button">Apply filters</button>
+                <button id="reset-filters" type="button">Reset filters</button>
+            </div>
+        </details>
+    </div>
+    <div class="sort-search-holder">
+        <div>
+            <select id="sort-by">
+                <option value="" disabled selected>Sort by</option>
+                <option value="1">Rating</option>
+                <option value="2">Price highest</option>
+                <option value="3">Price lowest</option>
+            </select>
+        </div>
+        <div>
+            <form id="search-quest" class="search-form" novalidate>
+                <label for="search">Search</label>
+                <input id="search" type="text" name="search" placeholder="Search" />
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </div>
+    </div>
+    <div class="date-inputs-holder">
+        <div>
+            <label for="start-date">From:</label>
+            <input id="start-date" type="date">
+        </div>
+        <div>
+            <label for="end-date">To:</label>
+            <input id="end-date" type="date">
+        </div>
+        <button id="check-available" type="button">Check available</button>
+    </div>
+    <span class="display-none filters-message-js"></span>
+</div>
