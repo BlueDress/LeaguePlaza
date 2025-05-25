@@ -1,4 +1,5 @@
-﻿using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
+﻿using LeaguePlaza.Core.Features.Mount.Models.RequestData;
+using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 
 namespace LeaguePlaza.Core.Features.Mount.Contracts
 {
@@ -7,5 +8,7 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
         Task<MountsViewModel> CreateMountsViewModelAsync();
 
         Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id);
+
+        Task<MountCardsContainerWithPaginationViewModel> CreateMountCardsContainerWithPaginationViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData);
     }
 }

@@ -287,8 +287,6 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 ? q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id
                 : q => true;
 
-            Expression<Func<QuestEntity, object>> sortExpression = filterAndSortQuestsRequestData.SortBy == "Reward" ? q => q.RewardAmount : q => q.Created;
-
             Expression<Func<QuestEntity, bool>> searchExpression = string.IsNullOrWhiteSpace(filterAndSortQuestsRequestData.SearchTerm)
                 ? q => true
                 : q => q.Title.Contains(filterAndSortQuestsRequestData.SearchTerm) || (q.Description != null && q.Description.Contains(filterAndSortQuestsRequestData.SearchTerm));
@@ -306,27 +304,29 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 ? q => typeFilters.Select(f => (QuestType)Enum.Parse(typeof(QuestType), f)).Contains(q.Type)
                 : q => true;
 
-            var parameter = Expression.Parameter(typeof(QuestEntity), "q");
-            var combinedFilterExpression = Expression.Lambda<Func<QuestEntity, bool>>(
+            ParameterExpression parameter = Expression.Parameter(typeof(QuestEntity), "q");
+            Expression<Func<QuestEntity, bool>> combinedFilterExpression = Expression.Lambda<Func<QuestEntity, bool>>(
                 Expression.AndAlso(
                     Expression.AndAlso(
-                        Expression.Invoke(statusFiltersExpression, parameter),
-                        Expression.Invoke(typeFiltersExpression, parameter)),
+                        Expression.Invoke(userFilterExpression, parameter),
+                        Expression.Invoke(searchExpression, parameter)),
                     Expression.AndAlso(
-                        Expression.Invoke(searchExpression, parameter),
-                        Expression.Invoke(userFilterExpression, parameter))),
+                        Expression.Invoke(statusFiltersExpression, parameter),
+                        Expression.Invoke(typeFiltersExpression, parameter))),
                 parameter);
 
-            var totalFilteredAndSortedQuestsCount = await _repository.GetCountAsync(combinedFilterExpression);
+            int totalFilteredAndSortedQuestsCount = await _repository.GetCountAsync(combinedFilterExpression);
 
             if (totalFilteredAndSortedQuestsCount == 0)
             {
                 return new QuestCardsContainerWithPaginationViewModel();
             }
 
-            var pageToShow = Math.Min(totalFilteredAndSortedQuestsCount, filterAndSortQuestsRequestData.CurrentPage);
+            int pageToShow = Math.Min(totalFilteredAndSortedQuestsCount / QuestConstants.CountForPagination + 1, filterAndSortQuestsRequestData.CurrentPage);
 
-            var filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, QuestConstants.CountForPagination, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
+            Expression<Func<QuestEntity, object>> sortExpression = filterAndSortQuestsRequestData.SortBy == "Reward" ? q => q.RewardAmount : q => q.Created;
+
+            IEnumerable<QuestEntity> filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, QuestConstants.CountForPagination, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
 
             return new QuestCardsContainerWithPaginationViewModel()
             {

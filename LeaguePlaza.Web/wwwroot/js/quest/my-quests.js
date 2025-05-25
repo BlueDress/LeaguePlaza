@@ -20,7 +20,7 @@ function myQuestsMain() {
     let questId;
 
     createQuestInputs?.forEach(i => i.addEventListener('blur', e => handleFormElementInput(e.target)));
-    typeSelect?.addEventListener('blur', e => handleFormElementInput(e.target));
+    typeSelect?.addEventListener('change', e => handleFormElementInput(e.target));
     imageInput?.addEventListener('blur', e => handleFormFileInput(e.target));
     createQuestForm?.addEventListener('submit', e => createQuest(e));
     updateBtn?.addEventListener('click', e => updateQuest(e));

@@ -1,10 +1,13 @@
 ﻿using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
+using LeaguePlaza.Core.Features.Mount.Models.RequestData;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Infrastructure.Data.Entities;
+using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
+using System.Linq.Expressions;
 
 namespace LeaguePlaza.Core.Features.Mount.Services
 {
@@ -14,7 +17,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
         public async Task<MountsViewModel> CreateMountsViewModelAsync()
         {
-            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, string>(QuestConstants.PageOne, QuestConstants.CountForPagination, false, m => m.Name, m => true);
+            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, double>(MountConstants.PageOne, MountConstants.CountForPagination, true, m => m.Rating, m => true);
             int totalResults = await _repository.GetCountAsync<MountEntity>(m => true);
 
             var mountCardsContainerWithPaginationViewModel = new MountCardsContainerWithPaginationViewModel()
@@ -67,6 +70,70 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
                 }),
+            };
+        }
+
+        public async Task<MountCardsContainerWithPaginationViewModel> CreateMountCardsContainerWithPaginationViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData)
+        {
+            if (!((filterAndSortMountsRequestData.StartDate == null && filterAndSortMountsRequestData.EndDate == null) ||
+                (filterAndSortMountsRequestData.StartDate != null && filterAndSortMountsRequestData.EndDate != null && filterAndSortMountsRequestData.StartDate <= filterAndSortMountsRequestData.EndDate)))
+            {
+                return new MountCardsContainerWithPaginationViewModel();
+            }
+
+            Expression<Func<MountEntity, bool>> dateIntervalExpression = filterAndSortMountsRequestData.StartDate != null && filterAndSortMountsRequestData.EndDate != null
+                ? m => m.MountRentals.All(mr => filterAndSortMountsRequestData.EndDate <= mr.StartDate || filterAndSortMountsRequestData.StartDate >= mr.EndDate)
+                : m => true;
+
+            Expression<Func<MountEntity, bool>> searchExpression = string.IsNullOrWhiteSpace(filterAndSortMountsRequestData.SearchTerm)
+                ? m => true
+                : m => m.Name.Contains(filterAndSortMountsRequestData.SearchTerm) || (m.Description != null && m.Description.Contains(filterAndSortMountsRequestData.SearchTerm));
+
+            string[] typeFilters = filterAndSortMountsRequestData.TypeFilters?.Split(',') ?? [];
+
+            Expression<Func<MountEntity, bool>> typeFiltersExpression = typeFilters.Length != 0
+                ? m => typeFilters.Select(f => (MountType)Enum.Parse(typeof(MountType), f)).Contains(m.MountType)
+                : m => true;
+
+            ParameterExpression parameter = Expression.Parameter(typeof(MountEntity), "m");
+            Expression<Func<MountEntity, bool>> combinedFilterExpression = Expression.Lambda<Func<MountEntity, bool>>(
+                Expression.AndAlso(
+                    Expression.AndAlso(
+                        Expression.Invoke(dateIntervalExpression, parameter),
+                        Expression.Invoke(searchExpression, parameter)),
+                    Expression.Invoke(typeFiltersExpression, parameter)),
+                parameter);
+
+            int totalFilteredAndSortedMountCount = await _repository.GetCountAsync(combinedFilterExpression);
+
+            if (totalFilteredAndSortedMountCount == 0)
+            {
+                return new MountCardsContainerWithPaginationViewModel();
+            }
+
+            int pageToShow = Math.Min(totalFilteredAndSortedMountCount / MountConstants.CountForPagination + 1, filterAndSortMountsRequestData.CurrentPage);
+
+            Expression<Func<MountEntity, object>> sortExpression = filterAndSortMountsRequestData.SortBy == "Price" ? m => m.RentPrice : m => m.Rating;
+
+            var filteredAndSortedMounts = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, MountConstants.CountForPagination, filterAndSortMountsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
+
+            return new MountCardsContainerWithPaginationViewModel()
+            {
+                Mounts = filteredAndSortedMounts.Select(m => new MountDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
+                    RentPrice = m.RentPrice,
+                    ImageUrl = m.ImageUrl,
+                    Type = m.MountType.ToString(),
+                    Rating = m.Rating,
+                }),
+                Pagination = new PaginationViewModel()
+                {
+                    CurrentPage = pageToShow,
+                    TotalPages = (int)Math.Ceiling(totalFilteredAndSortedMountCount / 6d),
+                },
             };
         }
     }

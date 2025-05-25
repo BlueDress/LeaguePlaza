@@ -1,62 +1,81 @@
-﻿document.addEventListener("DOMContentLoaded", filterAndSortQuestsMain());
+﻿document.addEventListener("DOMContentLoaded", filterAndSortMountsMain());
 
-function filterAndSortQuestsMain() {
-    const baseUrl = '/api/questapi/';
+function filterAndSortMountsMain() {
+    const baseUrl = '/api/mountapi/';
 
     const applyFiltersBtn = document.querySelector('#apply-filters');
     const resetFiltersBtn = document.querySelector('#reset-filters');
-    const searchQuestForm = document.querySelector('#search-quest');
+    const checkAvailableBtn = document.querySelector('#check-available');
+    const searchMountForm = document.querySelector('#search-mount');
     const cardsAndPaginationHolder = document.querySelector('#cards-and-pagination');
 
-    const statusFilterInputs = document.querySelectorAll('#status-filters input');
     const typeFilterInputs = document.querySelectorAll('#type-filters input');
     const sortBySelect = document.querySelector('#sort-by');
     const searchInput = document.querySelector('#search');
+    const startDateInput = document.querySelector('#start-date');
+    const endDateInput = document.querySelector('#end-date');
 
     cardsAndPaginationHolder.addEventListener('click', e => handlePaginationClick(e));
     resetFiltersBtn.addEventListener('click', e => resetFiltersAndSearch(e));
-    applyFiltersBtn.addEventListener('click', e => filterAndSortQuests(e));
-    searchQuestForm.addEventListener('submit', e => filterAndSortQuests(e));
-    sortBySelect.addEventListener('change', e => filterAndSortQuests(e));
+    applyFiltersBtn.addEventListener('click', e => filterAndSortMounts(e));
+    checkAvailableBtn.addEventListener('click', e => filterAndSortMounts(e));
+    searchMountForm.addEventListener('submit', e => filterAndSortMounts(e));
+    sortBySelect.addEventListener('change', e => filterAndSortMounts(e));
 
     function handlePaginationClick(e) {
         if (e.target && e.target.classList.contains('pagination-button-js')) {
-            filterAndSortQuests(e);
+            filterAndSortMounts(e);
         }
     }
 
     function resetFiltersAndSearch(e) {
-        statusFilterInputs.forEach(f => f.checked = false);
         typeFilterInputs.forEach(f => f.checked = false);
         sortBySelect.value = 1;
         searchInput.value = '';
-        filterAndSortQuests(e);
+        startDateInput.value = '';
+        endDateInput.value = '';
+        filterAndSortMounts(e);
     }
 
-    async function filterAndSortQuests(e) {
+    async function filterAndSortMounts(e) {
         e.preventDefault();
 
         const searchTerm = searchInput.value;
         const sortBy = getSortByValue();
         const orderIsDescending = getOrderDirection();
-        const statusFilters = Array.from(statusFilterInputs).filter(input => input.checked).map(input => input.dataset.value).join(',');
         const typeFilters = Array.from(typeFilterInputs).filter(input => input.checked).map(input => input.dataset.value).join(',');
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
         const currentPage = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;
-        const pageIsMyQuests = document.querySelector('.container').dataset.pageName === 'my-quests';
+
+        if (inputDateIntervalIsNotValid(startDate, endDate)) {
+            const filtersMessageElement = document.querySelector('.filters-message-js');
+            filtersMessageElement.innerText = 'Date interval is not valid';
+            filtersMessageElement.classList.add('error-message');
+            filtersMessageElement.classList.remove('display-none');
+
+            setTimeout(() => {
+                filtersMessageElement.classList.add('display-none');
+                filtersMessageElement.classList.remove('error-message');
+                filtersMessageElement.innerText = '';
+            }, 3000);
+
+            return;
+        }
 
         const filterAndSortData = {
             searchTerm: searchTerm,
             sortBy: sortBy,
             orderIsDescending: orderIsDescending,
-            statusFilters: statusFilters,
             typeFilters: typeFilters,
-            currentPage: currentPage,
-            pageIsMyQuests: pageIsMyQuests
+            startDate: startDate,
+            endDate: endDate,
+            currentPage: currentPage
         }
 
         const queryParams = new URLSearchParams(filterAndSortData).toString();
 
-        const response = await fetch(baseUrl + 'filterandsortquests' + `?${queryParams}`, {
+        const response = await fetch(baseUrl + 'filterandsortmounts' + `?${queryParams}`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
@@ -84,13 +103,17 @@ function filterAndSortQuestsMain() {
 
     function getSortByValue() {
         if (sortBySelect.value == 3 || sortBySelect.value == 4) {
-            return "Reward";
+            return "Price";
         }
 
-        return "Date";
+        return "Rating";
     }
 
     function getOrderDirection() {
         return !(sortBySelect.value == 2 || sortBySelect.value == 4);
+    }
+
+    function inputDateIntervalIsNotValid(startDate, endDate) {
+        return !((!startDate && !endDate) || (startDate && endDate && startDate <= endDate));
     }
 }
