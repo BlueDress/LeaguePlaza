@@ -34,5 +34,23 @@ namespace LeaguePlaza.Web.Controllers.Mount
                 return BadRequest();
             }
         }
+
+        [HttpPost("rentmount")]
+        public async Task<IActionResult> RentMount([FromBody] RentMountRequestData rentMountRequestData)
+        {
+            try
+            {
+                string response = await _mountService.RentMountAsync(rentMountRequestData);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(RentMount));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return BadRequest();
+            }
+        }
     }
 }

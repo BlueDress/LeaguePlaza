@@ -10,5 +10,7 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
         Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id);
 
         Task<MountCardsContainerWithPaginationViewModel> CreateMountCardsContainerWithPaginationViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData);
+
+        Task<string> RentMountAsync(RentMountRequestData rentMountRequestData);
     }
 }

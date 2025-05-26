@@ -33,9 +33,19 @@ namespace LeaguePlaza.Web.Controllers.Mount
         [Authorize(Roles = UserRoleConstants.Adventurer)]
         public async Task<IActionResult> ViewMount(int id)
         {
-            ViewMountViewModel viewMountViewModel = await _mountService.CreateViewMountViewModelAsync(id);
+            try
+            {
+                ViewMountViewModel viewMountViewModel = await _mountService.CreateViewMountViewModelAsync(id);
 
-            return View(viewMountViewModel);
+                return View(viewMountViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(ViewMount));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return View(new ViewMountViewModel());
+            }
         }
     }
 }

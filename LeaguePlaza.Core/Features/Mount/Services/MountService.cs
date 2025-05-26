@@ -7,13 +7,17 @@ using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
 
 namespace LeaguePlaza.Core.Features.Mount.Services
 {
-    public class MountService(IRepository repository) : IMountService
+    public class MountService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager) : IMountService
     {
         private readonly IRepository _repository = repository;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         public async Task<MountsViewModel> CreateMountsViewModelAsync()
         {
@@ -47,28 +51,30 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
         public async Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id)
         {
-            var mount = await _repository.FindByIdAsync<MountEntity>(id);
-            var recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(3, m => m.Id != id && m.MountType == mount.MountType);
+            var mount = await _repository.FindByIdAsync<MountEntity>(id) ?? new();
+            IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(MountConstants.RecommendedQuestsCount, m => m.Id != id && m.MountType == mount.MountType);
 
             return new ViewMountViewModel()
             {
                 Mount = new MountDto()
                 {
-                    Id = id,
+                    Id = mount.Id,
                     Name = mount.Name,
-                    Description = mount.Description,
+                    Description = string.IsNullOrWhiteSpace(mount.Description) ? MountConstants.NoDescriptionAvailable : mount.Description,
                     RentPrice = mount.RentPrice,
                     ImageUrl = mount.ImageUrl,
                     Type = mount.MountType.ToString(),
+                    Rating = mount.Rating,
                 },
                 RecommendedMounts = recommendedMounts.Select(m => new MountDto
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = m.Description,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
+                    Rating = m.Rating,
                 }),
             };
         }
@@ -135,6 +141,50 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     TotalPages = (int)Math.Ceiling(totalFilteredAndSortedMountCount / 6d),
                 },
             };
+        }
+
+        public async Task<string> RentMountAsync(RentMountRequestData rentMountRequestData)
+        {
+            if (rentMountRequestData.StartDate > rentMountRequestData.EndDate)
+            {
+                return "Something went wrong";
+            }
+
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return "Something went wrong";
+            }
+
+            var mountToRent = await _repository.FindByIdAsync<MountEntity>(rentMountRequestData.MountId);
+
+            if (mountToRent == null)
+            {
+                return "Something went wrong";
+            }
+
+            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindAllReadOnlyAsync<MountRentalEntity>(mr => mr.MountId == mountToRent.Id);
+
+            if (mountRentals.All(mr => rentMountRequestData.EndDate <= mr.StartDate || rentMountRequestData.StartDate >= mr.EndDate))
+            {
+                var newMountRental = new MountRentalEntity()
+                {
+                    StartDate = rentMountRequestData.StartDate,
+                    EndDate = rentMountRequestData.EndDate,
+                    UserId = currentUser.Id,
+                    MountId = mountToRent.Id,
+                };
+
+                await _repository.AddAsync(newMountRental);
+                await _repository.SaveChangesAsync();
+
+                return "Mount rented successfully for the chosen interval";
+            }
+            else
+            {
+                return "The mount is not available for the chosen interval";
+            }
         }
     }
 }

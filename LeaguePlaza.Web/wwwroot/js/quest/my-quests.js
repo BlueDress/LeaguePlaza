@@ -15,7 +15,6 @@ function myQuestsMain() {
     const createBtn = document.querySelector('#create-quest-btn');
     const updateBtn = document.querySelector('#update-quest-btn');
     const cardsAndPaginationHolder = document.querySelector('#cards-and-pagination');
-    const questCardsContainer = document.querySelector('#quest-cards-container');
 
     let questId;
 
