@@ -81,13 +81,13 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
         public async Task<MountCardsContainerWithPaginationViewModel> CreateMountCardsContainerWithPaginationViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData)
         {
-            if (!((filterAndSortMountsRequestData.StartDate == null && filterAndSortMountsRequestData.EndDate == null) ||
-                (filterAndSortMountsRequestData.StartDate != null && filterAndSortMountsRequestData.EndDate != null && filterAndSortMountsRequestData.StartDate <= filterAndSortMountsRequestData.EndDate)))
+            if (!((!filterAndSortMountsRequestData.StartDate.HasValue && !filterAndSortMountsRequestData.EndDate.HasValue) ||
+                (filterAndSortMountsRequestData.StartDate.HasValue && filterAndSortMountsRequestData.EndDate.HasValue && filterAndSortMountsRequestData.StartDate.Value.Date >= DateTime.UtcNow.Date && filterAndSortMountsRequestData.StartDate <= filterAndSortMountsRequestData.EndDate)))
             {
                 return new MountCardsContainerWithPaginationViewModel();
             }
 
-            Expression<Func<MountEntity, bool>> dateIntervalExpression = filterAndSortMountsRequestData.StartDate != null && filterAndSortMountsRequestData.EndDate != null
+            Expression<Func<MountEntity, bool>> dateIntervalExpression = filterAndSortMountsRequestData.StartDate.HasValue && filterAndSortMountsRequestData.EndDate.HasValue
                 ? m => m.MountRentals.All(mr => filterAndSortMountsRequestData.EndDate <= mr.StartDate || filterAndSortMountsRequestData.StartDate >= mr.EndDate)
                 : m => true;
 

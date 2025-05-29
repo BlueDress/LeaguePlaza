@@ -114,6 +114,6 @@ function filterAndSortMountsMain() {
     }
 
     function inputDateIntervalIsNotValid(startDate, endDate) {
-        return !((!startDate && !endDate) || (startDate && endDate && startDate <= endDate));
+        return !((!startDate && !endDate) || (startDate && endDate && startDate >= new Date().toJSON().slice(0, 10) && startDate <= endDate));
     }
 }
