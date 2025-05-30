@@ -79,6 +79,29 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
+        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync()
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return new MountRentHistoryViewModel();
+            }
+
+            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindAllReadOnlyAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id);
+
+            return new MountRentHistoryViewModel()
+            {
+                MountRentals = mountRentals.Select(mr => new MountRentalDto()
+                {
+                    Id = mr.Id,
+                    StartDate = mr.StartDate,
+                    EndDate = mr.EndDate,
+                    MountId = mr.MountId,
+                }),
+            };
+        }
+
         public async Task<MountCardsContainerWithPaginationViewModel> CreateMountCardsContainerWithPaginationViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData)
         {
             if (!((!filterAndSortMountsRequestData.StartDate.HasValue && !filterAndSortMountsRequestData.EndDate.HasValue) ||
@@ -184,6 +207,16 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             else
             {
                 return "The mount is not available for the chosen interval";
+            }
+        }
+
+        public async Task CancelMountRentAsync(int id)
+        {
+            MountRentalEntity? mountRentalToCancel = await _repository.FindByIdAsync<MountRentalEntity>(id);
+
+            if (mountRentalToCancel != null)
+            {
+                _repository.Remove(mountRentalToCancel);
             }
         }
     }

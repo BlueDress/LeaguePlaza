@@ -47,5 +47,23 @@ namespace LeaguePlaza.Web.Controllers.Mount
                 return View(new ViewMountViewModel());
             }
         }
+
+        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        public async Task<IActionResult> MountRentHistory()
+        {
+            try
+            {
+                MountRentHistoryViewModel mountRentHistoryViewModel = await _mountService.CreateMountRentHistoryViewModelAsync();
+
+                return View(mountRentHistoryViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(MountRentHistory));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return View(new MountRentHistoryViewModel());
+            }
+        }
     }
 }

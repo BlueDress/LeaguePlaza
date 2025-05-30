@@ -52,5 +52,23 @@ namespace LeaguePlaza.Web.Controllers.Mount
                 return BadRequest();
             }
         }
+
+        [HttpDelete("cancelmountrent/{id}")]
+        public async Task<IActionResult> CancelMountRent(int id)
+        {
+            try
+            {
+                await _mountService.CancelMountRentAsync(id);
+
+                return Ok(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(RentMount));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return BadRequest();
+            }
+        }
     }
 }
