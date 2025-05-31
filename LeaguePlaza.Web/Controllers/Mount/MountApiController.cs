@@ -53,6 +53,24 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
         }
 
+        [HttpPost("ratemount")]
+        public async Task<IActionResult> RateMount([FromBody] RateMountRequestData rateMountRequestData)
+        {
+            try
+            {
+                string response = await _mountService.AddOrUpadeMountRatingAsync(rateMountRequestData);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(RateMount));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return BadRequest();
+            }
+        }
+
         [HttpDelete("cancelmountrent/{id}")]
         public async Task<IActionResult> CancelMountRent(int id)
         {

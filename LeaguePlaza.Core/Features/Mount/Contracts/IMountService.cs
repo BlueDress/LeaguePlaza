@@ -15,6 +15,8 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
 
         Task<string> RentMountAsync(RentMountRequestData rentMountRequestData);
 
+        Task<string> AddOrUpadeMountRatingAsync(RateMountRequestData rateMountRequestData);
+
         Task CancelMountRentAsync(int id);
     }
 }

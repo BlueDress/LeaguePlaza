@@ -18,18 +18,32 @@
                 </div>
             </div>
         </div>
-        <div class="date-inputs-holder">
-            <div>
-                <label for="start-date">From:</label>
-                <input id="start-date" type="date">
+        <div class="inputs-holder">
+            <div class="date-inputs-holder">
+                <div>
+                    <label for="start-date">From</label>
+                    <input id="start-date" type="date">
+                </div>
+                <div>
+                    <label for="end-date">To</label>
+                    <input id="end-date" type="date">
+                </div>
+                <button id="rent-mount" type="button" data-mount-id="@Model.Mount.Id">Rent</button>
             </div>
-            <div>
-                <label for="end-date">To:</label>
-                <input id="end-date" type="date">
+            <p class="display-none response-message date-inputs-message-js"></p>
+            <div class="ratings-select-holder">
+                <p>Rate mount</p>
+                <select id="rating-select" data-mount-id="@Model.Mount.Id">
+                    <option value="" disabled selected>Select rating</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
             </div>
-            <button id="rent-mount" type="button" data-mount-id="@Model.Mount.Id">Rent</button>
+            <p class="display-none response-message rating-select-message-js"></p>
         </div>
-        <p class="display-none date-inputs-message date-inputs-message-js"></p>
     </div>
     <div>
         <h3>Recommended mounts</h3>

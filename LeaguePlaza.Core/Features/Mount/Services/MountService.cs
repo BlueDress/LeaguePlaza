@@ -210,6 +210,48 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             }
         }
 
+        public async Task<string> AddOrUpadeMountRatingAsync(RateMountRequestData rateMountRequestData)
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return "Something went wrong";
+            }
+
+            var mountToRate = await _repository.FindByIdAsync<MountEntity>(rateMountRequestData.MountId);
+
+            if (mountToRate == null)
+            {
+                return "Something went wrong";
+            }
+
+            IEnumerable<MountRatingEntity> currentMountRatings = await _repository.FindAllAsync<MountRatingEntity>(mr => mr.MountId == rateMountRequestData.MountId);
+            MountRatingEntity? usersCurrentMountRating = currentMountRatings.FirstOrDefault(mr => mr.UserId == currentUser.Id);
+
+            if (usersCurrentMountRating != null)
+            {
+                usersCurrentMountRating.Rating = rateMountRequestData.Rating;
+            }
+            else
+            {
+                var newMountRating = new MountRatingEntity()
+                {
+                    Rating = rateMountRequestData.Rating,
+                    UserId = currentUser.Id,
+                    MountId = rateMountRequestData.MountId,
+                };
+
+                await _repository.AddAsync(newMountRating);
+            }
+
+            mountToRate.Rating = currentMountRatings.Average(mr => mr.Rating);
+
+            await _repository.SaveChangesAsync();
+
+            return "Mount rated successfully";
+        }
+
         public async Task CancelMountRentAsync(int id)
         {
             MountRentalEntity? mountRentalToCancel = await _repository.FindByIdAsync<MountRentalEntity>(id);
