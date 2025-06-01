@@ -1,0 +1,6 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.ViewModels
+
+@model MountCardsContainerWithPaginationViewModel
+
+<partial name="~/Admin/Views/Partials/_MountAdminCardsContainer.cshtml" model="@Model.Mounts" />
+<partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />

@@ -1,0 +1,24 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly
+
+@model IEnumerable<MountDto>
+
+<div id="items-holder">
+    @foreach (var mount in Model)
+    {
+        <div>
+            <div>
+                <img src="@mount.ImageUrl" />
+            </div>
+            <div>
+                <div>@mount.Name</div>
+                <div>@mount.Description</div>
+                <div>@mount.RentPrice</div>
+                <div>@mount.Type</div>
+            </div>
+            <div>
+                <button type="button" data-mount-id="@mount.Id">Edit</button>
+                <button type="button" data-mount-id="@mount.Id">Delete</button>
+            </div>
+        </div>
+    }
+</div>

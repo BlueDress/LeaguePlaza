@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Mount.Contracts;
+using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
@@ -260,6 +261,21 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             {
                 _repository.Remove(mountRentalToCancel);
             }
+        }
+
+        public async Task CreateMountsAsync(CreateMountDto createMountDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateMountAsync(UpdateMountDto updateMountDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteMountAsync(DeleteMountDto deleteMountDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

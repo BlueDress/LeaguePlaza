@@ -1,4 +1,5 @@
-﻿using LeaguePlaza.Core.Features.Mount.Models.RequestData;
+﻿using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Mount.Models.RequestData;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 
 namespace LeaguePlaza.Core.Features.Mount.Contracts
@@ -18,5 +19,11 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
         Task<string> AddOrUpadeMountRatingAsync(RateMountRequestData rateMountRequestData);
 
         Task CancelMountRentAsync(int id);
+
+        Task CreateMountsAsync(CreateMountDto createMountDto);
+
+        Task UpdateMountAsync(UpdateMountDto updateMountDto);
+
+        Task DeleteMountAsync(DeleteMountDto deleteMountDto);
     }
 }
