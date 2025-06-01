@@ -1,0 +1,58 @@
+﻿.identity-form-holder {
+    font-size: 12px;
+    margin-bottom: 1rem;
+}
+
+    .identity-form-holder form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+        .identity-form-holder form > * {
+            flex: 1 0 100%;
+        }
+
+        .identity-form-holder form > div {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .identity-form-holder form input,
+        .identity-form-holder form select,
+        .identity-form-holder form button {
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 0.2rem;
+            font-size: 12px;
+        }
+
+        .identity-form-holder form button {
+            padding: 0.2rem 1.4rem;
+            background-color: #BEBEFF;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+            .identity-form-holder form button:hover {
+                background-color: #A9A9FF;
+                color: #F8F8FF;
+            }
+
+            .identity-form-holder form button:active {
+                transform: scale(0.98);
+            }
+
+@media (min-width: 601px) {
+    .identity-form-holder {
+        font-size: 16px;
+    }
+
+        .identity-form-holder form input,
+        .identity-form-holder form select,
+        .identity-form-holder form button {
+            font-size: 16px;
+        }
+}
