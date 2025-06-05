@@ -15,7 +15,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
 
         public async Task<MountAdminViewModel> CreateMountAdminViewModelAsync()
         {
-            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, double>(AdminConstants.PageOne, AdminConstants.CountForPagination, true, m => m.Rating, m => true);
+            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, int>(AdminConstants.PageOne, AdminConstants.CountForPagination, false, m => m.Id, m => true);
             int totalResults = await _repository.GetCountAsync<MountEntity>(m => true);
 
             var mountCardsContainerWithPaginationViewModel = new MountCardsContainerWithPaginationViewModel()

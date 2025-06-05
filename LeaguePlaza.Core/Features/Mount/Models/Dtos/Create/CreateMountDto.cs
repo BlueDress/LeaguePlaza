@@ -18,6 +18,7 @@ namespace LeaguePlaza.Core.Features.Mount.Models.Dtos.Create
         public string? ImageUrl { get; set; }
 
         [Required]
+        [AllowedValues(Infrastructure.Data.Enums.MountType.Aquatic, Infrastructure.Data.Enums.MountType.Flying, Infrastructure.Data.Enums.MountType.Ground)]
         public string MountType { get; set; } = null!;
     }
 }

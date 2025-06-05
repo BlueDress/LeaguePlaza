@@ -2,22 +2,22 @@
 
 @model IEnumerable<MountDto>
 
-<div id="items-holder">
+<div id="items-holder" class="admin-cards-holder">
     @foreach (var mount in Model)
     {
-        <div>
+        <div class="admin-card">
             <div>
                 <img src="@mount.ImageUrl" />
             </div>
-            <div>
+            <div class="admin-card-info">
                 <div>@mount.Name</div>
                 <div>@mount.Description</div>
                 <div>@mount.RentPrice</div>
                 <div>@mount.Type</div>
             </div>
-            <div>
-                <button type="button" data-mount-id="@mount.Id">Edit</button>
-                <button type="button" data-mount-id="@mount.Id">Delete</button>
+            <div class="admin-card-buttons">
+                <button class="admin-edit-button" type="button" data-mount-id="@mount.Id">Edit</button>
+                <button class="admin-delete-button" type="button" data-mount-id="@mount.Id">Delete</button>
             </div>
         </div>
     }
