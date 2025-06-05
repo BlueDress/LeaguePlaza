@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LeaguePlaza.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize(Roles = UserRoleConstants.LeagueMaster)]
     public class AdminController(IAdminService adminService) : Controller
     {
