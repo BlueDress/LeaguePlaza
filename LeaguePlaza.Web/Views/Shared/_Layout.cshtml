@@ -45,6 +45,12 @@
                             <a asp-controller="Mount" asp-action="MountRentHistory">Mount Rent History</a>
                         </li>
                     }
+                    @if (User.IsInRole(UserRoleConstants.LeagueMaster))
+                    {
+                        <li>
+                            <a asp-area="Admin" asp-controller="Admin" asp-action="Index">Manage Mounts</a>
+                        </li>
+                    }
                 </ul>
 
                 <partial name="_LoginPartial" />

@@ -1,1 +1,13 @@
-﻿
+﻿.admin-panel {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+    .admin-panel a {
+        display: block;
+        padding: 4rem;
+        border: 2px solid black;
+        font-size: 20px;
+        background-color: #F1F1D5;
+    }

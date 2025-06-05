@@ -8,13 +8,14 @@
         <form></form>
     </div>
     <div id="cards-and-pagination">
-        <partial name="~/Admin/Views/Partials/_MountAdminCardsContainerWithPagination.cshtml" model="@Model.ViewModel" />
+        <partial name="~/Areas/Admin/Views/Partials/_MountAdminCardsContainerWithPagination.cshtml" model="@Model.ViewModel" />
     </div>
 </div>
 
 @section Styles
 {
     <link rel="stylesheet" href="~/css/admin/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
 }
 
 @section Scripts
