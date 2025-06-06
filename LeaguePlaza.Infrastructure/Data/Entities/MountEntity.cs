@@ -18,6 +18,9 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public string? Description { get; set; }
 
         [Required]
+        public DateTime Created { get; set; }
+
+        [Required]
         [Column(TypeName = "decimal(12,2)")]
         public decimal RentPrice { get; set; }
 
