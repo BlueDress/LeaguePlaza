@@ -24,6 +24,6 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
 
         Task UpdateMountAsync(UpdateMountDto updateMountDto);
 
-        Task DeleteMountAsync(DeleteMountDto deleteMountDto);
+        Task DeleteMountAsync(int id);
     }
 }

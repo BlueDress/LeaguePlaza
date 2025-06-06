@@ -1,4 +1,9 @@
-﻿.admin-panel {
+﻿h1 {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.admin-panel {
     display: flex;
     flex-wrap: wrap;
     margin: 1rem 0;

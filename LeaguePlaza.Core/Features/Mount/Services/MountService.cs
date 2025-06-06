@@ -8,17 +8,28 @@ using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
+using LeaguePlaza.Infrastructure.Dropbox.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
 
 namespace LeaguePlaza.Core.Features.Mount.Services
 {
-    public class MountService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager) : IMountService
+    public class MountService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IMountService
     {
+        private const string ImageUploadPath = "/mounts/{0}/{1}/{2}";
+
+        private readonly Dictionary<string, string> DefaultMountTypeImageUrls = new()
+        {
+            { "0", "https://www.dropbox.com/scl/fi/wyvpahi0salv5ii2v5i8r/ground-default.jpg?rlkey=br72tc41gyn9b59bqk5ahyyod&st=w147fofs&raw=1" },
+            { "1", "https://www.dropbox.com/scl/fi/9n7d7geaprae40gjhcvyr/flying-default.jpg?rlkey=ktap2t7jjgo2j8oatka34rxdu&st=pfuagymz&raw=1" },
+            { "2", "https://www.dropbox.com/scl/fi/soux4avtf2hlpjw2gguth/aquatic-default.jpg?rlkey=hlf1n9g4pts8zrcfiaiglddyu&st=om0epfjz&raw=1" },
+        };
+
         private readonly IRepository _repository = repository;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly IDropboxService _dropboxService = dropboxService;
 
         public async Task<MountsViewModel> CreateMountsViewModelAsync()
         {
@@ -265,17 +276,78 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
         public async Task CreateMountsAsync(CreateMountDto createMountDto)
         {
-            throw new NotImplementedException();
+            var dateCreated = DateTime.Now;
+
+            string imageUrl = string.Empty;
+
+            if (createMountDto.Image != null)
+            {
+                string accessToken = await _dropboxService.GetAccessToken();
+
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    string uploadPath = string.Format(ImageUploadPath, createMountDto.Name, dateCreated.ToLongTimeString(), createMountDto.Image.FileName);
+                    imageUrl = await _dropboxService.UploadImage(createMountDto.Image, uploadPath, accessToken);
+                }
+            }
+
+            imageUrl = string.IsNullOrEmpty(imageUrl) ? DefaultMountTypeImageUrls[createMountDto.MountType] : imageUrl;
+
+            var newMount = new MountEntity()
+            {
+                Name = createMountDto.Name,
+                Description = createMountDto.Description,
+                Created = dateCreated,
+                RentPrice = createMountDto.RentPrice,
+                MountType = (MountType)Enum.Parse(typeof(MountType), createMountDto.MountType),
+                ImageUrl = imageUrl,
+            };
+
+            await _repository.AddAsync(newMount);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task UpdateMountAsync(UpdateMountDto updateMountDto)
         {
-            throw new NotImplementedException();
+            var mountToUpdate = await _repository.FindByIdAsync<MountEntity>(updateMountDto.Id);
+
+            if (mountToUpdate != null)
+            {
+                mountToUpdate.Name = updateMountDto.Name;
+                mountToUpdate.Description = updateMountDto.Description;
+                mountToUpdate.RentPrice = updateMountDto.RentPrice;
+                mountToUpdate.MountType = (MountType)Enum.Parse(typeof(MountType), updateMountDto.MountType);
+
+                if (updateMountDto.Image != null)
+                {
+                    string accessToken = await _dropboxService.GetAccessToken();
+
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        string uploadPath = string.Format(ImageUploadPath, updateMountDto.Name, mountToUpdate.Created.ToLongTimeString(), updateMountDto.Image.FileName);
+                        string imageUrl = await _dropboxService.UploadImage(updateMountDto.Image, uploadPath, accessToken);
+
+                        if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            mountToUpdate.ImageUrl = imageUrl;
+                        }
+                    }
+                }
+
+                _repository.Update(mountToUpdate);
+                await _repository.SaveChangesAsync();
+            }
         }
 
-        public async Task DeleteMountAsync(DeleteMountDto deleteMountDto)
+        public async Task DeleteMountAsync(int id)
         {
-            throw new NotImplementedException();
+            var mountToRemove = await _repository.FindByIdAsync<MountEntity>(id);
+
+            if (mountToRemove != null)
+            {
+                _repository.Remove(mountToRemove);
+                await _repository.SaveChangesAsync();
+            }
         }
     }
 }

@@ -13,6 +13,8 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
     [Authorize(Roles = UserRoleConstants.LeagueMaster)]
     public class AdminApiController(IAdminService adminService, IMountService mountService) : Controller
     {
+        private const string MountAdminCardsContainerWithPagination = "~/Areas/Admin/Views/Partials/_MountAdminCardsContainerWithPagination.cshtml";
+
         public readonly IAdminService _adminService = adminService;
         private readonly IMountService _mountService = mountService;
 
@@ -22,7 +24,7 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
             await _mountService.CreateMountsAsync(createMountDto);
             MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync();
 
-            return View(mountAdminViewModel);
+            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
         }
 
         [HttpPut("updatemount")]
@@ -31,16 +33,16 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
             await _mountService.UpdateMountAsync(updateMountDto);
             MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync();
 
-            return View(mountAdminViewModel);
+            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
         }
 
         [HttpPut("deletemount")]
-        public async Task<IActionResult> DeleteMount([FromForm] DeleteMountDto deleteMountDto)
+        public async Task<IActionResult> DeleteMount([FromBody] DeleteMountDto deleteMountDto)
         {
-            await _mountService.DeleteMountAsync(deleteMountDto);
+            await _mountService.DeleteMountAsync(deleteMountDto.Id);
             MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync();
 
-            return View(mountAdminViewModel);
+            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
         }
     }
 }

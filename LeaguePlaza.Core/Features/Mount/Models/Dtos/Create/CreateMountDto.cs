@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LeaguePlaza.Infrastructure.Attributes;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace LeaguePlaza.Core.Features.Mount.Models.Dtos.Create
 {
@@ -12,13 +14,14 @@ namespace LeaguePlaza.Core.Features.Mount.Models.Dtos.Create
         public string? Description { get; set; }
 
         [Required]
+        [DecimalModelBinder]
         public decimal RentPrice { get; set; }
 
-        [MaxLength(500)]
-        public string? ImageUrl { get; set; }
+        [MaxFileSize(5 * 1024 * 1024)]
+        [ValidateImageFileSignature]
+        public IFormFile? Image { get; set; }
 
         [Required]
-        [AllowedValues(Infrastructure.Data.Enums.MountType.Aquatic, Infrastructure.Data.Enums.MountType.Flying, Infrastructure.Data.Enums.MountType.Ground)]
         public string MountType { get; set; } = null!;
     }
 }

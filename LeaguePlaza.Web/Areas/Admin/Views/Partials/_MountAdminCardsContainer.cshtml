@@ -5,19 +5,19 @@
 <div id="items-holder" class="admin-cards-holder">
     @foreach (var mount in Model)
     {
-        <div class="admin-card">
+        <div class="admin-card admin-mount-card-js">
             <div>
                 <img src="@mount.ImageUrl" />
             </div>
-            <div class="admin-card-info">
+            <div class="admin-card-info admin-mount-card-info-js">
                 <div>@mount.Name</div>
                 <div>@mount.Description</div>
                 <div>@mount.RentPrice</div>
                 <div>@mount.Type</div>
             </div>
             <div class="admin-card-buttons">
-                <button class="admin-edit-button" type="button" data-mount-id="@mount.Id">Edit</button>
-                <button class="admin-delete-button" type="button" data-mount-id="@mount.Id">Delete</button>
+                <button class="admin-edit-button admin-mount-edit-button-js" type="button" data-mount-id="@mount.Id">Edit</button>
+                <button class="admin-delete-button admin-mount-delete-button-js" type="button" data-mount-id="@mount.Id">Delete</button>
             </div>
         </div>
     }
