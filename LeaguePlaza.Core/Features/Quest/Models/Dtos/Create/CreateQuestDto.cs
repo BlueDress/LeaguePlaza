@@ -15,6 +15,7 @@ namespace LeaguePlaza.Core.Features.Quest.Models.Dtos.Create
         public string? Description { get; set; }
 
         [Required]
+        [DecimalModelBinder]
         public decimal RewardAmount { get; set; }
 
         [Required]
