@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace LeaguePlaza.Core.Features.Quest.Attributes
+namespace LeaguePlaza.Infrastructure.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class MaxFileSizeAttribute(int maxFileSize) : ValidationAttribute

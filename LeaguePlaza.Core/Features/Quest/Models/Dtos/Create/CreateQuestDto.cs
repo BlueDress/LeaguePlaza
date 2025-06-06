@@ -1,4 +1,4 @@
-﻿using LeaguePlaza.Core.Features.Quest.Attributes;
+﻿using LeaguePlaza.Infrastructure.Attributes;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
