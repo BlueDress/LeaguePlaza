@@ -13,11 +13,15 @@ function filterAndSortQuestsMain() {
     const sortBySelect = document.querySelector('#sort-by');
     const searchInput = document.querySelector('#search');
 
+    const pageName = document.querySelector('.container').dataset.pageName;
+
     cardsAndPaginationHolder.addEventListener('click', e => handlePaginationClick(e));
     resetFiltersBtn.addEventListener('click', e => resetFiltersAndSearch(e));
     applyFiltersBtn.addEventListener('click', e => filterAndSortQuests(e));
     searchQuestForm.addEventListener('submit', e => filterAndSortQuests(e));
     sortBySelect.addEventListener('change', e => filterAndSortQuests(e));
+
+    hideStatusFiltersForAllQuestsPage();
 
     function handlePaginationClick(e) {
         if (e.target && e.target.classList.contains('pagination-button-js')) {
@@ -92,5 +96,11 @@ function filterAndSortQuestsMain() {
 
     function getOrderDirection() {
         return !(sortBySelect.value == 2 || sortBySelect.value == 4);
+    }
+
+    function hideStatusFiltersForAllQuestsPage() {
+        if (pageName === 'all-quests') {
+            document.querySelector('#status-filters').parentElement.classList.add('display-none');
+        }
     }
 }
