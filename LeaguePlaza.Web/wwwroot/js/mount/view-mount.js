@@ -31,7 +31,7 @@ function viewMountMain() {
             return;
         }
 
-        const rentMountRequestData = {
+        const rentMountDto = {
             mountId: e.target.dataset.mountId,
             startDate: startDate,
             endDate: endDate
@@ -42,7 +42,7 @@ function viewMountMain() {
             headers: {
                 'content-type': 'application/json',
             },
-            body: JSON.stringify(rentMountRequestData)
+            body: JSON.stringify(rentMountDto)
         });
 
         if (response.status == 200) {
@@ -71,7 +71,7 @@ function viewMountMain() {
     }
 
     async function rateMount(e) {
-        const rateMountRequestData = {
+        const rateMountDto = {
             mountId: e.target.dataset.mountId,
             rating: e.target.value
         }
@@ -81,7 +81,7 @@ function viewMountMain() {
             headers: {
                 'content-type': 'application/json',
             },
-            body: JSON.stringify(rateMountRequestData)
+            body: JSON.stringify(rateMountDto)
         });
 
         if (response.status == 200) {

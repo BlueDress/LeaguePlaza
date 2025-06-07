@@ -178,9 +178,9 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<string> RentMountAsync(RentMountRequestData rentMountRequestData)
+        public async Task<string> RentMountAsync(RentMountDto rentMountDto)
         {
-            if (rentMountRequestData.StartDate > rentMountRequestData.EndDate)
+            if (rentMountDto.StartDate > rentMountDto.EndDate)
             {
                 return "Something went wrong";
             }
@@ -192,7 +192,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return "Something went wrong";
             }
 
-            var mountToRent = await _repository.FindByIdAsync<MountEntity>(rentMountRequestData.MountId);
+            var mountToRent = await _repository.FindByIdAsync<MountEntity>(rentMountDto.MountId);
 
             if (mountToRent == null)
             {
@@ -201,12 +201,12 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
             IEnumerable<MountRentalEntity> mountRentals = await _repository.FindAllReadOnlyAsync<MountRentalEntity>(mr => mr.MountId == mountToRent.Id);
 
-            if (mountRentals.All(mr => rentMountRequestData.EndDate <= mr.StartDate || rentMountRequestData.StartDate >= mr.EndDate))
+            if (mountRentals.All(mr => rentMountDto.EndDate <= mr.StartDate || rentMountDto.StartDate >= mr.EndDate))
             {
                 var newMountRental = new MountRentalEntity()
                 {
-                    StartDate = rentMountRequestData.StartDate,
-                    EndDate = rentMountRequestData.EndDate,
+                    StartDate = rentMountDto.StartDate,
+                    EndDate = rentMountDto.EndDate,
                     UserId = currentUser.Id,
                     MountId = mountToRent.Id,
                 };
@@ -222,7 +222,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             }
         }
 
-        public async Task<string> AddOrUpadeMountRatingAsync(RateMountRequestData rateMountRequestData)
+        public async Task<string> AddOrUpadeMountRatingAsync(RateMountDto rateMountDto)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -231,27 +231,27 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return "Something went wrong";
             }
 
-            var mountToRate = await _repository.FindByIdAsync<MountEntity>(rateMountRequestData.MountId);
+            var mountToRate = await _repository.FindByIdAsync<MountEntity>(rateMountDto.MountId);
 
             if (mountToRate == null)
             {
                 return "Something went wrong";
             }
 
-            IEnumerable<MountRatingEntity> currentMountRatings = await _repository.FindAllAsync<MountRatingEntity>(mr => mr.MountId == rateMountRequestData.MountId);
+            IEnumerable<MountRatingEntity> currentMountRatings = await _repository.FindAllAsync<MountRatingEntity>(mr => mr.MountId == rateMountDto.MountId);
             MountRatingEntity? usersCurrentMountRating = currentMountRatings.FirstOrDefault(mr => mr.UserId == currentUser.Id);
 
             if (usersCurrentMountRating != null)
             {
-                usersCurrentMountRating.Rating = rateMountRequestData.Rating;
+                usersCurrentMountRating.Rating = rateMountDto.Rating;
             }
             else
             {
                 var newMountRating = new MountRatingEntity()
                 {
-                    Rating = rateMountRequestData.Rating,
+                    Rating = rateMountDto.Rating,
                     UserId = currentUser.Id,
-                    MountId = rateMountRequestData.MountId,
+                    MountId = rateMountDto.MountId,
                 };
 
                 await _repository.AddAsync(newMountRating);

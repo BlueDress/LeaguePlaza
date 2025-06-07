@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LeaguePlaza.Core.Features.Mount.Models.RequestData
+namespace LeaguePlaza.Core.Features.Mount.Models.Dtos.Create
 {
-    public class RentMountRequestData
+    public class RentMountDto
     {
         [Required]
         public int MountId { get; set; }

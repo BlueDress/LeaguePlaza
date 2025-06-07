@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Mount.Contracts;
+using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -36,11 +37,11 @@ namespace LeaguePlaza.Web.Controllers.Mount
         }
 
         [HttpPost("rentmount")]
-        public async Task<IActionResult> RentMount([FromBody] RentMountRequestData rentMountRequestData)
+        public async Task<IActionResult> RentMount([FromBody] RentMountDto rentMountDto)
         {
             try
             {
-                string response = await _mountService.RentMountAsync(rentMountRequestData);
+                string response = await _mountService.RentMountAsync(rentMountDto);
 
                 return Ok(response);
             }
@@ -54,11 +55,11 @@ namespace LeaguePlaza.Web.Controllers.Mount
         }
 
         [HttpPost("ratemount")]
-        public async Task<IActionResult> RateMount([FromBody] RateMountRequestData rateMountRequestData)
+        public async Task<IActionResult> RateMount([FromBody] RateMountDto rateMountDto)
         {
             try
             {
-                string response = await _mountService.AddOrUpadeMountRatingAsync(rateMountRequestData);
+                string response = await _mountService.AddOrUpadeMountRatingAsync(rateMountDto);
 
                 return Ok(response);
             }
