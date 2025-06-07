@@ -12,7 +12,7 @@ namespace LeaguePlaza.Web.Controllers.Mount
     [Authorize(Roles = UserRoleConstants.Adventurer)]
     public class MountApiController(IMountService mountService, ILogger<MountController> logger) : Controller
     {
-        private const string MountCardsContainerWithPagination = "~/Views/Shared/Mount/_MountCardsContainerWithPagination.cshtml";
+        private const string MountCardsContainerWithPagination = "~/Views/Mount/Partials/_MountCardsContainerWithPagination.cshtml";
 
         private readonly IMountService _mountService = mountService;
         private readonly ILogger<MountController> _logger = logger;

@@ -4,7 +4,7 @@
 
 @if (Model.Mounts.Any())
 {
-    <partial name="~/Views/Shared/Mount/_MountCardsContainer.cshtml" model="@Model.Mounts" />
+    <partial name="~/Views/Mount/Partials/_MountCardsContainer.cshtml" model="@Model.Mounts" />
     <partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />
 }
 else

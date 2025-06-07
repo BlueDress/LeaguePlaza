@@ -4,7 +4,7 @@
 
 @if (Model.Quests.Any())
 {
-    <partial name="~/Views/Shared/Quest/_QuestCardsContainer.cshtml" model="@Model.Quests" />
+    <partial name="~/Views/Quest/Partials/_QuestCardsContainer.cshtml" model="@Model.Quests" />
     <partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />
 }
 else
