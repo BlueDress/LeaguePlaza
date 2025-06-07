@@ -44,5 +44,13 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
 
             return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
         }
+
+        [HttpGet("getpageresults")]
+        public async Task<IActionResult> GetPageResults([FromQuery] int pageNumber)
+        {
+            MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync(pageNumber);
+
+            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
+        }
     }
 }

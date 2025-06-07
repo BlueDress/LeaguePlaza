@@ -14,11 +14,14 @@ function adminMain() {
     const updateMountBtn = document.querySelector('#update-mount-btn');
     const cardsAndPaginationHolder = document.querySelector('#cards-and-pagination');
 
+    const pageName = document.querySelector('.container').dataset.pageName;
+
     let mountId;
 
     createMountForm?.addEventListener('submit', e => createMount(e));
     updateMountBtn?.addEventListener('click', e => updateMount(e));
     cardsAndPaginationHolder.addEventListener('click', e => handleMountButtonClick(e));
+    cardsAndPaginationHolder.addEventListener('click', e => handlePaginationClick(e));
 
     async function createMount(e) {
         createMountBtn.setAttribute('disabled', 'disabled');
@@ -123,6 +126,32 @@ function adminMain() {
             const cardsAndPaginationHolderView = await response.text();
             cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
             ClearMountInputs();
+        }
+    }
+
+    function handlePaginationClick(e) {
+        if (e.target && e.target.classList.contains('pagination-button-js')) {
+            switch (pageName) {
+                case 'mount-admin': getMountPageResults(e);
+            }
+        }
+    }
+
+    async function getMountPageResults(e) {
+        e.preventDefault();
+
+        const pageNumber = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;
+
+        const response = await fetch(baseUrl + 'getpageresults' + `?pageNumber=${pageNumber}`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+            },
+        });
+
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
         }
     }
 

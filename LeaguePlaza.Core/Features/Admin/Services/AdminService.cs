@@ -13,9 +13,9 @@ namespace LeaguePlaza.Core.Features.Admin.Services
     {
         private readonly IRepository _repository = repository;
 
-        public async Task<MountAdminViewModel> CreateMountAdminViewModelAsync()
+        public async Task<MountAdminViewModel> CreateMountAdminViewModelAsync(int pageNumber = AdminConstants.PageOne)
         {
-            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, int>(AdminConstants.PageOne, AdminConstants.CountForPagination, false, m => m.Id, m => true);
+            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, int>(pageNumber, AdminConstants.CountForPagination, false, m => m.Id, m => true);
             int totalResults = await _repository.GetCountAsync<MountEntity>(m => true);
 
             var mountCardsContainerWithPaginationViewModel = new MountCardsContainerWithPaginationViewModel()
@@ -32,7 +32,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = 1,
+                    CurrentPage = pageNumber,
                     TotalPages = (int)Math.Ceiling(totalResults / 10d),
                 },
             };
