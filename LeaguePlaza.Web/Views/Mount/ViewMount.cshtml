@@ -12,7 +12,7 @@
                 <h6>@Model.Mount.Name</h6>
                 <p>@Model.Mount.Description</p>
                 <div class="view-mount-metadata">
-                    <span><i class="fa-solid fa-star"></i>@Model.Mount.Rating</span>
+                    <span><i class="fa-solid fa-star"></i>@(Model.Mount.Rating != 0 ? Model.Mount.Rating : "N/A")</span>
                     <span><i class="fa-solid fa-horse-head"></i>@Model.Mount.Type</span>
                     <span><i class="fa-solid fa-coins"></i>@Model.Mount.RentPrice</span>
                 </div>

@@ -13,7 +13,7 @@
                 <h6>@mount.Name</h6>
                 <p>@mount.Description</p>
                 <div class="mount-metadata">
-                    <span><i class="fa-solid fa-star"></i>@mount.Rating</span>
+                    <span><i class="fa-solid fa-star"></i>@(mount.Rating != 0 ? mount.Rating : "N/A")</span>
                     <span><i class="fa-solid fa-horse-head"></i>@mount.Type</span>
                     <span><i class="fa-solid fa-coins"></i>@mount.RentPrice</span>
                 </div>
