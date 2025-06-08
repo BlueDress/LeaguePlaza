@@ -99,7 +99,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync()
+        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = MountConstants.PageOne)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -108,7 +108,8 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentHistoryViewModel();
             }
 
-            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindAllReadOnlyAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id, mr => mr.Mount);
+            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountConstants.CountForRentHistoryPagination, false, mr => mr.StartDate, mr => mr.UserId == currentUser.Id, mr => mr.Mount);
+            int totalResults = await _repository.GetCountAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id);
 
             return new MountRentHistoryViewModel()
             {
@@ -120,6 +121,11 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     MountId = mr.MountId,
                     MountName = mr.Mount.Name,
                 }),
+                Pagination = new PaginationViewModel()
+                {
+                    CurrentPage = pageNumber,
+                    TotalPages = (int)Math.Ceiling(totalResults / 10d),
+                },
             };
         }
 
@@ -280,6 +286,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             if (mountRentalToCancel != null)
             {
                 _repository.Remove(mountRentalToCancel);
+                await _repository.SaveChangesAsync();
             }
         }
 

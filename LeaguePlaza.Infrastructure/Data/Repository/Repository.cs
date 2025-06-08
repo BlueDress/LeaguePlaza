@@ -68,9 +68,19 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             return await DbSet<T>().AsNoTracking().Where(filterCondition).Take(count).ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindSpecificCountOrderedReadOnlyAsync<T, TKey>(int pageNumber, int count, bool orderIsDescending, Expression<Func<T, TKey>> orderCondition, Expression<Func<T, bool>> filterCondition) where T : class
+        public async Task<IEnumerable<T>> FindSpecificCountOrderedReadOnlyAsync<T, TKey>(int pageNumber, int count, bool orderIsDescending, Expression<Func<T, TKey>> orderCondition, Expression<Func<T, bool>> filterCondition, params Expression<Func<T, object>>[] includes) where T : class
         {
-            var query = DbSet<T>().AsNoTracking().Where(filterCondition);
+            IQueryable<T> query = DbSet<T>().AsNoTracking();
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            query = query.Where(filterCondition);
             query = orderIsDescending ? query.OrderByDescending(orderCondition) : query.OrderBy(orderCondition);
 
             return await query.Skip((pageNumber - 1) * count).Take(count).ToListAsync();

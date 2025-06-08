@@ -4,44 +4,14 @@
 
 <div class="container">
     <h1>My Mount Rent History</h1>
-
-    @if (Model.MountRentals.Any())
-    {
-        <div class="mount-rent-history">
-            <div>
-                <div>Start Date</div>
-                <div>End Date</div>
-                <div>Mount</div>
-                <div>Status</div>
-            </div>
-            @foreach (var mountRental in Model.MountRentals.OrderBy(mr => mr.StartDate))
-            {
-                <div class="mount-rent-info">
-                    <div>@mountRental.StartDate.ToShortDateString()</div>
-                    <div>@mountRental.EndDate.ToShortDateString()</div>
-                    <div><a asp-controller="Mount" asp-action="ViewMount" asp-route-id="@mountRental.MountId">@mountRental.MountName</a></div>
-                    <div>
-                        @if (mountRental.EndDate < DateTime.UtcNow)
-                        {
-                            <span class="passed-rental">Passed</span>
-                        }
-                        else if (mountRental.StartDate.Date <= DateTime.UtcNow.Date)
-                        {
-                            <span class="ongoing-rental">Ongoing</span>
-                        }
-                        else
-                        {
-                            <button class="cancel-rent-btn cancel-rent-btn-js" type="button" data-mount-rental-id="@mountRental.Id">Cancel</button>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
-    }
+    <div id="mount-rent-history-and-pagination">
+        <partial name="~/Views/Mount/Partials/_MountRentHistoryContainerWithPagination.cshtml" model="@Model" />
+    </div>
 </div>
 
 @section Styles {
     <link rel="stylesheet" href="~/css/mount/mount-rent-history.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
 }
 
 @section Scripts {

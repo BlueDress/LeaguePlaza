@@ -1,4 +1,5 @@
 ﻿using LeaguePlaza.Common.Constants;
+using LeaguePlaza.Core.Features.Admin.Models.ViewModels;
 using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
@@ -14,6 +15,7 @@ namespace LeaguePlaza.Web.Controllers.Mount
     public class MountApiController(IMountService mountService, ILogger<MountController> logger) : Controller
     {
         private const string MountCardsContainerWithPagination = "~/Views/Mount/Partials/_MountCardsContainerWithPagination.cshtml";
+        private const string MountRentHistoryContainerWithPagination = "~/Views/Mount/Partials/_MountRentHistoryContainerWithPagination.cshtml";
 
         private readonly IMountService _mountService = mountService;
         private readonly ILogger<MountController> _logger = logger;
@@ -87,6 +89,24 @@ namespace LeaguePlaza.Web.Controllers.Mount
                 _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
 
                 return BadRequest();
+            }
+        }
+
+        [HttpGet("getpageresults")]
+        public async Task<IActionResult> GetPageResults([FromQuery] int pageNumber)
+        {
+            try
+            {
+                MountRentHistoryViewModel mountRentHistoryViewModel = await _mountService.CreateMountRentHistoryViewModelAsync(pageNumber);
+
+                return PartialView(MountRentHistoryContainerWithPagination, mountRentHistoryViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(GetPageResults));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return View(new MountRentHistoryViewModel());
             }
         }
     }
