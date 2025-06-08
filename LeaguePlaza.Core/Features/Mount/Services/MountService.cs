@@ -100,7 +100,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentHistoryViewModel();
             }
 
-            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindAllReadOnlyAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id);
+            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindAllReadOnlyAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id, mr => mr.Mount);
 
             return new MountRentHistoryViewModel()
             {
@@ -110,6 +110,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     StartDate = mr.StartDate,
                     EndDate = mr.EndDate,
                     MountId = mr.MountId,
+                    MountName = mr.Mount.Name,
                 }),
             };
         }

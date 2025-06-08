@@ -9,5 +9,7 @@
         public DateTime EndDate { get; set; }
 
         public int MountId { get; set; }
+
+        public string MountName { get; set; } = null!;
     }
 }

@@ -33,9 +33,19 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             return await DbSet<T>().Where(filterCondition).ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition) where T : class
+        public async Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Expression<Func<T, object>>[] includes) where T : class
         {
-            return await DbSet<T>().AsNoTracking().Where(filterCondition).ToListAsync();
+            IQueryable<T> query = DbSet<T>();
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.AsNoTracking().Where(filterCondition).ToListAsync();
         }
 
         public async Task<IEnumerable<T>> FindSpecificCountReadOnlyAsync<T>(int count, Expression<Func<T, bool>> filterCondition) where T : class

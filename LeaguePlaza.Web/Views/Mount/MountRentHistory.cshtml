@@ -19,7 +19,7 @@
                 <div class="mount-rent-info">
                     <div>@mountRental.StartDate.ToShortDateString()</div>
                     <div>@mountRental.EndDate.ToShortDateString()</div>
-                    <div><a asp-controller="Mount" asp-action="ViewMount" asp-route-id="@mountRental.MountId">View</a></div>
+                    <div><a asp-controller="Mount" asp-action="ViewMount" asp-route-id="@mountRental.MountId">@mountRental.MountName</a></div>
                     <div>
                         @if (mountRental.EndDate < DateTime.UtcNow)
                         {

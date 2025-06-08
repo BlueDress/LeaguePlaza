@@ -14,7 +14,7 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
 
         Task<IEnumerable<T>> FindAllAsync<T>(Expression<Func<T, bool>> filterCondition) where T : class;
 
-        Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition) where T : class;
+        Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Expression<Func<T, object>>[] includes) where T : class;
 
         Task<IEnumerable<T>> FindSpecificCountReadOnlyAsync<T>(int count, Expression<Func<T, bool>> filterCondition) where T : class;
 
