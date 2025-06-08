@@ -6,9 +6,9 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
 {
     public interface IQuestService
     {
-        Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync();
+        Task<QuestsViewModel> CreateAvailableQuestsViewModelAsync();
 
-        Task<UserQuestsViewModel> CreateUserQuestsViewModelAsync();
+        Task<QuestsViewModel> CreateUserQuestsViewModelAsync();
 
         Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id);
 
@@ -24,6 +24,6 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
 
         Task AbandonQuestAsync(int id);
 
-        Task<QuestCardsContainerWithPaginationViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData);
+        Task<QuestsViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData);
     }
 }

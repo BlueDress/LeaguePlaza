@@ -1,13 +1,13 @@
 ﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
 
-@model AvailableQuestsViewModel
+@model QuestsViewModel
 
 <div class="container" data-page-name="all-quests">
     <h1>All Quests</h1>
 
     <partial name="~/Views/Quest/Partials/_QuestControlls.cshtml" />
     <div id="cards-and-pagination">
-        <partial name="~/Views/Quest/Partials/_QuestCardsContainerWithPagination.cshtml" model="@Model.ViewModel" />
+        <partial name="~/Views/Quest/Partials/_QuestCardsContainerWithPagination.cshtml" model="@Model" />
     </div>
 </div>
 

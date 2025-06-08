@@ -3,7 +3,7 @@ using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
 
 namespace LeaguePlaza.Core.Features.Quest.Models.ViewModels
 {
-    public class QuestCardsContainerWithPaginationViewModel
+    public class QuestsViewModel
     {
         public IEnumerable<QuestDto> Quests { get; set; } = new List<QuestDto>();
 

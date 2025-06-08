@@ -1,7 +1,7 @@
 ﻿@using LeaguePlaza.Common.Constants
 @using LeaguePlaza.Core.Features.Quest.Models.ViewModels
 
-@model UserQuestsViewModel
+@model QuestsViewModel
 
 <div class="container" data-page-name="my-quests">
     @if (User.IsInRole(UserRoleConstants.QuestGiver))
@@ -49,7 +49,7 @@
 
     <partial name="~/Views/Quest/Partials/_QuestControlls.cshtml" />
     <div id="cards-and-pagination">
-        <partial name="~/Views/Quest/Partials/_QuestCardsContainerWithPagination.cshtml" model="@Model.ViewModel" />
+        <partial name="~/Views/Quest/Partials/_QuestCardsContainerWithPagination.cshtml" model="@Model" />
     </div>
 </div>
 

@@ -31,12 +31,12 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IDropboxService _dropboxService = dropboxService;
 
-        public async Task<AvailableQuestsViewModel> CreateAvailableQuestsViewModelAsync()
+        public async Task<QuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
             IEnumerable<QuestEntity> availableQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(QuestConstants.PageOne, QuestConstants.CountForPagination, true, q => q.Created, q => q.Status == QuestStatus.Posted);
             int totalResults = await _repository.GetCountAsync<QuestEntity>(q => true);
 
-            var questCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
+            return new QuestsViewModel()
             {
                 Quests = availableQuests.Select(q => new QuestDto
                 {
@@ -57,14 +57,9 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     TotalPages = (int)Math.Ceiling(totalResults / 6d),
                 },
             };
-
-            return new AvailableQuestsViewModel()
-            {
-                ViewModel = questCardsContainerWithPaginationViewModel,
-            };
         }
 
-        public async Task<UserQuestsViewModel> CreateUserQuestsViewModelAsync()
+        public async Task<QuestsViewModel> CreateUserQuestsViewModelAsync()
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -73,7 +68,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 IEnumerable<QuestEntity> userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, object>(QuestConstants.PageOne, QuestConstants.CountForPagination, true, q => q.Created, q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
                 int totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
 
-                var questCardsContainerWithPaginationViewModel = new QuestCardsContainerWithPaginationViewModel()
+                return new QuestsViewModel()
                 {
                     Quests = userQuests.Select(q => new QuestDto
                     {
@@ -95,15 +90,10 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                         TotalPages = (int)Math.Ceiling(totalResults / 6d),
                     },
                 };
-
-                return new UserQuestsViewModel()
-                {
-                    ViewModel = questCardsContainerWithPaginationViewModel,
-                };
             }
             else
             {
-                return new UserQuestsViewModel();
+                return new QuestsViewModel();
             }
         }
 
@@ -278,7 +268,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             }
         }
 
-        public async Task<QuestCardsContainerWithPaginationViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)
+        public async Task<QuestsViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)
         {
             // TODO: Refactor expression build and extract it in method
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
@@ -319,7 +309,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             if (totalFilteredAndSortedQuestsCount == 0)
             {
-                return new QuestCardsContainerWithPaginationViewModel();
+                return new QuestsViewModel();
             }
 
             int pageToShow = Math.Min(totalFilteredAndSortedQuestsCount / QuestConstants.CountForPagination + 1, filterAndSortQuestsRequestData.CurrentPage);
@@ -328,9 +318,8 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             IEnumerable<QuestEntity> filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, QuestConstants.CountForPagination, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
 
-            return new QuestCardsContainerWithPaginationViewModel()
+            return new QuestsViewModel()
             {
-                //TODO : Extract mapping into method
                 Quests = filteredAndSortedQuests.Select(q => new QuestDto
                 {
                     Id = q.Id,

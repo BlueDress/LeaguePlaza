@@ -25,9 +25,9 @@ namespace LeaguePlaza.Web.Controllers.Quest
             try
             {
                 await _questService.CreateQuestAsync(createQuestDto);
-                UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-                return PartialView(QuestCardsContainerWithPagination, userQuestsViewModel.ViewModel);
+                return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
             catch (Exception ex)
             {
@@ -45,9 +45,9 @@ namespace LeaguePlaza.Web.Controllers.Quest
             try
             {
                 await _questService.UpdateQuestAsync(updateQuestDto);
-                UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-                return PartialView(QuestCardsContainerWithPagination, userQuestsViewModel.ViewModel);
+                return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
             catch (Exception ex)
             {
@@ -84,9 +84,9 @@ namespace LeaguePlaza.Web.Controllers.Quest
             try
             {
                 await _questService.RemoveQuestAsync(updateQuestStatusDto.Id);
-                UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-                return PartialView(QuestCardsContainerWithPagination, userQuestsViewModel.ViewModel);
+                return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
             catch (Exception ex)
             {
@@ -104,9 +104,9 @@ namespace LeaguePlaza.Web.Controllers.Quest
             try
             {
                 await _questService.CompleteQuestAsync(updateQuestStatusDto.Id);
-                UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-                return PartialView(QuestCardsContainerWithPagination, userQuestsViewModel.ViewModel);
+                return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
             catch (Exception ex)
             {
@@ -141,9 +141,9 @@ namespace LeaguePlaza.Web.Controllers.Quest
         {
             try
             {
-                QuestCardsContainerWithPaginationViewModel questCardsContainerWithPaginationViewModel = await _questService.CreateQuestCardsContainerWithPaginationViewModelAsync(filterAndSortQuestsRequestData);
+                QuestsViewModel questsViewModel = await _questService.CreateQuestCardsContainerWithPaginationViewModelAsync(filterAndSortQuestsRequestData);
 
-                return PartialView(QuestCardsContainerWithPagination, questCardsContainerWithPaginationViewModel);
+                return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
             catch (Exception ex)
             {

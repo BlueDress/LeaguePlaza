@@ -16,16 +16,16 @@ namespace LeaguePlaza.Web.Controllers.Quest
         {
             try
             {
-                AvailableQuestsViewModel availableQuestsViewModel = await _questService.CreateAvailableQuestsViewModelAsync();
+                QuestsViewModel questsViewModel = await _questService.CreateAvailableQuestsViewModelAsync();
 
-                return View(availableQuestsViewModel);
+                return View(questsViewModel);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ErrorConstants.FailedAt, nameof(Index));
                 _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
 
-                return View(new AvailableQuestsViewModel());
+                return View(new QuestsViewModel());
             }
         }
 
@@ -34,16 +34,16 @@ namespace LeaguePlaza.Web.Controllers.Quest
         {
             try
             {
-                UserQuestsViewModel userQuestsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
 
-                return View(userQuestsViewModel);
+                return View(questsViewModel);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ErrorConstants.FailedAt, nameof(MyQuests));
                 _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
 
-                return View(new UserQuestsViewModel());
+                return View(new QuestsViewModel());
             }
         }
 
