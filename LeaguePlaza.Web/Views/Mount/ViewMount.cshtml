@@ -34,7 +34,14 @@
             <div class="ratings-select-holder">
                 <p>Rate mount</p>
                 <select id="rating-select" data-mount-id="@Model.Mount.Id">
-                    <option value="" disabled selected>Select rating</option>
+                    @if (@Model.UserRating == 0)
+                    {
+                        <option value="" disabled selected>Select rating</option>
+                    }
+                    else
+                    {
+                        <option value="" disabled selected>@Model.UserRating</option>
+                    }
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>

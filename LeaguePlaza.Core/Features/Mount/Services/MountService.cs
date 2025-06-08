@@ -63,11 +63,19 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
         public async Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id)
         {
-            var mount = await _repository.FindByIdAsync<MountEntity>(id) ?? new();
-            IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(MountConstants.RecommendedQuestsCount, m => m.Id != id && m.MountType == mount.MountType);
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return new ViewMountViewModel();
+            }
+
+            var mount = await _repository.FindOneReadOnlyAsync<MountEntity>(m => m.Id == id, m => m.MountRatings.Where(mr => mr.UserId == currentUser.Id)) ?? new();
+            IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(MountConstants.RecommendedMountsCount, m => m.Id != id && m.MountType == mount.MountType);
 
             return new ViewMountViewModel()
             {
+                UserRating = mount.MountRatings.FirstOrDefault()?.Rating ?? 0,
                 Mount = new MountDto()
                 {
                     Id = mount.Id,
