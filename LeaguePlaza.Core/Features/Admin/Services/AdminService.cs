@@ -2,7 +2,6 @@
 using LeaguePlaza.Core.Features.Admin.Contracts;
 using LeaguePlaza.Core.Features.Admin.Models.ViewModels;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
-using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Repository;
@@ -18,7 +17,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
             IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, int>(pageNumber, AdminConstants.CountForPagination, false, m => m.Id, m => true);
             int totalResults = await _repository.GetCountAsync<MountEntity>(m => true);
 
-            var mountCardsContainerWithPaginationViewModel = new MountCardsContainerWithPaginationViewModel()
+            return new MountAdminViewModel()
             {
                 Mounts = mounts.Select(m => new MountDto
                 {
@@ -35,11 +34,6 @@ namespace LeaguePlaza.Core.Features.Admin.Services
                     CurrentPage = pageNumber,
                     TotalPages = (int)Math.Ceiling(totalResults / 10d),
                 },
-            };
-
-            return new MountAdminViewModel()
-            {
-                ViewModel = mountCardsContainerWithPaginationViewModel,
             };
         }
     }

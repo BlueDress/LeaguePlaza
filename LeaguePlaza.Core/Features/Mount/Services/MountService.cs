@@ -36,7 +36,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, double>(MountConstants.PageOne, MountConstants.CountForPagination, true, m => m.Rating, m => true);
             int totalResults = await _repository.GetCountAsync<MountEntity>(m => true);
 
-            var mountCardsContainerWithPaginationViewModel = new MountCardsContainerWithPaginationViewModel()
+            return new MountsViewModel()
             {
                 Mounts = mounts.Select(m => new MountDto
                 {
@@ -50,14 +50,9 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = 1,
+                    CurrentPage = MountConstants.PageOne,
                     TotalPages = (int)Math.Ceiling(totalResults / 6d),
                 },
-            };
-
-            return new MountsViewModel()
-            {
-                ViewModel = mountCardsContainerWithPaginationViewModel,
             };
         }
 
@@ -129,12 +124,12 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<MountCardsContainerWithPaginationViewModel> CreateMountCardsContainerWithPaginationViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData)
+        public async Task<MountsViewModel> CreateMountsViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData)
         {
             if (!((!filterAndSortMountsRequestData.StartDate.HasValue && !filterAndSortMountsRequestData.EndDate.HasValue) ||
                 (filterAndSortMountsRequestData.StartDate.HasValue && filterAndSortMountsRequestData.EndDate.HasValue && filterAndSortMountsRequestData.StartDate.Value.Date >= DateTime.UtcNow.Date && filterAndSortMountsRequestData.StartDate <= filterAndSortMountsRequestData.EndDate)))
             {
-                return new MountCardsContainerWithPaginationViewModel();
+                return new MountsViewModel();
             }
 
             Expression<Func<MountEntity, bool>> dateIntervalExpression = filterAndSortMountsRequestData.StartDate.HasValue && filterAndSortMountsRequestData.EndDate.HasValue
@@ -164,7 +159,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
             if (totalFilteredAndSortedMountCount == 0)
             {
-                return new MountCardsContainerWithPaginationViewModel();
+                return new MountsViewModel();
             }
 
             int pageToShow = Math.Min(totalFilteredAndSortedMountCount / MountConstants.CountForPagination + 1, filterAndSortMountsRequestData.CurrentPage);
@@ -173,7 +168,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
             var filteredAndSortedMounts = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, MountConstants.CountForPagination, filterAndSortMountsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
 
-            return new MountCardsContainerWithPaginationViewModel()
+            return new MountsViewModel()
             {
                 Mounts = filteredAndSortedMounts.Select(m => new MountDto
                 {

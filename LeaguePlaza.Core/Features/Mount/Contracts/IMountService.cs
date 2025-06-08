@@ -13,7 +13,7 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
 
         Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = MountConstants.PageOne);
 
-        Task<MountCardsContainerWithPaginationViewModel> CreateMountCardsContainerWithPaginationViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData);
+        Task<MountsViewModel> CreateMountsViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData);
 
         Task<string> RentMountAsync(RentMountDto rentMountDto);
 

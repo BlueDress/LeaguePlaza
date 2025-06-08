@@ -24,7 +24,7 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
             await _mountService.CreateMountsAsync(createMountDto);
             MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync();
 
-            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
+            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel);
         }
 
         [HttpPut("updatemount")]
@@ -33,16 +33,16 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
             await _mountService.UpdateMountAsync(updateMountDto);
             MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync();
 
-            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
+            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel);
         }
 
-        [HttpPut("deletemount")]
+        [HttpDelete("deletemount")]
         public async Task<IActionResult> DeleteMount([FromBody] DeleteMountDto deleteMountDto)
         {
             await _mountService.DeleteMountAsync(deleteMountDto.Id);
             MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync();
 
-            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
+            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel);
         }
 
         [HttpGet("getpageresults")]
@@ -50,7 +50,7 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
         {
             MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync(pageNumber);
 
-            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel.ViewModel);
+            return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel);
         }
     }
 }

@@ -54,6 +54,7 @@ function adminMain() {
 
         const formData = new FormData();
         formData.append('id', mountId);
+        formData.append('name', mountNameInput.value);
         formData.append('description', mountDescriptionTextarea.value);
         formData.append('rentPrice', mountRentPriceInput.value);
         formData.append('mountType', mountTypeSelect.value);
@@ -93,7 +94,7 @@ function adminMain() {
         mountDescriptionTextarea.value = mountInfoEl.children[1].textContent;
         mountRentPriceInput.value = parseFloat(mountInfoEl.children[2].textContent.replace(',', '.'));
         mountTypeSelect.value = getMountTypeValue(mountInfoEl.children[3].textContent);
-        mountId = e.target.parentElement.dataset.mountId;
+        mountId = e.target.dataset.mountId;
 
         createMountBtn.setAttribute('disabled', 'disabled');
         updateMountBtn.removeAttribute('disabled')
@@ -112,7 +113,7 @@ function adminMain() {
     }
 
     async function deleteMount(e) {
-        const mountId = e.target.parentElement.dataset.mountId;
+        const mountId = e.target.dataset.mountId;
 
         const response = await fetch(baseUrl + 'deletemount', {
             method: 'DELETE',

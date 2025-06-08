@@ -1,5 +1,4 @@
 ﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Admin.Models.ViewModels;
 using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
@@ -25,9 +24,9 @@ namespace LeaguePlaza.Web.Controllers.Mount
         {
             try
             {
-                MountCardsContainerWithPaginationViewModel mountCardsContainerWithPaginationViewModel = await _mountService.CreateMountCardsContainerWithPaginationViewModelAsync(filterAndSortMountsRequestData);
+                MountsViewModel mountsViewModel = await _mountService.CreateMountsViewModelAsync(filterAndSortMountsRequestData);
 
-                return PartialView(MountCardsContainerWithPagination, mountCardsContainerWithPaginationViewModel);
+                return PartialView(MountCardsContainerWithPagination, mountsViewModel);
             }
             catch (Exception ex)
             {
