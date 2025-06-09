@@ -1,6 +1,7 @@
 ﻿using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -42,9 +43,9 @@ namespace LeaguePlaza.Web.Controllers.Mount
         {
             try
             {
-                string response = await _mountService.RentMountAsync(rentMountDto);
+                MountRentalResultDto mountRentResult = await _mountService.RentMountAsync(rentMountDto);
 
-                return Ok(response);
+                return Ok(mountRentResult);
             }
             catch (Exception ex)
             {

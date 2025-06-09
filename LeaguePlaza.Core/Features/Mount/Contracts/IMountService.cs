@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 
@@ -15,7 +16,7 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
 
         Task<MountsViewModel> CreateMountsViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData);
 
-        Task<string> RentMountAsync(RentMountDto rentMountDto);
+        Task<MountRentalResultDto> RentMountAsync(RentMountDto rentMountDto);
 
         Task<string> AddOrUpadeMountRatingAsync(RateMountDto rateMountDto);
 

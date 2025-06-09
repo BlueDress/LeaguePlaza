@@ -188,25 +188,37 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<string> RentMountAsync(RentMountDto rentMountDto)
+        public async Task<MountRentalResultDto> RentMountAsync(RentMountDto rentMountDto)
         {
             if (rentMountDto.StartDate > rentMountDto.EndDate)
             {
-                return "Something went wrong";
+                return new MountRentalResultDto()
+                {
+                    IsMountRentSuccessful = false,
+                    MountRentMessage = "Something went wrong"
+                };
             }
 
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
             if (currentUser == null)
             {
-                return "Something went wrong";
+                return new MountRentalResultDto()
+                {
+                    IsMountRentSuccessful = false,
+                    MountRentMessage = "Something went wrong",
+                };
             }
 
             var mountToRent = await _repository.FindByIdAsync<MountEntity>(rentMountDto.MountId);
 
             if (mountToRent == null)
             {
-                return "Something went wrong";
+                return new MountRentalResultDto()
+                {
+                    IsMountRentSuccessful = false,
+                    MountRentMessage = "Something went wrong",
+                };
             }
 
             IEnumerable<MountRentalEntity> mountRentals = await _repository.FindAllReadOnlyAsync<MountRentalEntity>(mr => mr.MountId == mountToRent.Id);
@@ -224,11 +236,19 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 await _repository.AddAsync(newMountRental);
                 await _repository.SaveChangesAsync();
 
-                return "Mount rented successfully for the chosen interval";
+                return new MountRentalResultDto()
+                {
+                    IsMountRentSuccessful = true,
+                    MountRentMessage = "Mount rented successfully for the chosen interval",
+                };
             }
             else
             {
-                return "The mount is not available for the chosen interval";
+                return new MountRentalResultDto()
+                {
+                    IsMountRentSuccessful = false,
+                    MountRentMessage = "The mount is not available for the chosen interval",
+                };
             }
         }
 

@@ -47,13 +47,29 @@ function viewMountMain() {
 
         if (response.status == 200) {
             const dateInputsMessageElement = document.querySelector('.date-inputs-message-js');
-            dateInputsMessageElement.innerText = await response.text();
-            dateInputsMessageElement.classList.remove('display-none');
+            const mountRentResult = await response.json();
 
-            setTimeout(() => {
-                dateInputsMessageElement.classList.add('display-none');
-                dateInputsMessageElement.innerText = '';
-            }, 3000);
+            dateInputsMessageElement.innerText = mountRentResult.mountRentMessage;
+
+            if (mountRentResult.isMountRentSuccessful) {
+                dateInputsMessageElement.classList.add('success-message');
+                dateInputsMessageElement.classList.remove('display-none');
+
+                setTimeout(() => {
+                    dateInputsMessageElement.classList.add('display-none');
+                    dateInputsMessageElement.classList.remove('success-message');
+                    dateInputsMessageElement.innerText = '';
+                }, 3000);
+            } else {
+                dateInputsMessageElement.classList.add('error-message');
+                dateInputsMessageElement.classList.remove('display-none');
+
+                setTimeout(() => {
+                    dateInputsMessageElement.classList.add('display-none');
+                    dateInputsMessageElement.classList.remove('error-message');
+                    dateInputsMessageElement.innerText = '';
+                }, 3000);
+            }
         }
 
         if (response.status == 400) {
