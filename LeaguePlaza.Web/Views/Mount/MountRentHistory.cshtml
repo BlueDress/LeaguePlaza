@@ -1,0 +1,19 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.ViewModels
+
+@model MountRentHistoryViewModel
+
+<div class="container">
+    <h1>My Mount Rent History</h1>
+    <div id="mount-rent-history-and-pagination">
+        <partial name="~/Views/Mount/Partials/_MountRentHistoryContainerWithPagination.cshtml" model="@Model" />
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/mount/mount-rent-history.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/js/mount/mount-rent-history.js"></script>
+}

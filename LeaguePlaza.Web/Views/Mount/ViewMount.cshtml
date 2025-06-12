@@ -1,0 +1,70 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.ViewModels
+
+@model ViewMountViewModel
+
+<div class="container">
+    <div>
+        <div class="view-mount-card">
+            <div class="view-mount-image">
+                <img src="@Model.Mount.ImageUrl" alt="mount image" loading="lazy" />
+            </div>
+            <div class="view-mount-info">
+                <h6>@Model.Mount.Name</h6>
+                <p>@Model.Mount.Description</p>
+                <div class="view-mount-metadata">
+                    <span><i class="fa-solid fa-star"></i>@(Model.Mount.Rating != 0 ? Model.Mount.Rating : "N/A")</span>
+                    <span><i class="fa-solid fa-horse-head"></i>@Model.Mount.Type</span>
+                    <span><i class="fa-solid fa-coins"></i>@Model.Mount.RentPrice</span>
+                </div>
+            </div>
+        </div>
+        <div class="inputs-holder">
+            <div class="date-inputs-holder">
+                <div>
+                    <label for="start-date">From</label>
+                    <input id="start-date" type="date">
+                </div>
+                <div>
+                    <label for="end-date">To</label>
+                    <input id="end-date" type="date">
+                </div>
+                <button id="rent-mount" type="button" data-mount-id="@Model.Mount.Id">Rent</button>
+            </div>
+            <p class="display-none response-message date-inputs-message-js"></p>
+            <div class="ratings-select-holder">
+                <p>Rate mount</p>
+                <select id="rating-select" data-mount-id="@Model.Mount.Id">
+                    @if (@Model.UserRating == 0)
+                    {
+                        <option value="" disabled selected>Select rating</option>
+                    }
+                    else
+                    {
+                        <option value="" disabled selected>@Model.UserRating</option>
+                    }
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <p class="display-none response-message rating-select-message-js"></p>
+        </div>
+    </div>
+    <div>
+        <h3>Recommended mounts</h3>
+        <partial name="~/Views/Mount/Partials/_MountCardsContainer.cshtml" model="@Model.RecommendedMounts"></partial>
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/mount/mount-cards-container.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/mount/view-mount.css" asp-append-version="true" />
+}
+
+@section Scripts
+{
+    <script src="~/js/mount/view-mount.js" asp-append-version="true"></script>
+}

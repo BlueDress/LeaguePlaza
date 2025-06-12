@@ -22,7 +22,102 @@ namespace LeaguePlaza.Infrastructure.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.Quest", b =>
+            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.MountEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("MountType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
+
+                    b.Property<decimal>("RentPrice")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Mounts");
+                });
+
+            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.MountRatingEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MountId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MountRatings");
+                });
+
+            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.MountRentalEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MountId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MountId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MountRentals");
+                });
+
+            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.QuestEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,6 +138,11 @@ namespace LeaguePlaza.Infrastructure.Data.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<decimal>("RewardAmount")
                         .HasColumnType("decimal(12,2)");
@@ -285,7 +385,45 @@ namespace LeaguePlaza.Infrastructure.Data.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.Quest", b =>
+            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.MountRatingEntity", b =>
+                {
+                    b.HasOne("LeaguePlaza.Infrastructure.Data.Entities.MountEntity", "Mount")
+                        .WithMany("MountRatings")
+                        .HasForeignKey("MountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LeaguePlaza.Infrastructure.Data.Entities.ApplicationUser", "User")
+                        .WithMany("MountRatings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Mount");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.MountRentalEntity", b =>
+                {
+                    b.HasOne("LeaguePlaza.Infrastructure.Data.Entities.MountEntity", "Mount")
+                        .WithMany("MountRentals")
+                        .HasForeignKey("MountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LeaguePlaza.Infrastructure.Data.Entities.ApplicationUser", "User")
+                        .WithMany("MountRentals")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Mount");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.QuestEntity", b =>
                 {
                     b.HasOne("LeaguePlaza.Infrastructure.Data.Entities.ApplicationUser", "Adventurer")
                         .WithMany("AcceptedQuests")
@@ -354,9 +492,20 @@ namespace LeaguePlaza.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.MountEntity", b =>
+                {
+                    b.Navigation("MountRatings");
+
+                    b.Navigation("MountRentals");
+                });
+
             modelBuilder.Entity("LeaguePlaza.Infrastructure.Data.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("AcceptedQuests");
+
+                    b.Navigation("MountRatings");
+
+                    b.Navigation("MountRentals");
 
                     b.Navigation("PostedQuests");
                 });

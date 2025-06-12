@@ -1,0 +1,13 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.ViewModels
+
+@model MountsViewModel
+
+@if (Model.Mounts.Any())
+{
+    <partial name="~/Views/Mount/Partials/_MountCardsContainer.cshtml" model="@Model.Mounts" />
+    <partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />
+}
+else
+{
+    <div class="no-results">No results found</div>
+}

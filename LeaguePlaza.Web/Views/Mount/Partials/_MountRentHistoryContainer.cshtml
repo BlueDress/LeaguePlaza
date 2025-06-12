@@ -1,0 +1,34 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly
+
+@model IEnumerable<MountRentalDto>
+
+<div class="mount-rent-history">
+    <div>
+        <div>Start Date</div>
+        <div>End Date</div>
+        <div>Mount</div>
+        <div>Status</div>
+    </div>
+    @foreach (var mountRental in Model)
+    {
+        <div class="mount-rent-info">
+            <div>@mountRental.StartDate.ToShortDateString()</div>
+            <div>@mountRental.EndDate.ToShortDateString()</div>
+            <div><a asp-controller="Mount" asp-action="ViewMount" asp-route-id="@mountRental.MountId">@mountRental.MountName</a></div>
+            <div>
+                @if (mountRental.EndDate < DateTime.UtcNow)
+                {
+                    <span class="passed-rental">Passed</span>
+                }
+                else if (mountRental.StartDate.Date <= DateTime.UtcNow.Date)
+                {
+                    <span class="ongoing-rental">Ongoing</span>
+                }
+                else
+                {
+                    <button class="cancel-rent-btn cancel-rent-btn-js" type="button" data-mount-rental-id="@mountRental.Id">Cancel</button>
+                }
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,164 @@
+﻿.mount-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 0 auto 30px auto;
+}
+
+.mount-card {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.mount-image {
+    display: flex;
+}
+
+.mount-info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .mount-info > * {
+        flex: 1 1 100%;
+    }
+
+    .mount-info > h6,
+    .mount-info > a {
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .mount-info > h6,
+    .mount-info > p,
+    .mount-info > div.mount-metadata {
+        border-bottom: 1px solid black;
+    }
+
+    .mount-info > p {
+        padding: 0.7rem 0.3rem;
+    }
+
+    .mount-info > div {
+        display: flex;
+        justify-content: flex-start;
+        text-align: center;
+    }
+
+        .mount-info > div.mount-metadata > * {
+            font-size: 14px;
+            padding: 0.7rem 0.3rem;
+            flex: 1 1 auto;
+        }
+
+        .mount-info > div.mount-metadata > :nth-child(1),
+        .mount-info > div.mount-metadata > :nth-child(2) {
+            border-right: 1px solid black;
+        }
+
+        .mount-info > div.mount-extra-buttons > button {
+            font-size: 16px;
+            padding: 0.7rem 0.3rem;
+            flex: 1 1 auto;
+            border: none;
+            border-top: 1px solid black;
+        }
+
+        .mount-info > div.mount-extra-buttons > :nth-child(2) {
+            border-left: 1px solid black;
+        }
+
+    .mount-info i {
+        margin-right: 0.2rem;
+    }
+
+.edit-btn {
+    background-color: #FFD700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .edit-btn:hover {
+        background-color: #FFC107;
+        color: #F8F8FF;
+    }
+
+    .edit-btn:active {
+        transform: scale(0.98);
+    }
+
+.remove-btn {
+    background-color: #D33939;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .remove-btn:hover {
+        background-color: #B22222;
+        color: #FFFFF0;
+    }
+
+    .remove-btn:active {
+        transform: scale(0.98);
+    }
+
+.complete-btn {
+    background-color: #BEBEFF;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .complete-btn:hover {
+        background-color: #A9A9FF;
+        color: #F8F8FF;
+    }
+
+    .complete-btn:active {
+        transform: scale(0.98);
+    }
+
+.accept-btn {
+    background-color: #BEBEFF;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .accept-btn:hover {
+        background-color: #A9A9FF;
+        color: #F8F8FF;
+    }
+
+    .accept-btn:active {
+        transform: scale(0.98);
+    }
+
+.abandon-btn {
+    background-color: #D33939;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .abandon-btn:hover {
+        background-color: #B22222;
+        color: #FFFFF0;
+    }
+
+    .abandon-btn:active {
+        transform: scale(0.98);
+    }
+
+@media (min-width: 601px) {
+    .mount-card {
+        flex: 0 0 calc((100% - 2rem) / 2)
+    }
+}
+
+@media (min-width: 769px) {
+    .mount-card {
+        flex: 0 0 calc((100% - 4rem) / 3)
+    }
+}

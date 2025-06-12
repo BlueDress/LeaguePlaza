@@ -1,0 +1,49 @@
+﻿@page
+@using LeaguePlaza.Common.Constants
+
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+    <div class="identity-form-holder">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="error-message" role="alert"></div>
+            <div>
+                <label asp-for="Input.Email">Email</label>
+                <input asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <span asp-validation-for="Input.Email" class="error-message"></span>
+            </div>
+            <div>
+                <label asp-for="Input.Password">Password</label>
+                <input asp-for="Input.Password" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <span asp-validation-for="Input.Password" class="error-message"></span>
+            </div>
+            <div>
+                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                <input asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <span asp-validation-for="Input.ConfirmPassword" class="error-message"></span>
+            </div>
+            <div>
+                <label asp-for="Input.UserRole">Select Your Role</label>
+                <select asp-for="Input.UserRole" asp-items="Model.Roles" aria-required="true"></select>
+                <span asp-validation-for="Input.UserRole" class="error-message"></span>
+            </div>
+            <div>
+                <button id="registerSubmit" type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/identity/identity.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

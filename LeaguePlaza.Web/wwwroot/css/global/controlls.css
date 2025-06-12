@@ -1,0 +1,231 @@
+﻿.controlls-holder {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+    .controlls-holder > * {
+        flex: 1 0 100%;
+    }
+
+    .controlls-holder > span {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+.sort-search-holder {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+    .sort-search-holder select,
+    .sort-search-holder input {
+        padding: 0.2rem;
+        border-radius: 5px;
+        border: 1px solid black;
+        font-size: 12px;
+        height: 100%;
+    }
+
+.search-form {
+    position: relative;
+    height: 100%;
+}
+
+    .search-form > label {
+        position: absolute;
+        left: 1%;
+        top: 1%;
+        width: 1px;
+        height: 1px;
+        z-index: -1;
+    }
+
+    .search-form > button {
+        position: absolute;
+        right: 0%;
+        top: 4%;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: #9370DB;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .search-form > button:hover {
+            background-color: #BA55D3;
+            color: #F8F8FF;
+        }
+
+        .search-form > button:active {
+            transform: scale(0.98);
+        }
+
+        .search-form > button > i {
+            padding: 0.3rem;
+        }
+
+.filters-holder details {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    font-size: 12px;
+    background-color: #FFF8DC;
+}
+
+.filters-holder summary,
+.filters-choice-holder,
+.filters-button-holder {
+    padding: 0.2rem;
+}
+
+.filters-holder summary {
+    border-bottom: 1px solid black;
+}
+
+.filters-choice-holder {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .filters-choice-holder p {
+        margin-bottom: 0.2rem;
+    }
+
+.filters-button-holder {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .filters-button-holder > button {
+        font-size: inherit;
+        padding: 0.2rem 1.6rem;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+#apply-filters {
+    background-color: #9370DB;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    #apply-filters:hover {
+        background-color: #BA55D3;
+        color: #F8F8FF;
+    }
+
+    #apply-filters:active {
+        transform: scale(0.98);
+    }
+
+#reset-filters {
+    background-color: #D2B48C;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    #reset-filters:hover {
+        background-color: #DEB887;
+        color: #FFFFF0;
+    }
+
+    #reset-filters:active {
+        transform: scale(0.98);
+    }
+
+.date-inputs-holder {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    font-size: 12px;
+}
+
+    .date-inputs-holder > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 55%;
+    }
+
+    .date-inputs-holder input {
+        padding: 0.2rem;
+        border-radius: 5px;
+        border: 1px solid black;
+        font-size: 12px;
+        height: 100%;
+    }
+
+    .date-inputs-holder > button {
+        font-size: 12px;
+        padding: 0.3rem 0.6rem;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: #9370DB;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .date-inputs-holder > button:hover {
+            background-color: #BA55D3;
+            color: #F8F8FF;
+        }
+
+        .date-inputs-holder > button:active {
+            transform: scale(0.98);
+        }
+
+@media (min-width: 601px) {
+    .controlls-holder > span {
+        font-size: 16px;
+    }
+
+    .sort-search-holder select, .sort-search-holder input {
+        font-size: 16px;
+    }
+
+    .search-form > button {
+        top: 0%;
+    }
+
+        .search-form > button > i {
+            padding: 0.47rem;
+        }
+
+    .filters-holder details {
+        font-size: 16px;
+    }
+
+    .filters-choice-holder {
+        justify-content: flex-start;
+        gap: 8rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .date-inputs-holder {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 0.4rem;
+        font-size: 16px;
+    }
+
+        .date-inputs-holder > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.2rem;
+            width: auto;
+        }
+
+        .date-inputs-holder input {
+            font-size: 16px;
+        }
+
+        .date-inputs-holder > button {
+            font-size: 16px;
+        }
+}

@@ -1,0 +1,48 @@
+﻿.banner {
+    border: 1px solid black;
+    max-width: 90%;
+    margin: 0 auto 30px auto;
+}
+
+    .banner img {
+        width: 100%;
+    }
+
+.banner-header,
+.banner-text {
+    text-align: center;
+}
+
+    .banner-header > h1 {
+        text-transform: uppercase;
+    }
+
+.banner-image {
+    display: flex;
+}
+
+.banner-link {
+    font-weight: 700;
+    font-style: italic;
+}
+
+    .banner-link:hover {
+        color: red;
+    }
+
+.view-all-link {
+    display: flex;
+    justify-content: flex-end;
+}
+
+    .view-all-link > a {
+        padding: 0.5rem 1.5rem;
+        border: 0.5px solid black;
+        border-radius: 15px;
+    }
+
+@media (min-width: 1200px) {
+    .banner {
+        max-width: 1200px;
+    }
+}

@@ -1,8 +1,38 @@
-﻿@{
+﻿@using LeaguePlaza.Core.Features.Home.Models.ViewModels
+
+@model HomePageViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <div class="banner">
+        <div class="banner-header">
+            <h1>League plaza</h1>
+        </div>
+        <div class="banner-image">
+            <img src="https://www.dropbox.com/scl/fi/3zh0rmcnazvf7d1hrpw9x/home-banner.jpg?rlkey=umhsbajpp56km94oi2rmk6bky&st=teoqqgun&raw=1" alt="busy plaza of a fantasy town" loading="lazy" />
+        </div>
+        @if (!User.Identity?.IsAuthenticated ?? true)
+        {
+            <div class="banner-text">
+                <p>Best place to start your journey.</p>
+                <p><a class="banner-link" asp-area="Identity" asp-page="/Account/Register">Join</a> thousands of adventurers.</p>
+                <p>Already a member? <a class="banner-link" asp-area="Identity" asp-page="/Account/Login">Enter</a> throught the portal.</p>
+            </div>
+        }
+    </div>
+
+    <div class="container">
+        <h3>Latest quests</h3>
+        <partial name="~/Views/Quest/Partials/_QuestCardsContainer.cshtml" model="@Model.LatestQuests"></partial>
+        <div class="view-all-link"><a asp-controller="Quest" asp-action="Index">View All</a></div>
+    </div>
 </div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/quest/quest-cards-container.css" asp-append-version="true" />
+}

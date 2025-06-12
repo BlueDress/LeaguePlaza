@@ -1,0 +1,66 @@
+﻿.mount-rent-history {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    margin: 1rem 0;
+    font-size: 12px;
+}
+
+    .mount-rent-history > div:first-child {
+        background-color: #DAA520;
+        font-weight: 600;
+    }
+
+    .mount-rent-history > div {
+        flex: 1 0 100%;
+        display: flex;
+    }
+
+        .mount-rent-history > div > div {
+            flex: 0 0 25%;
+            border-bottom: 1px solid black;
+            border-right: 1px solid black;
+            text-align: center;
+            padding: 0.2rem;
+        }
+
+    .mount-rent-history button {
+        border: none;
+        font-size: 12px;
+        padding: 0.3rem;
+        background-color: #F35D5D;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .mount-rent-history button:hover {
+            background-color: #B22222;
+            color: #FFFFF0;
+        }
+
+        .mount-rent-history button:active {
+            transform: scale(0.98);
+        }
+
+    .mount-rent-history > div:has(.passed-rental) {
+        color: grey;
+    }
+
+    .mount-rent-history > div:has(.ongoing-rental) {
+        color: green;
+    }
+
+@media (min-width: 601px) {
+    .mount-rent-history {
+        font-size: 16px;
+    }
+
+        .mount-rent-history > div > div {
+            padding: 0.5rem;
+        }
+
+        .mount-rent-history button {
+            font-size: 16px;
+            padding: 0.3rem 0.6rem;
+        }
+}

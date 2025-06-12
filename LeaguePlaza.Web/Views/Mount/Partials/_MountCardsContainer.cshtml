@@ -1,0 +1,24 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly
+
+@model IEnumerable<MountDto>
+
+<div id="mount-cards-container" class="mount-cards-container">
+    @foreach (var mount in Model)
+    {
+        <div class="mount-card mount-card-js">
+            <div class="mount-image">
+                <img src="@mount.ImageUrl" alt="mount image" loading="lazy" />
+            </div>
+            <div class="mount-info mount-info-js">
+                <h6>@mount.Name</h6>
+                <p>@mount.Description</p>
+                <div class="mount-metadata">
+                    <span><i class="fa-solid fa-star"></i>@(mount.Rating != 0 ? mount.Rating : "N/A")</span>
+                    <span><i class="fa-solid fa-horse-head"></i>@mount.Type</span>
+                    <span><i class="fa-solid fa-coins"></i>@mount.RentPrice</span>
+                </div>
+                <a asp-controller="Mount" asp-action="ViewMount" asp-route-id="@mount.Id">View Mount</a>
+            </div>
+        </div>
+    }
+</div>

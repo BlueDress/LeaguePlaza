@@ -1,0 +1,68 @@
+﻿@using LeaguePlaza.Common.Constants
+@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+
+@model QuestsViewModel
+
+<div class="container" data-page-name="my-quests">
+    @if (User.IsInRole(UserRoleConstants.QuestGiver))
+    {
+        <h2>Post a quest</h2>
+        <form id="create-quest" class="create-quest-form" novalidate>
+            <div>
+                <label for="title">Title</label>
+                <input id="title" class="create-quest-input-js" type="text" name="title" maxlength="50" required />
+                <span class="display-none"></span>
+            </div>
+            <div>
+                <label for="description">Description</label>
+                <textarea id="description" rows="4" name="description" maxlength="500"></textarea>
+            </div>
+            <div>
+                <label for="reward">Reward</label>
+                <input id="reward" class="create-quest-input-js" type="number" step="0.01" name="reward" placeholder="0.00" required />
+                <span class="display-none"></span>
+            </div>
+            <div>
+                <label for="type">Type</label>
+                <select id="type" name="type" required>
+                    <option value="" disabled selected>Select quest type</option>
+                    <option value="1">Monster Hunt</option>
+                    <option value="2">Gathering</option>
+                    <option value="3">Escort</option>
+                </select>
+                <span class="display-none"></span>
+            </div>
+            <div>
+                <label for="image">Image</label>
+                <input id="image" type="file" name="image" placeholder="Upload an image" accept="image/*">
+                <span class="display-none"></span>
+            </div>
+            <div class="create-quest-form-buttons">
+                <button id="create-quest-btn" type="submit">Post</button>
+                <button id="update-quest-btn" type="button" disabled>Update</button>
+            </div>
+            <span class="display-none form-message-js"></span>
+        </form>
+    }
+    
+    <h1>My Quests</h1>
+
+    <partial name="~/Views/Quest/Partials/_QuestControlls.cshtml" />
+    <div id="cards-and-pagination">
+        <partial name="~/Views/Quest/Partials/_QuestCardsContainerWithPagination.cshtml" model="@Model" />
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/quest/my-quests.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/quest/quest-cards-container.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/controlls.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
+}
+
+@section Scripts
+{
+    <script src="~/js/quest/my-quests.js"></script>
+    <script src="~/js/quest/filter-and-sort-quests.js"></script>
+}

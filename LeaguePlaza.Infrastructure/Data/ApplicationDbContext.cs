@@ -10,7 +10,10 @@ namespace LeaguePlaza.Infrastructure.Data
         {
         }
 
-        public DbSet<Quest> Quests { get; set; }
+        public DbSet<QuestEntity> Quests { get; set; }
+        public DbSet<MountEntity> Mounts { get; set; }
+        public DbSet<MountRentalEntity> MountRentals { get; set; }
+        public DbSet<MountRatingEntity> MountRatings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

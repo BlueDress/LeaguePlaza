@@ -1,22 +1,101 @@
-html {
-  font-size: 14px;
+* {
+    padding: 0;
+    margin: 0;
 }
 
-@media (min-width: 768px) {
-  html {
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+
+html {
+    box-sizing: border-box;
+    font-family: "Merriweather", serif;
     font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    line-height: 1.5;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #FFFFF0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Cinzel", serif;
+    color: #4B0082;
+}
+
+h1 {
+    font-size: 2.2rem;
+}
+
+h2 {
+    font-size: 2.0rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+}
+
+h4 {
+    font-size: 1.6rem;
+}
+
+h5 {
+    font-size: 1.4rem;
+}
+
+h6 {
+    font-size: 1.2rem;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%
+}
+
+ul {
+    list-style: none;
+}
+
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+}
+
+.display-none {
+    display: none;
+}
+
+.container {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.success-message {
+    color: green;
+}
+
+.error-message {
+    color: red;
+}
+
+.no-results {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1200px;
+    }
 }

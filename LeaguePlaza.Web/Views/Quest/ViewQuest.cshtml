@@ -1,0 +1,53 @@
+﻿@using LeaguePlaza.Common.Constants
+@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+
+@model ViewQuestViewModel
+
+<div class="container">
+    <div>
+        <div class="view-quest-card">
+            <div class="view-quest-image">
+                <img src="@Model.Quest.ImageUrl" alt="quest image" loading="lazy" />
+            </div>
+            <div class="view-quest-info">
+                <h6>@Model.Quest.Title</h6>
+                <p>@Model.Quest.Description</p>
+                <div class="view-quest-metadata">
+                    <span><i class="fa-solid fa-calendar-days"></i>@Model.Quest.Created.ToShortDateString()</span>
+                    <span><i class="fa-solid fa-shield"></i>@(Model.Quest.Type == "MonsterHunt" ? "Monster Hunt" : Model.Quest.Type)</span>
+                    <span><i class="fa-solid fa-coins"></i>@Model.Quest.RewardAmount</span>
+                </div>
+            </div>
+        </div>
+
+        @if (User.IsInRole(UserRoleConstants.Adventurer) && Model.Quest.Status != "Completed")
+        {
+            <div id="button-holder">
+                @if (Model.Quest.AdventurerId == null)
+                {
+                    <button id="accept-btn" class="accept-btn" type="button" data-quest-id="@Model.Quest.Id">Accept Quest</button>
+                }
+                @if (Model.Quest.AdventurerId == Model.CurrentUserId)
+                {
+                    <button id="abandon-btn" class="abandon-btn" type="button" data-quest-id="@Model.Quest.Id">Abandon Quest</button>
+                }
+            </div>
+        }
+    </div>
+
+    <div>
+        <h3>Recommended quests</h3>
+        <partial name="~/Views/Quest/Partials/_QuestCardsContainer.cshtml" model="@Model.RecommendedQuests"></partial>
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/quest/quest-cards-container.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/quest/view-quest.css" asp-append-version="true" />
+}
+
+@section Scripts
+{
+    <script src="~/js/quest/view-quest.js" asp-append-version="true"></script>
+}

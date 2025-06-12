@@ -1,0 +1,48 @@
+﻿@using LeaguePlaza.Common.Constants
+@using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly
+
+@model IEnumerable<QuestDto>
+
+<div id="quest-cards-container" class="quest-cards-container">
+    @foreach (var quest in Model)
+    {
+        <div class="quest-card quest-card-js">
+            <div class="quest-image">
+                <img src="@quest.ImageUrl" alt="quest image" loading="lazy" />
+            </div>
+            <div class="quest-info quest-info-js">
+                <h6>@quest.Title</h6>
+                <p>@quest.Description</p>
+                <div class="quest-metadata">
+                    <span><i class="fa-solid fa-calendar-days"></i>@quest.Created.ToShortDateString()</span>
+                    <span><i class="fa-solid fa-shield"></i>@(quest.Type == "MonsterHunt" ? "Monster Hunt" : quest.Type)</span>
+                    <span><i class="fa-solid fa-coins"></i>@quest.RewardAmount</span>
+                </div>
+                <a asp-controller="Quest" asp-action="ViewQuest" asp-route-id="@quest.Id">View Quest</a>
+                @if (quest.ShowExtraButtons)
+                {
+                    <div class="quest-extra-buttons" data-quest-id="@quest.Id">
+                        @if (User.IsInRole(UserRoleConstants.QuestGiver))
+                        {
+                            @if (quest.AdventurerId == null)
+                            {
+                                <button class="edit-btn edit-btn-js" type="button">Edit</button>
+                                <button class="remove-btn remove-btn-js" type="button">Remove</button>
+                            }
+
+                            @if (quest.AdventurerId != null && quest.Status != "Completed")
+                            {
+                                <button class="complete-btn complete-btn-js" type="button">Mark as complete</button>
+                            }
+                        }
+
+                        @if (User.IsInRole(UserRoleConstants.Adventurer) && quest.Status != "Completed")
+                        {
+                            <button class="abandon-btn abandon-btn-js" type="button">Abandon</button>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

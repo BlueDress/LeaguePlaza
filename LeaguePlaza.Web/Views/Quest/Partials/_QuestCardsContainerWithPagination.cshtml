@@ -1,0 +1,13 @@
+﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+
+@model QuestsViewModel
+
+@if (Model.Quests.Any())
+{
+    <partial name="~/Views/Quest/Partials/_QuestCardsContainer.cshtml" model="@Model.Quests" />
+    <partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />
+}
+else
+{
+    <div class="no-results">No results found</div>
+}

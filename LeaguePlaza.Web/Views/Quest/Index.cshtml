@@ -1,0 +1,24 @@
+﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+
+@model QuestsViewModel
+
+<div class="container" data-page-name="all-quests">
+    <h1>All Quests</h1>
+
+    <partial name="~/Views/Quest/Partials/_QuestControlls.cshtml" />
+    <div id="cards-and-pagination">
+        <partial name="~/Views/Quest/Partials/_QuestCardsContainerWithPagination.cshtml" model="@Model" />
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/quest/quest-cards-container.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/controlls.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
+}
+
+@section Scripts
+{
+    <script src="~/js/quest/filter-and-sort-quests.js"></script>
+}

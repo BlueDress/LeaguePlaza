@@ -1,0 +1,14 @@
+﻿@using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly
+@using LeaguePlaza.Core.Features.Mount.Models.ViewModels
+
+@model MountRentHistoryViewModel
+
+@if (Model.MountRentals.Any())
+{
+    <partial name="~/Views/Mount/Partials/_MountRentHistoryContainer.cshtml" model="@Model.MountRentals" />
+    <partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />
+}
+else
+{
+    <div class="no-results">No results found</div>
+}
