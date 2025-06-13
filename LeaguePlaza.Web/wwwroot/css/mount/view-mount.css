@@ -28,8 +28,7 @@
     }
 
     .view-mount-info > h6,
-    .view-mount-info > p,
-    .view-mount-info > div.view-mount-metadata {
+    .view-mount-info > p {
         border-bottom: 1px solid black;
     }
 

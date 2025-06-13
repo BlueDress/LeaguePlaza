@@ -1,4 +1,4 @@
-﻿.view-quest-card {
+﻿.view-product-card {
     display: flex;
     flex-wrap: wrap;
     border: 1px solid black;
@@ -8,59 +8,58 @@
     margin: 1rem 0;
 }
 
-.view-quest-image {
+.view-product-image {
     display: flex;
 }
 
-.view-quest-info {
+.view-product-info {
     display: flex;
     flex-wrap: wrap;
 }
 
-    .view-quest-info > * {
+    .view-product-info > * {
         flex: 1 1 100%;
     }
 
-    .view-quest-info > h6 {
+    .view-product-info > h6 {
         text-align: center;
         padding: 1rem 0;
     }
 
-    .view-quest-info > h6,
-    .view-quest-info > p {
+    .view-product-info > h6,
+    .view-product-info > p {
         border-bottom: 1px solid black;
     }
 
-    .view-quest-info > h6,
-    .view-quest-info > p,
-    .view-quest-metadata > span {
+    .view-product-info > h6,
+    .view-product-info > p,
+    .view-product-metadata > span {
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    .view-quest-info > p {
+    .view-product-info > p {
         padding: 0.7rem 0.3rem;
     }
 
-    .view-quest-info > div {
+    .view-product-info > div {
         display: flex;
         justify-content: flex-start;
         text-align: center;
     }
 
-        .view-quest-info > div.view-quest-metadata > * {
+        .view-product-info > div.view-product-metadata > * {
             font-size: 14px;
             padding: 0.7rem 0.3rem;
             flex: 1 1 auto;
         }
 
-        .view-quest-info > div.view-quest-metadata > :nth-child(1),
-        .view-quest-info > div.view-quest-metadata > :nth-child(2) {
+        .view-product-info > div.view-product-metadata > :nth-child(1) {
             border-right: 1px solid black;
         }
 
-    .view-quest-info i {
+    .view-product-info i {
         margin-right: 0.2rem;
     }
 
@@ -77,11 +76,11 @@
     }
 
 @media (min-width: 601px) {
-    .view-quest-card {
+    .view-product-card {
         flex-wrap: nowrap;
     }
 
-    .view-quest-image {
+    .view-product-image {
         flex: 1 0 40%;
     }
 

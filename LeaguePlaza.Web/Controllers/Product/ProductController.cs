@@ -16,9 +16,9 @@ namespace LeaguePlaza.Web.Controllers.Product
         {
             try
             {
-                ProductsViewModel questsViewModel = await _productService.CreateAvailableProductsViewModelAsync();
+                ProductsViewModel productsViewModel = await _productService.CreateAvailableProductsViewModelAsync();
 
-                return View(questsViewModel);
+                return View(productsViewModel);
             }
             catch (Exception ex)
             {
@@ -26,6 +26,24 @@ namespace LeaguePlaza.Web.Controllers.Product
                 _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
 
                 return View(new ProductsViewModel());
+            }
+        }
+
+        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        public async Task<IActionResult> ViewProduct(int id)
+        {
+            try
+            {
+                ViewProductViewModel viewProductViewModel = await _productService.CreateViewProductViewModelAsync(id);
+
+                return View(viewProductViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(ViewProduct));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return View(new ViewProductViewModel());
             }
         }
     }
