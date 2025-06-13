@@ -1,0 +1,13 @@
+﻿@using LeaguePlaza.Core.Features.Product.Models.ViewModels
+
+@model ProductsViewModel
+
+@if (Model.Products.Any())
+{
+    <partial name="~/Views/Product/Partials/_ProductCardsContainer.cshtml" model="@Model.Products" />
+    <partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />
+}
+else
+{
+    <div class="no-results">No results found</div>
+}

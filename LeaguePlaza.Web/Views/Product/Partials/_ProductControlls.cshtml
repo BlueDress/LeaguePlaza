@@ -1,0 +1,53 @@
+﻿<div class="controlls-holder">
+    <div class="filters-holder">
+        <details>
+            <summary>
+                Filters
+            </summary>
+            <div class="filters-choice-holder">
+                <div>
+                    <p>
+                        Type
+                    </p>
+                    <ul id="type-filters">
+                        <li>
+                            <input id="healing" name="healing" type="checkbox" data-value="Healing" />
+                            <label for="healing">Healing</label>
+                        </li>
+                        <li>
+                            <input id="enhancement" name="enhancement" type="checkbox" data-value="Enhancement" />
+                            <label for="enhancement">Enhancement</label>
+                        </li>
+                        <li>
+                            <input id="impairment" name="impairment" type="checkbox" data-value="Impairment" />
+                            <label for="impairment">Impairment</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="filters-button-holder">
+                <button id="apply-filters" type="button">Apply filters</button>
+                <button id="reset-filters" type="button">Reset filters</button>
+            </div>
+        </details>
+    </div>
+    <div class="sort-search-holder">
+        <div>
+            <select id="sort-by">
+                <option value="" disabled selected>Sort by</option>
+                <option value="1">A -> Z</option>
+                <option value="2">Z -> A</option>
+                <option value="3">Price Most</option>
+                <option value="4">Price Least</option>
+            </select>
+        </div>
+        <div>
+            <form id="search-product" class="search-form" novalidate>
+                <label for="search">Search</label>
+                <input id="search" type="text" name="search" placeholder="Search" />
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </div>
+    </div>
+    <span class="display-none filters-message-js"></span>
+</div>
