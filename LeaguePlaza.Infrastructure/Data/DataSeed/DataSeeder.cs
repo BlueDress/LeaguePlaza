@@ -21,6 +21,13 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
             { "Aquatic", "https://www.dropbox.com/scl/fi/soux4avtf2hlpjw2gguth/aquatic-default.jpg?rlkey=hlf1n9g4pts8zrcfiaiglddyu&st=om0epfjz&raw=1" },
         };
 
+        private readonly Dictionary<string, string> DefaultProducTypeImages = new()
+        {
+            { "Healing", "https://www.dropbox.com/scl/fi/whb5luj0oh5kp2cpe7x82/healing-default.jpg?rlkey=2t4akdjnz5c6sxbd4lku9g0jg&st=ua4xrg64&raw=1" },
+            { "Enhancement", "https://www.dropbox.com/scl/fi/v3ez1ce7ftd4d7zeg3pja/enhancement-default.jpg?rlkey=iu0at7i5r3nnzbajdqpxsgdn4&st=4cpejjwu&raw=1" },
+            { "Impairment", "https://www.dropbox.com/scl/fi/aheohoh9av3kvoxa5crlb/impairment-default.jpg?rlkey=vincatdic90xdwko627bi4cbj&st=5nsgr1ri&raw=1" },
+        };
+
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
@@ -148,6 +155,29 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
                 }
 
                 await _applicationDbContext.Mounts.AddRangeAsync(testMounts);
+                await _applicationDbContext.SaveChangesAsync();
+            }
+
+            if (!_applicationDbContext.Products.Any())
+            {
+                var testProducts = new List<ProductEntity>();
+
+                for (int i = 1; i < 200; i++)
+                {
+                    var newTestProduct = new ProductEntity()
+                    {
+                        Name = $"Test Product {i}",
+                        Description = i % 11 == 0 ? string.Empty : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                        Price = Math.Round((i + 11) / 17m, 2) * 100,
+                        ImageUrl = i % 3 == 0 ? DefaultProducTypeImages["Healing"] : i % 3 == 1 ? DefaultProducTypeImages["Enhancement"] : DefaultProducTypeImages["Impairment"],
+                        IsInStock = !(i % 23 == 0),
+                        ProductType = i % 3 == 0 ? ProductType.Healing : i % 3 == 1 ? ProductType.Enhancement : ProductType.Impairment,
+                    };
+
+                    testProducts.Add(newTestProduct);
+                }
+
+                await _applicationDbContext.Products.AddRangeAsync(testProducts);
                 await _applicationDbContext.SaveChangesAsync();
             }
         }

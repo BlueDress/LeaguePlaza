@@ -21,7 +21,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 Products = availableProducts.Select(p => new ProductDto
                 {
                     Name = p.Name,
-                    Description = string.IsNullOrWhiteSpace(q.Description) ? "No description available" : p.Description,
+                    Description = string.IsNullOrWhiteSpace(p.Description) ? "No description available" : p.Description,
                     Price = p.Price,
                     ImageUrl = p.ImageUrl,
                     IsInStock = p.IsInStock,
