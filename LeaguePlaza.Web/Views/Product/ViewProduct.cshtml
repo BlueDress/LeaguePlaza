@@ -1,0 +1,40 @@
+﻿@using LeaguePlaza.Core.Features.Product.Models.ViewModels
+
+@model ViewProductViewModel
+
+<div class="container">
+    <div>
+        <div class="view-product-card">
+            <div class="view-product-image">
+                <img src="@Model.Product.ImageUrl" alt="product image" loading="lazy" />
+            </div>
+            <div class="view-product-info">
+                <h6>@Model.Product.Name</h6>
+                <p>@Model.Product.Description</p>
+                <div class="view-product-metadata">
+                    <span><i class="fa-solid fa-flask"></i>@Model.Product.ProductType</span>
+                    <span><i class="fa-solid fa-coins"></i>@Model.Product.Price</span>
+                </div>
+            </div>
+        </div>
+        <div id="button-holder">
+            <button id="add-to-cart-btn" class="add-to-cart-btn" type="button" data-product-id="@Model.Product.Id">Add to Cart</button>
+        </div>
+    </div>
+
+    <div>
+        <h3>Recommended products</h3>
+        <partial name="~/Views/Product/Partials/_ProductCardsContainer.cshtml" model="@Model.RecommendedProducts"></partial>
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/product/product-cards-container.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/product/view-product.css" asp-append-version="true" />
+}
+
+@section Scripts
+{
+    <script src="~/js/product/view-product.js" asp-append-version="true"></script>
+}

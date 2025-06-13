@@ -1,0 +1,24 @@
+﻿@using LeaguePlaza.Common.Constants
+@using LeaguePlaza.Core.Features.Product.Models.Dtos.ReadOnly
+
+@model IEnumerable<ProductDto>
+
+<div id="product-cards-container" class="product-cards-container">
+    @foreach (var product in Model)
+    {
+        <div class="product-card product-card-js">
+            <div class="product-image">
+                <img src="@product.ImageUrl" alt="product image" loading="lazy" />
+            </div>
+            <div class="product-info product-info-js">
+                <h6>@product.Name</h6>
+                <p>@product.Description</p>
+                <div class="product-metadata">
+                    <span><i class="fa-solid fa-flask"></i>@product.ProductType</span>
+                    <span><i class="fa-solid fa-coins"></i>@product.Price</span>
+                </div>
+                <a asp-controller="Product" asp-action="ViewProduct" asp-route-id="@product.Id">View product</a>
+            </div>
+        </div>
+    }
+</div>
