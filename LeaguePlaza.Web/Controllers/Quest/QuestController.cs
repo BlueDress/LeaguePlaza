@@ -29,7 +29,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = $"{UserRoleConstants.Adventurer}, {UserRoleConstants.QuestGiver}")]
         public async Task<IActionResult> MyQuests()
         {
             try
@@ -47,7 +47,7 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = $"{UserRoleConstants.Adventurer}, {UserRoleConstants.QuestGiver}")]
         public async Task<IActionResult> ViewQuest(int id)
         {
             try
