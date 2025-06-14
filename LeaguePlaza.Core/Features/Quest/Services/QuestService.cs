@@ -34,7 +34,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
         public async Task<QuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
             IEnumerable<QuestEntity> availableQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(QuestConstants.PageOne, QuestConstants.CountForPagination, true, q => q.Created, q => q.Status == QuestStatus.Posted);
-            int totalResults = await _repository.GetCountAsync<QuestEntity>(q => true);
+            int totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.Status == QuestStatus.Posted);
 
             return new QuestsViewModel()
             {
