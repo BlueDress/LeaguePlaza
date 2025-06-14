@@ -312,7 +312,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 return new QuestsViewModel();
             }
 
-            int pageToShow = Math.Min(totalFilteredAndSortedQuestsCount / QuestConstants.CountForPagination + 1, filterAndSortQuestsRequestData.CurrentPage);
+            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedQuestsCount / ProductConstants.CountForPagination), filterAndSortQuestsRequestData.CurrentPage);
 
             Expression<Func<QuestEntity, object>> sortExpression = filterAndSortQuestsRequestData.SortBy == "Reward" ? q => q.RewardAmount : q => q.Created;
 
