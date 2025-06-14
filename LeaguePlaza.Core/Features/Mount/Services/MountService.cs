@@ -162,7 +162,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountsViewModel();
             }
 
-            int pageToShow = Math.Min(totalFilteredAndSortedMountCount / MountConstants.CountForPagination + 1, filterAndSortMountsRequestData.CurrentPage);
+            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedMountCount / ProductConstants.CountForPagination), filterAndSortMountsRequestData.CurrentPage);
 
             Expression<Func<MountEntity, object>> sortExpression = filterAndSortMountsRequestData.SortBy == "Price" ? m => m.RentPrice : m => m.Rating;
 
