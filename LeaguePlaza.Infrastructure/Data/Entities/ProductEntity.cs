@@ -28,5 +28,7 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
 
         [Required]
         public ProductType ProductType { get; set; }
+
+        public ICollection<CartItemEntity> CartItems { get; set; } = new List<CartItemEntity>();
     }
 }

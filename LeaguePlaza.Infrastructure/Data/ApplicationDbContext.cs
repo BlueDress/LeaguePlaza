@@ -15,6 +15,8 @@ namespace LeaguePlaza.Infrastructure.Data
         public DbSet<MountRentalEntity> MountRentals { get; set; }
         public DbSet<MountRatingEntity> MountRatings { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<CartEntity> Carts { get; set; }
+        public DbSet<CartItemEntity> CartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -28,6 +30,12 @@ namespace LeaguePlaza.Infrastructure.Data
                 .HasMany(au => au.AcceptedQuests)
                 .WithOne(q => q.Adventurer)
                 .HasForeignKey(q => q.AdventurerId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<ApplicationUser>()
+                .HasOne(au => au.Cart)
+                .WithOne(c => c.User)
+                .HasForeignKey<ApplicationUser>(au => au.CartId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             base.OnModelCreating(builder);
