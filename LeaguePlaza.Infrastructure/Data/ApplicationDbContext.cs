@@ -17,6 +17,8 @@ namespace LeaguePlaza.Infrastructure.Data
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<CartEntity> Carts { get; set; }
         public DbSet<CartItemEntity> CartItems { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<OrderItemEntity> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
