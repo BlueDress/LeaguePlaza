@@ -14,6 +14,6 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
 
         public ApplicationUser User { get; set; } = null!;
 
-        public ICollection<CartItemEntity> CartItems { get; set; } = new List<CartItemEntity>();
+        public ICollection<CartItemEntity> CartItems { get; set; } = new HashSet<CartItemEntity>();
     }
 }

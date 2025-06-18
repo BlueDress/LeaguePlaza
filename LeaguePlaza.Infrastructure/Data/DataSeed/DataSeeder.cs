@@ -69,7 +69,7 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
 
             if (!_applicationDbContext.Quests.Any())
             {
-                var testQuests = new List<QuestEntity>();
+                var testQuests = new HashSet<QuestEntity>();
                 var questGivers = _applicationDbContext.UserRoles.Where(ur => ur.RoleId == _roleManager.Roles.First(r => r.Name == UserRoleConstants.QuestGiver).Id).ToArray();
 
                 for (int i = 1; i <= 100; i++)
@@ -96,7 +96,7 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
 
             if (!_applicationDbContext.Mounts.Any())
             {
-                var testMounts = new List<MountEntity>();
+                var testMounts = new HashSet<MountEntity>();
 
                 for (int i = 1; i <= 30; i++)
                 {
@@ -160,7 +160,7 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
 
             if (!_applicationDbContext.Products.Any())
             {
-                var testProducts = new List<ProductEntity>();
+                var testProducts = new HashSet<ProductEntity>();
 
                 for (int i = 1; i < 200; i++)
                 {

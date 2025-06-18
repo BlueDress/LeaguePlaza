@@ -29,8 +29,8 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         [Required]
         public ProductType ProductType { get; set; }
 
-        public ICollection<CartItemEntity> CartItems { get; set; } = new List<CartItemEntity>();
+        public ICollection<CartItemEntity> CartItems { get; set; } = new HashSet<CartItemEntity>();
 
-        public ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
+        public ICollection<OrderItemEntity> OrderItems { get; set; } = new HashSet<OrderItemEntity>();
     }
 }

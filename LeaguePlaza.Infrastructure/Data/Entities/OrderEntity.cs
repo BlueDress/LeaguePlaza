@@ -42,6 +42,6 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
 
         public ApplicationUser User { get; set; } = null!;
 
-        public ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
+        public ICollection<OrderItemEntity> OrderItems { get; set; } = new HashSet<OrderItemEntity>();
     }
 }
