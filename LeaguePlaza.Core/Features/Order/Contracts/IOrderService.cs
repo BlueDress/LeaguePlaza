@@ -1,6 +1,9 @@
-﻿namespace LeaguePlaza.Core.Features.Order.Contracts
+﻿using LeaguePlaza.Core.Features.Order.Models.ViewModels;
+
+namespace LeaguePlaza.Core.Features.Order.Contracts
 {
     public interface IOrderService
     {
+        Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync();
     }
 }

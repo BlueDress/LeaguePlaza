@@ -4,6 +4,8 @@ using LeaguePlaza.Core.Features.Home.Contracts;
 using LeaguePlaza.Core.Features.Home.Services;
 using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Services;
+using LeaguePlaza.Core.Features.Order.Contracts;
+using LeaguePlaza.Core.Features.Order.Services;
 using LeaguePlaza.Core.Features.Product.Contracts;
 using LeaguePlaza.Core.Features.Product.Services;
 using LeaguePlaza.Core.Features.Quest.Contracts;
@@ -42,6 +44,7 @@ namespace LeaguePlaza.Web
             builder.Services.AddScoped(typeof(IHomeService), typeof(HomeService));
             builder.Services.AddScoped(typeof(IQuestService), typeof(QuestService));
             builder.Services.AddScoped(typeof(IMountService), typeof(MountService));
+            builder.Services.AddScoped(typeof(IOrderService), typeof(OrderService));
             builder.Services.AddScoped(typeof(IProductService), typeof(ProductService));
             builder.Services.AddScoped(typeof(IDropboxService), typeof(DropboxService));
 

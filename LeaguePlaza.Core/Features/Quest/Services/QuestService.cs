@@ -53,7 +53,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = 1,
+                    CurrentPage = QuestConstants.PageOne,
                     TotalPages = (int)Math.Ceiling(totalResults / 6d),
                 },
             };
@@ -86,7 +86,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     }),
                     Pagination = new PaginationViewModel()
                     {
-                        CurrentPage = 1,
+                        CurrentPage = QuestConstants.PageOne,
                         TotalPages = (int)Math.Ceiling(totalResults / 6d),
                     },
                 };

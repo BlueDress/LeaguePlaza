@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace LeaguePlaza.Infrastructure.Data.Repository
 {
@@ -33,7 +33,7 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             return await DbSet<T>().Where(filterCondition).ToListAsync();
         }
 
-        public async Task<T?> FindOneReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Expression<Func<T, object>>[] includes) where T : class
+        public async Task<T?> FindOneReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes) where T : class
         {
             IQueryable<T> query = DbSet<T>();
 
@@ -41,14 +41,14 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             {
                 foreach (var include in includes)
                 {
-                    query = query.Include(include);
+                    query = include(query);
                 }
             }
 
             return await query.AsNoTracking().Where(filterCondition).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Expression<Func<T, object>>[] includes) where T : class
+        public async Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes) where T : class
         {
             IQueryable<T> query = DbSet<T>();
 
@@ -56,7 +56,7 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             {
                 foreach (var include in includes)
                 {
-                    query = query.Include(include);
+                    query = include(query);
                 }
             }
 
@@ -68,7 +68,7 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             return await DbSet<T>().AsNoTracking().Where(filterCondition).Take(count).ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindSpecificCountOrderedReadOnlyAsync<T, TKey>(int pageNumber, int count, bool orderIsDescending, Expression<Func<T, TKey>> orderCondition, Expression<Func<T, bool>> filterCondition, params Expression<Func<T, object>>[] includes) where T : class
+        public async Task<IEnumerable<T>> FindSpecificCountOrderedReadOnlyAsync<T, TKey>(int pageNumber, int count, bool orderIsDescending, Expression<Func<T, TKey>> orderCondition, Expression<Func<T, bool>> filterCondition, params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes) where T : class
         {
             IQueryable<T> query = DbSet<T>().AsNoTracking();
 
@@ -76,7 +76,7 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             {
                 foreach (var include in includes)
                 {
-                    query = query.Include(include);
+                    query = include(query);
                 }
             }
 
