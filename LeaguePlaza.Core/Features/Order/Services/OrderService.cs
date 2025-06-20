@@ -41,6 +41,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                     OrderItems = o.OrderItems.Select(oi => new OrderItemDto()
                     {
                         ProductName = oi.Product.Name,
+                        ProductImageUrl = oi.Product.ImageUrl,
                         Quantity = oi.Quantity,
                         Price = oi.Price,
                     }),
