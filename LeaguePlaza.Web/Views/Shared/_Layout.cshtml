@@ -33,16 +33,10 @@
                     <li>
                         <a asp-controller="Quest" asp-action="Index">Quests</a>
                     </li>
-                    <li>
-                        <a asp-controller="Quest" asp-action="MyQuests">My Quests</a>
-                    </li>
                     @if (User.IsInRole(UserRoleConstants.Adventurer))
                     {
                         <li>
                             <a asp-controller="Mount" asp-action="Index">Mounts</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Mount" asp-action="MountRentHistory">Mount Rent History</a>
                         </li>
                         <li>
                             <a asp-controller="Product" asp-action="Index">Products</a>
@@ -58,6 +52,11 @@
                         </li>
                     }
                 </ul>
+
+                @if (User.IsInRole(UserRoleConstants.Adventurer))
+                {
+                    <a class="cart-nav-icon" asp-controller="Order" asp-action="Cart"><i class="fa-solid fa-cart-shopping"></i><span>0</span></a>
+                }
 
                 <partial name="_LoginPartial" />
 
