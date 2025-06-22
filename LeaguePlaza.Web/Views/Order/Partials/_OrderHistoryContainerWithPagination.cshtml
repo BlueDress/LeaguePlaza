@@ -1,0 +1,13 @@
+﻿@using LeaguePlaza.Core.Features.Order.Models.ViewModels
+
+@model OrderHistoryViewModel
+
+@if (Model.Orders.Any())
+{
+    <partial name="~/Views/Order/Partials/_OrderHistoryContainer.cshtml" model="@Model.Orders" />
+    <partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />
+}
+else
+{
+    <div class="no-results">No results found</div>
+}

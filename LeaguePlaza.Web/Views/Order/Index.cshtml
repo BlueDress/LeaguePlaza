@@ -1,3 +1,19 @@
 ﻿@using LeaguePlaza.Core.Features.Order.Models.ViewModels
 
 @model OrderHistoryViewModel
+
+<div class="container">
+    <h1>My Orders</h1>
+    <div id="order-history-and-pagination">
+        <partial name="~/Views/Order/Partials/_OrderHistoryContainerWithPagination.cshtml" model="@Model" />
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/order/order-history.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/js/order/order-history.js"></script>
+}
