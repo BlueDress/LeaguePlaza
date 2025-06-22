@@ -55,7 +55,7 @@
 
                 @if (User.IsInRole(UserRoleConstants.Adventurer))
                 {
-                    <a class="cart-nav-icon" asp-controller="Order" asp-action="Cart"><i class="fa-solid fa-cart-shopping"></i><span>0</span></a>
+                    <a class="cart-nav-icon" asp-controller="Order" asp-action="ViewCart"><i class="fa-solid fa-cart-shopping"></i><span>0</span></a>
                 }
 
                 <partial name="_LoginPartial" />

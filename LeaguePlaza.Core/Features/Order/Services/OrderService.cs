@@ -37,7 +37,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                     DateCreated = o.DateCreated.ToString("dd-MM-yyyy"),
                     DateCompleted = o.DateCompleted.HasValue ? o.DateCompleted.Value.ToString("dd-MM-yyyy") : string.Empty,
                     Status = o.Status.ToString(),
-                    TotalPrice = o.OrderItems.Sum(oi => oi.Price),
+                    TotalPrice = o.OrderItems.Sum(oi => oi.Quantity * oi.Price),
                     OrderItems = o.OrderItems.Select(oi => new OrderItemDto()
                     {
                         ProductName = oi.Product.Name,
@@ -51,6 +51,37 @@ namespace LeaguePlaza.Core.Features.Order.Services
                     CurrentPage = QuestConstants.PageOne,
                     TotalPages = (int)Math.Ceiling(totalResults / 10d),
                 },
+            };
+        }
+        public async Task<CartViewModel> CreateViewCartViewModelAsync()
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return new CartViewModel();
+            }
+
+            var userCart = await _repository.FindOneReadOnlyAsync<CartEntity>(c => c.UserID == currentUser.Id, query => query.Include(c => c.CartItems).ThenInclude(ci => ci.Product));
+
+            if (userCart == null)
+            {
+                await _repository.AddAsync(new CartEntity() { UserID = currentUser.Id });
+                return new CartViewModel();
+            }
+
+            return new CartViewModel()
+            {
+                CartId = userCart.Id,
+                TotalPrice = userCart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price),
+                CartItems = userCart.CartItems.Select(ci => new CartItemDto()
+                {
+                    Id = ci.Id,
+                    Quantity = ci.Quantity,
+                    ProductName = ci.Product.Name,
+                    ProductPrice = ci.Product.Price,
+                    TotalPrice = ci.Quantity * ci.Product.Price,
+                }),
             };
         }
     }

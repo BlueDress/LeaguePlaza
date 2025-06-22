@@ -28,5 +28,22 @@ namespace LeaguePlaza.Web.Controllers.Order
                 return View(new OrderHistoryViewModel());
             }
         }
+
+        public async Task<IActionResult> ViewCart()
+        {
+            try
+            {
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+
+                return View(cartViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(ViewCart));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return View(new CartViewModel());
+            }
+        }
     }
 }
