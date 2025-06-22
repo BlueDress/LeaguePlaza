@@ -28,24 +28,21 @@
             <div class="links-holder">
                 <ul id="nav-links" class="nav-links">
                     <li>
-                        <a asp-controller="Home" asp-action="Index">Home</a>
+                        <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li>
-                        <a asp-controller="Quest" asp-action="Index">Quests</a>
-                    </li>
-                    <li>
-                        <a asp-controller="Quest" asp-action="MyQuests">My Quests</a>
+                        <a asp-area="" asp-controller="Quest" asp-action="Index">Quests</a>
                     </li>
                     @if (User.IsInRole(UserRoleConstants.Adventurer))
                     {
                         <li>
-                            <a asp-controller="Mount" asp-action="Index">Mounts</a>
+                            <a asp-area="" asp-controller="Mount" asp-action="Index">Mounts</a>
                         </li>
                         <li>
-                            <a asp-controller="Mount" asp-action="MountRentHistory">Mount Rent History</a>
+                            <a asp-area="" asp-controller="Product" asp-action="Index">Products</a>
                         </li>
                         <li>
-                            <a asp-controller="Product" asp-action="Index">Products</a>
+                            <a asp-area="" asp-controller="Order" asp-action="Index">Order History</a>
                         </li>
                     }
                     @if (User.IsInRole(UserRoleConstants.LeagueMaster))
@@ -55,6 +52,11 @@
                         </li>
                     }
                 </ul>
+
+                @if (User.IsInRole(UserRoleConstants.Adventurer))
+                {
+                    <a class="cart-nav-icon" asp-area="" asp-controller="Order" asp-action="ViewCart"><i class="fa-solid fa-cart-shopping"></i><span>0</span></a>
+                }
 
                 <partial name="_LoginPartial" />
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LeaguePlaza.Infrastructure.Data.Entities
 {
@@ -11,5 +12,7 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public ICollection<MountRentalEntity> MountRentals { get; set; } = new HashSet<MountRentalEntity>();
 
         public ICollection<MountRatingEntity> MountRatings { get; set; } = new HashSet<MountRatingEntity>();
+
+        public ICollection<OrderEntity> Orders { get; set; } = new HashSet<OrderEntity>();
     }
 }

@@ -5,7 +5,7 @@ namespace LeaguePlaza.Core.Features.Admin.Models.ViewModels
 {
     public class MountAdminViewModel
     {
-        public IEnumerable<MountDto> Mounts { get; set; } = new List<MountDto>();
+        public IEnumerable<MountDto> Mounts { get; set; } = new HashSet<MountDto>();
 
         public PaginationViewModel Pagination { get; set; } = new PaginationViewModel();
     }

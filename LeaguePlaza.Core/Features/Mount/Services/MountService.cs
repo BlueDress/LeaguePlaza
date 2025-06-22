@@ -11,6 +11,7 @@ using LeaguePlaza.Infrastructure.Data.Repository;
 using LeaguePlaza.Infrastructure.Dropbox.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace LeaguePlaza.Core.Features.Mount.Services
@@ -65,7 +66,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new ViewMountViewModel();
             }
 
-            var mount = await _repository.FindOneReadOnlyAsync<MountEntity>(m => m.Id == id, m => m.MountRatings.Where(mr => mr.UserId == currentUser.Id)) ?? new();
+            var mount = await _repository.FindOneReadOnlyAsync<MountEntity>(m => m.Id == id, query => query.Include(m => m.MountRatings.Where(mr => mr.UserId == currentUser.Id))) ?? new();
             IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(MountConstants.RecommendedMountsCount, m => m.Id != id && m.MountType == mount.MountType);
 
             return new ViewMountViewModel()
@@ -103,7 +104,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentHistoryViewModel();
             }
 
-            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountConstants.CountForRentHistoryPagination, false, mr => mr.StartDate, mr => mr.UserId == currentUser.Id, mr => mr.Mount);
+            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountConstants.CountForRentHistoryPagination, false, mr => mr.StartDate, mr => mr.UserId == currentUser.Id, query => query.Include(mr => mr.Mount));
             int totalResults = await _repository.GetCountAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id);
 
             return new MountRentHistoryViewModel()

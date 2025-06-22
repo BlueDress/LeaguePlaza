@@ -8,6 +8,6 @@ namespace LeaguePlaza.Core.Features.Mount.Models.ViewModels
 
         public MountDto Mount { get; set; } = new MountDto();
 
-        public IEnumerable<MountDto> RecommendedMounts { get; set; } = new List<MountDto>();
+        public IEnumerable<MountDto> RecommendedMounts { get; set; } = new HashSet<MountDto>();
     }
 }
