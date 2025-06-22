@@ -62,11 +62,12 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new CartViewModel();
             }
 
-            var userCart = await _repository.FindOneReadOnlyAsync<CartEntity>(c => c.UserID == currentUser.Id, query => query.Include(c => c.CartItems).ThenInclude(ci => ci.Product));
+            CartEntity? userCart = await _repository.FindOneReadOnlyAsync<CartEntity>(c => c.UserID == currentUser.Id, query => query.Include(c => c.CartItems).ThenInclude(ci => ci.Product));
 
             if (userCart == null)
             {
                 await _repository.AddAsync(new CartEntity() { UserID = currentUser.Id });
+                await _repository.SaveChangesAsync();
                 return new CartViewModel();
             }
 
@@ -83,6 +84,26 @@ namespace LeaguePlaza.Core.Features.Order.Services
                     TotalPrice = ci.Quantity * ci.Product.Price,
                 }),
             };
+        }
+
+        public async Task<int> GetCartItemsCountAsync()
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return 0;
+            }
+            CartEntity? userCart = await _repository.FindOneReadOnlyAsync<CartEntity>(c => c.UserID == currentUser.Id);
+
+            if (userCart == null)
+            {
+                await _repository.AddAsync(new CartEntity() { UserID = currentUser.Id });
+                await _repository.SaveChangesAsync();
+                return 0;
+            }
+
+            return await _repository.GetCountAsync<CartItemEntity>(ci => ci.CartId == userCart.Id);
         }
     }
 }
