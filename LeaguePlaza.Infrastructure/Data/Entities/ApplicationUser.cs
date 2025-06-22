@@ -5,11 +5,6 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        [ForeignKey(nameof(Cart))]
-        public int CartId { get; set; }
-
-        public CartEntity? Cart { get; set; }
-
         public ICollection<QuestEntity> PostedQuests { get; set; } = new HashSet<QuestEntity>();
 
         public ICollection<QuestEntity> AcceptedQuests { get; set; } = new HashSet<QuestEntity>();

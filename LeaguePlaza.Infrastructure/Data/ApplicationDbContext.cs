@@ -34,12 +34,6 @@ namespace LeaguePlaza.Infrastructure.Data
                 .HasForeignKey(q => q.AdventurerId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.Entity<ApplicationUser>()
-                .HasOne(au => au.Cart)
-                .WithOne(c => c.User)
-                .HasForeignKey<ApplicationUser>(au => au.CartId)
-                .OnDelete(DeleteBehavior.SetNull);
-
             base.OnModelCreating(builder);
         }
     }
