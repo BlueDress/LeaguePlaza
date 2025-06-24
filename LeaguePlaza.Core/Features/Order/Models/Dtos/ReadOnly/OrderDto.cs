@@ -9,9 +9,5 @@
         public string? DateCompleted { get; set; }
 
         public string Status { get; set; } = null!;
-
-        public decimal TotalPrice { get; set; }
-
-        public IEnumerable<OrderItemDto> OrderItems { get; set; } = new HashSet<OrderItemDto>();
     }
 }
