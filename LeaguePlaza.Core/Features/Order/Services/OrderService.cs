@@ -17,7 +17,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-        public async Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync()
+        public async Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(int pageNumber = OrderConstants.PageOne)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -26,7 +26,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new OrderHistoryViewModel();
             }
 
-            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, DateTime?>(OrderConstants.PageOne, OrderConstants.CountForOrderHistoryPagination, true, o => o.DateCompleted, o => o.UserId == currentUser.Id);
+            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, DateTime?>(pageNumber, OrderConstants.CountForOrderHistoryPagination, true, o => o.DateCompleted, o => o.UserId == currentUser.Id);
             int totalResults = await _repository.GetCountAsync<OrderEntity>(o => o.UserId == currentUser.Id);
 
             return new OrderHistoryViewModel()
@@ -40,7 +40,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = QuestConstants.PageOne,
+                    CurrentPage = pageNumber,
                     TotalPages = (int)Math.Ceiling(totalResults / 10d),
                 },
             };
