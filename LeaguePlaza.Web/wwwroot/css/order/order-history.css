@@ -1,2 +1,52 @@
-﻿body {
+﻿.order-history {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    margin: 1rem 0;
+    font-size: 12px;
+}
+
+    .order-history > div:first-child {
+        background-color: #DAA520;
+        font-weight: 600;
+    }
+
+    .order-history > div {
+        flex: 1 0 100%;
+        display: flex;
+    }
+
+        .order-history > div > div {
+            flex: 0 0 25%;
+            border-bottom: 1px solid black;
+            border-right: 1px solid black;
+            text-align: center;
+            padding: 0.2rem;
+        }
+
+        .order-history > div:has(.completed-order) {
+            color: green;
+        }
+
+        .order-history > div:has(.pending-order) {
+            color: orange;
+        }
+
+        .order-history > div:has(.in-progress-order) {
+            color: blue;
+        }
+
+@media (min-width: 601px) {
+    .order-history {
+        font-size: 16px;
+    }
+
+        .order-history > div > div {
+            padding: 0.5rem;
+        }
+
+        .order-history a {
+            font-size: 16px;
+            padding: 0.3rem 0.6rem;
+        }
 }

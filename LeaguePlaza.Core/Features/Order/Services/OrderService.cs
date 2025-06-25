@@ -17,7 +17,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-        public async Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync()
+        public async Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(int pageNumber = OrderConstants.PageOne)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -26,7 +26,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new OrderHistoryViewModel();
             }
 
-            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, DateTime?>(OrderConstants.PageOne, OrderConstants.CountForOrderHistoryPagination, true, o => o.DateCompleted, o => o.UserId == currentUser.Id, query => query.Include(o => o.OrderItems).ThenInclude(oi => oi.Product));
+            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, DateTime?>(pageNumber, OrderConstants.CountForOrderHistoryPagination, true, o => o.DateCompleted, o => o.UserId == currentUser.Id);
             int totalResults = await _repository.GetCountAsync<OrderEntity>(o => o.UserId == currentUser.Id);
 
             return new OrderHistoryViewModel()
@@ -34,22 +34,13 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 Orders = orders.Select(o => new OrderDto()
                 {
                     Id = o.Id,
-                    DateCreated = o.DateCreated.ToString("dd-MM-yyyy"),
-                    DateCompleted = o.DateCompleted.HasValue ? o.DateCompleted.Value.ToString("dd-MM-yyyy") : string.Empty,
+                    DateCreated = o.DateCreated.ToString("dd.MM.yyyy"),
+                    DateCompleted = o.DateCompleted.HasValue ? o.DateCompleted.Value.ToString("dd.MM.yyyy") : string.Empty,
                     Status = o.Status.ToString(),
-                    TotalPrice = o.OrderItems.Sum(oi => oi.Quantity * oi.Price),
-                    OrderItems = o.OrderItems.Select(oi => new OrderItemDto()
-                    {
-                        ProductName = oi.Product.Name,
-                        ProductImageUrl = oi.Product.ImageUrl,
-                        Quantity = oi.Quantity,
-                        Price = oi.Price,
-                        TotalPrice = oi.Quantity * oi.Price,
-                    }),
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = QuestConstants.PageOne,
+                    CurrentPage = pageNumber,
                     TotalPages = (int)Math.Ceiling(totalResults / 10d),
                 },
             };

@@ -1,0 +1,32 @@
+﻿@using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly
+
+@model IEnumerable<OrderDto>
+
+<div class="order-history">
+    <div>
+        <div>Created</div>
+        <div>Completed</div>
+        <div>Status</div>
+        <div>Order</div>
+    </div>
+    @foreach (var order in Model)
+    {
+        <div class="order-info">
+            <div>@order.DateCreated</div>
+            <div>@order.DateCompleted</div>
+            @if (order.Status == "Completed")
+            {
+                <div class="completed-order">@order.Status</div>
+            }
+            else if (order.Status == "Pending")
+            {
+                <div class="pending-order">@order.Status</div>
+            }
+            else
+            {
+                <div class="in-progress-order">@order.Status</div>
+            }
+            <div><a asp-controller="Order" asp-action="ViewOrder" asp-route-id="@order.Id">View</a></div>
+        </div>
+    }
+</div>
