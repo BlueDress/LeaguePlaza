@@ -1,0 +1,15 @@
+﻿@using LeaguePlaza.Core.Features.Order.Models.ViewModels
+
+@model OrderViewModel
+
+@Model.Order.Id
+@Model.Order.DateCreated
+@Model.Order.DateCompleted
+@Model.Order.Status
+@foreach(var item in Model.OrderItems)
+{
+    @item.Price
+    @item.Quantity
+    @item.ProductImageUrl
+    @item.ProductName
+}

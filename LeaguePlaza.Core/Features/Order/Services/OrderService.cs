@@ -45,6 +45,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 },
             };
         }
+
         public async Task<CartViewModel> CreateViewCartViewModelAsync()
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
@@ -96,6 +97,34 @@ namespace LeaguePlaza.Core.Features.Order.Services
             }
 
             return await _repository.GetCountAsync<CartItemEntity>(ci => ci.CartId == userCart.Id);
+        }
+
+        public async Task<OrderViewModel> CreateOrderViewModelAsync(int orderId)
+        {
+            var order = await _repository.FindOneReadOnlyAsync<OrderEntity>(o => o.Id == orderId, query => query.Include(o => o.OrderItems).ThenInclude(oi => oi.Product));
+
+            if (order == null)
+            {
+                return new OrderViewModel();
+            }
+
+            return new OrderViewModel()
+            {
+                Order = new OrderDto()
+                {
+                    Id = order.Id,
+                    DateCreated = order.DateCreated.ToString("dd.MM.yyyy"),
+                    DateCompleted = order.DateCompleted.HasValue ? order.DateCompleted.Value.ToString("dd.MM.yyyy") : null,
+                    Status = order.Status.ToString(),
+                },
+                OrderItems = order.OrderItems.Select(oi => new OrderItemDto()
+                {
+                    ProductName = oi.Product.Name,
+                    ProductImageUrl = oi.Product.ImageUrl,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price,
+                }),
+            };
         }
     }
 }
