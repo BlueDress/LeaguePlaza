@@ -87,6 +87,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
             {
                 return 0;
             }
+
             CartEntity? userCart = await _repository.FindOneReadOnlyAsync<CartEntity>(c => c.UserID == currentUser.Id);
 
             if (userCart == null)
@@ -101,7 +102,14 @@ namespace LeaguePlaza.Core.Features.Order.Services
 
         public async Task<OrderViewModel> CreateOrderViewModelAsync(int orderId)
         {
-            var order = await _repository.FindOneReadOnlyAsync<OrderEntity>(o => o.Id == orderId, query => query.Include(o => o.OrderItems).ThenInclude(oi => oi.Product));
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return new OrderViewModel(); ;
+            }
+
+            var order = await _repository.FindOneReadOnlyAsync<OrderEntity>(o => o.Id == orderId && o.UserId == currentUser.Id, query => query.Include(o => o.OrderItems).ThenInclude(oi => oi.Product));
 
             if (order == null)
             {
