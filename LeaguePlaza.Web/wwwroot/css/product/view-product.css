@@ -67,12 +67,44 @@
     display: flex;
     justify-content: flex-end;
     margin: 1rem 0;
+    gap: 1rem;
 }
 
     #button-holder > button {
         padding: 0.3rem 0.8rem;
         border: 1px solid black;
-        border-radius: 10px;
+        border-radius: 5px;
+    }
+
+.quantity-selector {
+    display: flex;
+    gap: 0.3rem;
+}
+
+    .quantity-selector > button,
+    .quantity-selector > input {
+        padding: 0.3rem 0.8rem;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+#product-quantity {
+    max-width: 50px;
+}
+
+button {
+    background-color: #BEBEFF;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #A9A9FF;
+        color: #F8F8FF;
+    }
+
+    button:active {
+        transform: scale(0.98);
     }
 
 @media (min-width: 601px) {

@@ -18,6 +18,11 @@
             </div>
         </div>
         <div id="button-holder">
+            <div class="quantity-selector">
+                <button id="minus-btn" type="button">-</button>
+                <input id="product-quantity" type="number" name="quantity" value="1" min="1"/>
+                <button id="plus-btn" type="button">+</button>
+            </div>
             <button id="add-to-cart-btn" class="add-to-cart-btn" type="button" data-product-id="@Model.Product.Id">Add to Cart</button>
         </div>
     </div>
