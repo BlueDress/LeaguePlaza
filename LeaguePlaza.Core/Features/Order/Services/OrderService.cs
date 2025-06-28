@@ -69,11 +69,12 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 CartId = userCart.Id,
                 CartItems = userCart.CartItems.Select(ci => new CartItemDto()
                 {
-                    Id = ci.Id,
+                    CartId = ci.Id,
                     ProductName = ci.Product.Name,
                     ProductImageUrl = ci.Product.ImageUrl,
                     Quantity = ci.Quantity,
                     Price = ci.Product.Price,
+                    ProductId = ci.ProductId,
                 }),
             };
         }
@@ -130,6 +131,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                     ProductImageUrl = oi.Product.ImageUrl,
                     Quantity = oi.Quantity,
                     Price = oi.Price,
+                    ProductId = oi.ProductId,
                 }),
             };
         }

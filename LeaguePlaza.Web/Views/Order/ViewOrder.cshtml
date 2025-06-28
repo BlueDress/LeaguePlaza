@@ -35,7 +35,9 @@
                     <div class="order-item-image">
                         <img src="@item.ProductImageUrl" alt="order item image" loading="lazy" />
                     </div>
-                    <div class="order-item-name">@item.ProductName</div>
+                    <div class="order-item-name">
+                        <a asp-controller="Product" asp-action="ViewProduct" asp-route-id="@item.ProductId">@item.ProductName</a>
+                    </div>
                     <div>@item.Quantity</div>
                     <div>x</div>
                     <div>@item.Price</div>

@@ -24,6 +24,10 @@
     flex: 0 0 15%;
 }
 
+    .cart-item-name > a:hover {
+        text-decoration: underline;
+    }
+
 .cart-total-price {
     display: flex;
     justify-content: space-between;

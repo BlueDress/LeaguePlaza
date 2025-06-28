@@ -43,6 +43,10 @@
     flex: 0 0 15%;
 }
 
+.order-item-name > a:hover {
+    text-decoration: underline;
+}
+
 .order-total-price {
     display: flex;
     justify-content: space-between;
