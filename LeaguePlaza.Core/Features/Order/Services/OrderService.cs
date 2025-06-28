@@ -67,14 +67,13 @@ namespace LeaguePlaza.Core.Features.Order.Services
             return new CartViewModel()
             {
                 CartId = userCart.Id,
-                TotalPrice = userCart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price),
                 CartItems = userCart.CartItems.Select(ci => new CartItemDto()
                 {
                     Id = ci.Id,
-                    Quantity = ci.Quantity,
                     ProductName = ci.Product.Name,
-                    ProductPrice = ci.Product.Price,
-                    TotalPrice = ci.Quantity * ci.Product.Price,
+                    ProductImageUrl = ci.Product.ImageUrl,
+                    Quantity = ci.Quantity,
+                    Price = ci.Product.Price,
                 }),
             };
         }
