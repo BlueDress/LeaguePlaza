@@ -15,6 +15,8 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
 
         Task<IEnumerable<T>> FindAllAsync<T>(Expression<Func<T, bool>> filterCondition) where T : class;
 
+        Task<T?> FindOneAsync<T>(Expression<Func<T, bool>> filterCondition, params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes) where T : class;
+
         Task<T?> FindOneReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes) where T : class;
 
         Task<IEnumerable<T>> FindAllReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes) where T : class;

@@ -1,3 +1,16 @@
 ﻿@using LeaguePlaza.Core.Features.Order.Models.ViewModels
 
 @model CartViewModel
+
+<div class="container container-js" data-page-name="view-cart">
+    <partial name="~/Views/Order/Partials/_CartItems.cshtml" model="@Model" />
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/order/shopping-cart.css" asp-append-version="true" />
+}
+
+@section Scripts
+{
+    <script src="~/js/order/shopping-cart.js" asp-append-version="true"></script>
+}

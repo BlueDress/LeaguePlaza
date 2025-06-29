@@ -1,4 +1,6 @@
 ﻿using LeaguePlaza.Common.Constants;
+using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 
 namespace LeaguePlaza.Core.Features.Order.Contracts
@@ -10,5 +12,9 @@ namespace LeaguePlaza.Core.Features.Order.Contracts
         Task<CartViewModel> CreateViewCartViewModelAsync();
 
         Task<int> GetCartItemsCountAsync();
+
+        Task<OrderViewModel> CreateOrderViewModelAsync(int orderId);
+
+        Task<AddToCartResultDto> AddToCartAsync(CreateCartItemDto createCartItemDto);
     }
 }

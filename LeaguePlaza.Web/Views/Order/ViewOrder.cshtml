@@ -1,0 +1,58 @@
+﻿@using LeaguePlaza.Core.Features.Order.Models.ViewModels
+
+@model OrderViewModel
+
+<div class="container" data-page-name="view-order">
+    <h1>Order Information</h1>
+
+    <div class="order-information">
+        <div>
+            <span>Date Created:</span>
+            <span>@Model.Order.DateCreated</span>
+        </div>
+
+        @if (Model.Order.DateCompleted != null)
+        {
+            <div>
+                <span>Date Completed:</span>
+                <span>@Model.Order.DateCompleted</span>
+            </div>
+        }
+
+        <div>
+            <span>Status:</span>
+            <span>@Model.Order.Status</span>
+        </div>
+    </div>
+
+    <h3>Order Items</h3>
+
+    <div class="order-items-information">
+        <div>
+            @foreach (var item in Model.OrderItems)
+            {
+                <div class="order-item">
+                    <div class="order-item-image">
+                        <img src="@item.ProductImageUrl" alt="order item image" loading="lazy" />
+                    </div>
+                    <div class="order-item-name">
+                        <a asp-controller="Product" asp-action="ViewProduct" asp-route-id="@item.ProductId">@item.ProductName</a>
+                    </div>
+                    <div>@item.Quantity</div>
+                    <div>x</div>
+                    <div>@item.Price</div>
+                    <div>=</div>
+                    <div>@(item.Quantity* item.Price)</div>
+                </div>
+            }
+        </div>
+        <div class="order-total-price">
+            <span>Total:</span>
+            <span>@Model.OrderItems.Sum(oi => oi.Quantity * oi.Price)</span>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/order/view-order.css" asp-append-version="true" />
+}

@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Order.Contracts;
+using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 using LeaguePlaza.Core.Features.Pagination.Models;
@@ -45,6 +46,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 },
             };
         }
+
         public async Task<CartViewModel> CreateViewCartViewModelAsync()
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
@@ -66,14 +68,14 @@ namespace LeaguePlaza.Core.Features.Order.Services
             return new CartViewModel()
             {
                 CartId = userCart.Id,
-                TotalPrice = userCart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price),
                 CartItems = userCart.CartItems.Select(ci => new CartItemDto()
                 {
-                    Id = ci.Id,
-                    Quantity = ci.Quantity,
+                    CartId = ci.Id,
                     ProductName = ci.Product.Name,
-                    ProductPrice = ci.Product.Price,
-                    TotalPrice = ci.Quantity * ci.Product.Price,
+                    ProductImageUrl = ci.Product.ImageUrl,
+                    Quantity = ci.Quantity,
+                    Price = ci.Product.Price,
+                    ProductId = ci.ProductId,
                 }),
             };
         }
@@ -86,6 +88,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
             {
                 return 0;
             }
+
             CartEntity? userCart = await _repository.FindOneReadOnlyAsync<CartEntity>(c => c.UserID == currentUser.Id);
 
             if (userCart == null)
@@ -96,6 +99,92 @@ namespace LeaguePlaza.Core.Features.Order.Services
             }
 
             return await _repository.GetCountAsync<CartItemEntity>(ci => ci.CartId == userCart.Id);
+        }
+
+        public async Task<OrderViewModel> CreateOrderViewModelAsync(int orderId)
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return new OrderViewModel(); ;
+            }
+
+            var order = await _repository.FindOneReadOnlyAsync<OrderEntity>(o => o.Id == orderId && o.UserId == currentUser.Id, query => query.Include(o => o.OrderItems).ThenInclude(oi => oi.Product));
+
+            if (order == null)
+            {
+                return new OrderViewModel();
+            }
+
+            return new OrderViewModel()
+            {
+                Order = new OrderDto()
+                {
+                    Id = order.Id,
+                    DateCreated = order.DateCreated.ToString("dd.MM.yyyy"),
+                    DateCompleted = order.DateCompleted.HasValue ? order.DateCompleted.Value.ToString("dd.MM.yyyy") : null,
+                    Status = order.Status.ToString(),
+                },
+                OrderItems = order.OrderItems.Select(oi => new OrderItemDto()
+                {
+                    ProductName = oi.Product.Name,
+                    ProductImageUrl = oi.Product.ImageUrl,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price,
+                    ProductId = oi.ProductId,
+                }),
+            };
+        }
+
+        public async Task<AddToCartResultDto> AddToCartAsync(CreateCartItemDto createCartItemDto)
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return new AddToCartResultDto()
+                {
+                    IsAddToCartSuccessful = false,
+                    AddToCartMessage = "Something went wrong",
+                };
+            }
+
+            var currentUserCart = await _repository.FindOneAsync<CartEntity>(ce => ce.UserID == currentUser.Id, query => query.Include(c => c.CartItems));
+
+            if (currentUserCart == null)
+            {
+                return new AddToCartResultDto()
+                {
+                    IsAddToCartSuccessful = false,
+                    AddToCartMessage = "Something went wrong",
+                };
+            }
+
+            if (currentUserCart.CartItems.Any(ci => ci.ProductId == createCartItemDto.ProductId))
+            {
+                CartItemEntity cartItemToUpdate = currentUserCart.CartItems.First(ci => ci.ProductId == createCartItemDto.ProductId);
+                cartItemToUpdate.Quantity += createCartItemDto.Quantity;
+            }
+            else
+            {
+                var cartItemToAdd = new CartItemEntity()
+                {
+                    Quantity = createCartItemDto.Quantity,
+                    ProductId = createCartItemDto.ProductId,
+                    CartId = currentUserCart.Id,
+                };
+
+                currentUserCart.CartItems.Add(cartItemToAdd);
+            }
+
+            await _repository.SaveChangesAsync();
+
+            return new AddToCartResultDto()
+            {
+                IsAddToCartSuccessful = true,
+                AddToCartMessage = "Product added to cart",
+            };
         }
     }
 }

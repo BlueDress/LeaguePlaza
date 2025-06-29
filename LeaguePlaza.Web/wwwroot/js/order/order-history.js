@@ -8,7 +8,6 @@ function orderHistoryMain() {
     orderHistoryWithPagination.addEventListener('click', e => getOrderHistoryPageResults(e));
 
     async function getOrderHistoryPageResults(e) {
-        e.preventDefault();
 
         if (e.target && e.target.classList.contains('pagination-button-js')) {
             const pageNumber = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;

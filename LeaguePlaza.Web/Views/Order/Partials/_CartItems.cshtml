@@ -1,5 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using LeaguePlaza.Core.Features.Order.Models.ViewModels
+
+@model CartViewModel
+
+<h1>View Cart</h1>
+<div class="cart-items-information">
+    <div>
+        @foreach (var item in Model.CartItems)
+        {
+            <div class="cart-item">
+                <div class="cart-item-image">
+                    <img src="@item.ProductImageUrl" alt="cart item image" loading="lazy" />
+                </div>
+                <div class="cart-item-name">
+                    <a asp-controller="Product" asp-action="ViewProduct" asp-route-id="@item.ProductId">@item.ProductName</a>
+                </div>
+                <div>@item.Quantity</div>
+                <div>x</div>
+                <div>@item.Price</div>
+                <div>=</div>
+                <div>@(item.Quantity* item.Price)</div>
+            </div>
+        }
+    </div>
+    <div class="cart-total-price">
+        <span>Total:</span>
+        <span>@Model.CartItems.Sum(ci => ci.Quantity * ci.Price)</span>
+    </div>
+    <div class="cart-items-button">
+        <button id="cart-items-continue" type="button">Continue</button>
+    </div>
+</div>

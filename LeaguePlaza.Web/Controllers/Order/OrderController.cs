@@ -45,5 +45,22 @@ namespace LeaguePlaza.Web.Controllers.Order
                 return View(new CartViewModel());
             }
         }
+
+        public async Task<IActionResult> ViewOrder(int id)
+        {
+            try
+            {
+                OrderViewModel orderViewModel = await _orderService.CreateOrderViewModelAsync(id);
+
+                return View(orderViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(ViewOrder));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return View(new OrderViewModel());
+            }
+        }
     }
 }
