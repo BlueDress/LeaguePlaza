@@ -1,5 +1,7 @@
 ﻿using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Order.Contracts;
+using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +49,24 @@ namespace LeaguePlaza.Web.Controllers.Order
                 _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
 
                 return View(new OrderHistoryViewModel());
+            }
+        }
+
+        [HttpPost("addtocart")]
+        public async Task<IActionResult> AddToCart([FromBody] CreateCartItemDto createCartItemDto)
+        {
+            try
+            {
+                AddToCartResultDto addToCartResult = await _orderService.AddToCartAsync(createCartItemDto);
+
+                return Ok(addToCartResult);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(GetPageResults));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return BadRequest();
             }
         }
     }

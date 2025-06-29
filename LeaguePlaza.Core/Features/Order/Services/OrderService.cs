@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Order.Contracts;
+using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 using LeaguePlaza.Core.Features.Pagination.Models;
@@ -133,6 +134,56 @@ namespace LeaguePlaza.Core.Features.Order.Services
                     Price = oi.Price,
                     ProductId = oi.ProductId,
                 }),
+            };
+        }
+
+        public async Task<AddToCartResultDto> AddToCartAsync(CreateCartItemDto createCartItemDto)
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return new AddToCartResultDto()
+                {
+                    IsAddToCartSuccessful = false,
+                    AddToCartMessage = "Something went wrong",
+                };
+            }
+
+            var currentUserCart = await _repository.FindOneAsync<CartEntity>(ce => ce.UserID == currentUser.Id, query => query.Include(c => c.CartItems));
+
+            if (currentUserCart == null)
+            {
+                return new AddToCartResultDto()
+                {
+                    IsAddToCartSuccessful = false,
+                    AddToCartMessage = "Something went wrong",
+                };
+            }
+
+            if (currentUserCart.CartItems.Any(ci => ci.ProductId == createCartItemDto.ProductId))
+            {
+                CartItemEntity cartItemToUpdate = currentUserCart.CartItems.First(ci => ci.ProductId == createCartItemDto.ProductId);
+                cartItemToUpdate.Quantity += createCartItemDto.Quantity;
+            }
+            else
+            {
+                var cartItemToAdd = new CartItemEntity()
+                {
+                    Quantity = createCartItemDto.Quantity,
+                    ProductId = createCartItemDto.ProductId,
+                    CartId = currentUserCart.Id,
+                };
+
+                currentUserCart.CartItems.Add(cartItemToAdd);
+            }
+
+            await _repository.SaveChangesAsync();
+
+            return new AddToCartResultDto()
+            {
+                IsAddToCartSuccessful = true,
+                AddToCartMessage = "Product added to cart",
             };
         }
     }

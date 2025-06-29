@@ -33,6 +33,21 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             return await DbSet<T>().Where(filterCondition).ToListAsync();
         }
 
+        public async Task<T?> FindOneAsync<T>(Expression<Func<T, bool>> filterCondition, params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes) where T : class
+        {
+            IQueryable<T> query = DbSet<T>();
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = include(query);
+                }
+            }
+
+            return await query.Where(filterCondition).FirstOrDefaultAsync();
+        }
+
         public async Task<T?> FindOneReadOnlyAsync<T>(Expression<Func<T, bool>> filterCondition, params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes) where T : class
         {
             IQueryable<T> query = DbSet<T>();
