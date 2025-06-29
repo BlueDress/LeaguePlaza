@@ -15,6 +15,9 @@ function shoppingCartMain() {
             if (e.target.id == 'order-information-back') {
                 await showCartItems(e);
             }
+            if (e.target.id == 'order-information-continue') {
+                await showSubmitOrder(e);
+            }
         }
     }
 
@@ -29,6 +32,15 @@ function shoppingCartMain() {
 
     async function showCartItems(e) {
         const response = await fetch(baseUrl + 'showcartitems');
+
+        if (response.status == 200) {
+            const orderInformationView = await response.text();
+            container.innerHTML = orderInformationView;
+        }
+    }
+
+    async function showSubmitOrder(e) {
+        const response = await fetch(baseUrl + 'showsubmitorder');
 
         if (response.status == 200) {
             const orderInformationView = await response.text();
