@@ -17,6 +17,7 @@ namespace LeaguePlaza.Web.Controllers.Order
         private const string OrderInformation = "~/Views/Order/Partials/_OrderInformation.cshtml";
         private const string CartItems = "~/Views/Order/Partials/_CartItems.cshtml";
         private const string SubmitOrder = "~/Views/Order/Partials/_SubmitOrder.cshtml";
+        private const string OrderSuccessful = "~/Views/Order/Partials/_OrderSuccessful.cshtml";
 
         private readonly IOrderService _orderService = orderService;
         private readonly ILogger<OrderController> _logger = logger;
@@ -119,6 +120,22 @@ namespace LeaguePlaza.Web.Controllers.Order
             catch (Exception ex)
             {
                 _logger.LogError(ErrorConstants.FailedAt, nameof(ShowSubmitOrder));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("showordersuccessful")]
+        public async Task<IActionResult> ShowOrderSuccessful()
+        {
+            try
+            {
+                return PartialView(OrderSuccessful);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowOrderSuccessful));
                 _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
 
                 return BadRequest();
