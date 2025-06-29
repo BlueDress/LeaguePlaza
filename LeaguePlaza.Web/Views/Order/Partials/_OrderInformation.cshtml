@@ -1,1 +1,31 @@
-﻿<h1>Test</h1>
+﻿<h1>Order information</h1>
+<div class="cart-order-information">
+    <div>
+        <label for="country">Country</label>
+        <input id="country" type="text" name="country" maxlength="200" required />
+        <span class="display-none"></span>
+    </div>
+    <div>
+        <label for="city">City</label>
+        <input id="city" type="text" name="city" maxlength="200" required />
+        <span class="display-none"></span>
+    </div>
+    <div>
+        <label for="street">Street</label>
+        <input id="street" type="text" name="street" maxlength="200" required />
+        <span class="display-none"></span>
+    </div>
+    <div>
+        <label for="postal-code">Postal code</label>
+        <input id="postal-code" type="text" name="postal-code" maxlength="20" required />
+        <span class="display-none"></span>
+    </div>
+    <div>
+        <label for="additional-information">Additional information</label>
+        <textarea id="additional-information" rows="4" name="additional-information" maxlength="200"></textarea>
+    </div>
+    <div class="order-information-buttons">
+        <button id="order-information-back" type="button">Back to cart</button>
+        <button id="order-information-continue" type="button">Continue</button>
+    </div>
+</div>
