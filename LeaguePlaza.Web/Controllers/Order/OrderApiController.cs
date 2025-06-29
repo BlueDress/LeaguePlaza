@@ -3,7 +3,6 @@ using LeaguePlaza.Core.Features.Order.Contracts;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
-using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +15,7 @@ namespace LeaguePlaza.Web.Controllers.Order
     {
         private const string OrderHistoryContainerWithPagination = "~/Views/Order/Partials/_OrderHistoryContainerWithPagination.cshtml";
         private const string OrderInformation = "~/Views/Order/Partials/_OrderInformation.cshtml";
+        private const string CartItems = "~/Views/Order/Partials/_CartItems.cshtml";
 
         private readonly IOrderService _orderService = orderService;
         private readonly ILogger<OrderController> _logger = logger;
@@ -82,6 +82,24 @@ namespace LeaguePlaza.Web.Controllers.Order
             catch (Exception ex)
             {
                 _logger.LogError(ErrorConstants.FailedAt, nameof(ShowOrderInformation));
+                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("showcartitems")]
+        public async Task<IActionResult> ShowCartItems()
+        {
+            try
+            {
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+
+                return PartialView(CartItems, cartViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowCartItems));
                 _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
 
                 return BadRequest();
