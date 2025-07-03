@@ -34,7 +34,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageNumber,
-                    TotalPages = (int)Math.Ceiling(totalResults / 10d),
+                    TotalPages = (int)Math.Ceiling((double)totalResults / AdminCountForPagination),
                 },
             };
         }

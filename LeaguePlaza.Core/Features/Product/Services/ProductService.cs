@@ -37,7 +37,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = PageOne,
-                    TotalPages = (int)Math.Ceiling(totalResults / 6d),
+                    TotalPages = (int)Math.Ceiling((double)totalResults / ProductsPerPage),
                 },
             };
         }
@@ -119,7 +119,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageToShow,
-                    TotalPages = (int)Math.Ceiling(totalFilteredAndSortedProductsCount / 6d),
+                    TotalPages = (int)Math.Ceiling((double)totalFilteredAndSortedProductsCount / ProductsPerPage),
                 },
             };
         }

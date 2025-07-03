@@ -54,7 +54,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = PageOne,
-                    TotalPages = (int)Math.Ceiling(totalResults / 6d),
+                    TotalPages = (int)Math.Ceiling((double)totalResults / MountsPerPage),
                 },
             };
         }
@@ -122,7 +122,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageNumber,
-                    TotalPages = (int)Math.Ceiling(totalResults / 10d),
+                    TotalPages = (int)Math.Ceiling((double)totalResults / MountRentalsPerPage),
                 },
             };
         }
@@ -186,7 +186,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageToShow,
-                    TotalPages = (int)Math.Ceiling(totalFilteredAndSortedMountCount / 6d),
+                    TotalPages = (int)Math.Ceiling((double)totalFilteredAndSortedMountCount / MountsPerPage),
                 },
             };
         }
