@@ -1,5 +1,4 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Infrastructure.Data.Entities;
+﻿using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
 using Microsoft.AspNetCore.Identity;
 

@@ -1,5 +1,4 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Quest.Contracts;
+﻿using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

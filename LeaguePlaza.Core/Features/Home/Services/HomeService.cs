@@ -1,5 +1,4 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Home.Contracts;
+﻿using LeaguePlaza.Core.Features.Home.Contracts;
 using LeaguePlaza.Core.Features.Home.Models.ViewModels;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly;
 using LeaguePlaza.Infrastructure.Data.Entities;
