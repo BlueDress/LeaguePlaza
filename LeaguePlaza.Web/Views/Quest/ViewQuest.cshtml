@@ -1,5 +1,6 @@
-﻿@using LeaguePlaza.Common.Constants
-@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+
+@using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 @model ViewQuestViewModel
 
@@ -20,7 +21,7 @@
             </div>
         </div>
 
-        @if (User.IsInRole(UserRoleConstants.Adventurer) && Model.Quest.Status != "Completed")
+        @if (User.IsInRole(Adventurer) && Model.Quest.Status != "Completed")
         {
             <div id="button-holder">
                 @if (Model.Quest.AdventurerId == null)

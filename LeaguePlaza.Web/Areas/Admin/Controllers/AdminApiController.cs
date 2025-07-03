@@ -6,11 +6,13 @@ using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Web.Areas.Admin.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleConstants.LeagueMaster)]
+    [Authorize(Roles = LeagueMaster)]
     public class AdminApiController(IAdminService adminService, IMountService mountService) : Controller
     {
         private const string MountAdminCardsContainerWithPagination = "~/Areas/Admin/Views/Partials/_MountAdminCardsContainerWithPagination.cshtml";

@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using static LeaguePlaza.Common.Constants.PaginationConstants;
+
 namespace LeaguePlaza.Core.Features.Order.Services
 {
     public class OrderService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager) : IOrderService
@@ -18,7 +20,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-        public async Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(int pageNumber = OrderConstants.PageOne)
+        public async Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(int pageNumber = PageOne)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -27,7 +29,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new OrderHistoryViewModel();
             }
 
-            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, DateTime?>(pageNumber, OrderConstants.CountForOrderHistoryPagination, true, o => o.DateCompleted, o => o.UserId == currentUser.Id);
+            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, DateTime?>(pageNumber, OrdersPerPage, true, o => o.DateCompleted, o => o.UserId == currentUser.Id);
             int totalResults = await _repository.GetCountAsync<OrderEntity>(o => o.UserId == currentUser.Id);
 
             return new OrderHistoryViewModel()

@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
 
+using static LeaguePlaza.Common.Constants.QuestConstants;
+using static LeaguePlaza.Common.Constants.PaginationConstants;
+
 namespace LeaguePlaza.Core.Features.Quest.Services
 {
     public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IQuestService
@@ -33,7 +36,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
         public async Task<QuestsViewModel> CreateAvailableQuestsViewModelAsync()
         {
-            IEnumerable<QuestEntity> availableQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(QuestConstants.PageOne, QuestConstants.CountForPagination, true, q => q.Created, q => q.Status == QuestStatus.Posted);
+            IEnumerable<QuestEntity> availableQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, DateTime>(PageOne, QuestsPerPage, true, q => q.Created, q => q.Status == QuestStatus.Posted);
             int totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.Status == QuestStatus.Posted);
 
             return new QuestsViewModel()
@@ -42,7 +45,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 {
                     Id = q.Id,
                     Title = q.Title,
-                    Description = string.IsNullOrWhiteSpace(q.Description) ? QuestConstants.NoDescriptionAvailable : q.Description,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? NoQuestDescriptionAvailable : q.Description,
                     Created = q.Created,
                     RewardAmount = q.RewardAmount,
                     Type = q.Type.ToString(),
@@ -53,7 +56,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = QuestConstants.PageOne,
+                    CurrentPage = PageOne,
                     TotalPages = (int)Math.Ceiling(totalResults / 6d),
                 },
             };
@@ -65,7 +68,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             if (currentUser != null)
             {
-                IEnumerable<QuestEntity> userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, object>(QuestConstants.PageOne, QuestConstants.CountForPagination, true, q => q.Created, q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
+                IEnumerable<QuestEntity> userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, object>(PageOne, QuestsPerPage, true, q => q.Created, q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
                 int totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
 
                 return new QuestsViewModel()
@@ -74,7 +77,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     {
                         Id = q.Id,
                         Title = q.Title,
-                        Description = string.IsNullOrWhiteSpace(q.Description) ? QuestConstants.NoDescriptionAvailable : q.Description,
+                        Description = string.IsNullOrWhiteSpace(q.Description) ? NoQuestDescriptionAvailable : q.Description,
                         Created = q.Created,
                         RewardAmount = q.RewardAmount,
                         Type = q.Type.ToString(),
@@ -86,7 +89,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     }),
                     Pagination = new PaginationViewModel()
                     {
-                        CurrentPage = QuestConstants.PageOne,
+                        CurrentPage = PageOne,
                         TotalPages = (int)Math.Ceiling(totalResults / 6d),
                     },
                 };
@@ -104,7 +107,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             if (currentUser != null)
             {
                 var quest = await _repository.FindByIdAsync<QuestEntity>(id) ?? new();
-                IEnumerable<QuestEntity> recommendedQuests = await _repository.FindSpecificCountReadOnlyAsync<QuestEntity>(QuestConstants.RecommendedQuestsCount, q => q.Id != id && q.Type == quest.Type && q.Status == QuestStatus.Posted);
+                IEnumerable<QuestEntity> recommendedQuests = await _repository.FindSpecificCountReadOnlyAsync<QuestEntity>(RecommendedQuestsCount, q => q.Id != id && q.Type == quest.Type && q.Status == QuestStatus.Posted);
 
                 return new ViewQuestViewModel()
                 {
@@ -112,7 +115,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     {
                         Id = id,
                         Title = quest.Title,
-                        Description = string.IsNullOrWhiteSpace(quest.Description) ? QuestConstants.NoDescriptionAvailable : quest.Description,
+                        Description = string.IsNullOrWhiteSpace(quest.Description) ? NoQuestDescriptionAvailable : quest.Description,
                         Created = quest.Created,
                         RewardAmount = quest.RewardAmount,
                         Type = quest.Type.ToString(),
@@ -125,7 +128,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                     {
                         Id = q.Id,
                         Title = q.Title,
-                        Description = string.IsNullOrWhiteSpace(q.Description) ? QuestConstants.NoDescriptionAvailable : q.Description,
+                        Description = string.IsNullOrWhiteSpace(q.Description) ? NoQuestDescriptionAvailable : q.Description,
                         Created = q.Created,
                         RewardAmount = q.RewardAmount,
                         Type = q.Type.ToString(),
@@ -312,11 +315,11 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 return new QuestsViewModel();
             }
 
-            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedQuestsCount / ProductConstants.CountForPagination), filterAndSortQuestsRequestData.CurrentPage);
+            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedQuestsCount / QuestsPerPage), filterAndSortQuestsRequestData.CurrentPage);
 
             Expression<Func<QuestEntity, object>> sortExpression = filterAndSortQuestsRequestData.SortBy == "Reward" ? q => q.RewardAmount : q => q.Created;
 
-            IEnumerable<QuestEntity> filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, QuestConstants.CountForPagination, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
+            IEnumerable<QuestEntity> filteredAndSortedQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, QuestsPerPage, filterAndSortQuestsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
 
             return new QuestsViewModel()
             {
@@ -324,7 +327,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
                 {
                     Id = q.Id,
                     Title = q.Title,
-                    Description = string.IsNullOrWhiteSpace(q.Description) ? QuestConstants.NoDescriptionAvailable : q.Description,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? NoQuestDescriptionAvailable : q.Description,
                     Created = q.Created,
                     RewardAmount = q.RewardAmount,
                     Type = q.Type.ToString(),

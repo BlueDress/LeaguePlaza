@@ -1,4 +1,5 @@
-﻿@using LeaguePlaza.Common.Constants
+﻿@using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +34,7 @@
                     <li>
                         <a asp-area="" asp-controller="Quest" asp-action="Index">Quests</a>
                     </li>
-                    @if (User.IsInRole(UserRoleConstants.Adventurer))
+                    @if (User.IsInRole(Adventurer))
                     {
                         <li>
                             <a asp-area="" asp-controller="Mount" asp-action="Index">Mounts</a>
@@ -45,7 +46,7 @@
                             <a asp-area="" asp-controller="Order" asp-action="Index">Order History</a>
                         </li>
                     }
-                    @if (User.IsInRole(UserRoleConstants.LeagueMaster))
+                    @if (User.IsInRole(LeagueMaster))
                     {
                         <li>
                             <a asp-area="Admin" asp-controller="Admin" asp-action="Index">Manage Mounts</a>
@@ -53,7 +54,7 @@
                     }
                 </ul>
 
-                @if (User.IsInRole(UserRoleConstants.Adventurer))
+                @if (User.IsInRole(Adventurer))
                 {
                     <a class="cart-nav-icon" asp-area="" asp-controller="Order" asp-action="ViewCart"><i class="fa-solid fa-cart-shopping"></i><span>0</span></a>
                 }

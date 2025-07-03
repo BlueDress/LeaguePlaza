@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
+using static LeaguePlaza.Common.Constants.MountConstants;
+using static LeaguePlaza.Common.Constants.PaginationConstants;
+
 namespace LeaguePlaza.Core.Features.Mount.Services
 {
     public class MountService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IMountService
@@ -34,7 +37,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
         public async Task<MountsViewModel> CreateMountsViewModelAsync()
         {
-            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, double>(MountConstants.PageOne, MountConstants.CountForPagination, true, m => m.Rating, m => true);
+            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, double>(PageOne, MountsPerPage, true, m => m.Rating, m => true);
             int totalResults = await _repository.GetCountAsync<MountEntity>(m => true);
 
             return new MountsViewModel()
@@ -43,7 +46,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? NoMountDescriptionAvailable : m.Description,
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
@@ -51,7 +54,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = MountConstants.PageOne,
+                    CurrentPage = PageOne,
                     TotalPages = (int)Math.Ceiling(totalResults / 6d),
                 },
             };
@@ -67,7 +70,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             }
 
             var mount = await _repository.FindOneReadOnlyAsync<MountEntity>(m => m.Id == id, query => query.Include(m => m.MountRatings.Where(mr => mr.UserId == currentUser.Id))) ?? new();
-            IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(MountConstants.RecommendedMountsCount, m => m.Id != id && m.MountType == mount.MountType);
+            IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(RecommendedMountsCount, m => m.Id != id && m.MountType == mount.MountType);
 
             return new ViewMountViewModel()
             {
@@ -76,7 +79,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     Id = mount.Id,
                     Name = mount.Name,
-                    Description = string.IsNullOrWhiteSpace(mount.Description) ? MountConstants.NoDescriptionAvailable : mount.Description,
+                    Description = string.IsNullOrWhiteSpace(mount.Description) ? NoMountDescriptionAvailable : mount.Description,
                     RentPrice = mount.RentPrice,
                     ImageUrl = mount.ImageUrl,
                     Type = mount.MountType.ToString(),
@@ -86,7 +89,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? NoMountDescriptionAvailable : m.Description,
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
@@ -95,7 +98,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = MountConstants.PageOne)
+        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = PageOne)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -104,7 +107,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentHistoryViewModel();
             }
 
-            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountConstants.CountForRentHistoryPagination, false, mr => mr.StartDate, mr => mr.UserId == currentUser.Id, query => query.Include(mr => mr.Mount));
+            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountRentalsPerPage, false, mr => mr.StartDate, mr => mr.UserId == currentUser.Id, query => query.Include(mr => mr.Mount));
             int totalResults = await _repository.GetCountAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id);
 
             return new MountRentHistoryViewModel()
@@ -163,11 +166,11 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountsViewModel();
             }
 
-            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedMountCount / ProductConstants.CountForPagination), filterAndSortMountsRequestData.CurrentPage);
+            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedMountCount / MountsPerPage), filterAndSortMountsRequestData.CurrentPage);
 
             Expression<Func<MountEntity, object>> sortExpression = filterAndSortMountsRequestData.SortBy == "Price" ? m => m.RentPrice : m => m.Rating;
 
-            var filteredAndSortedMounts = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, MountConstants.CountForPagination, filterAndSortMountsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
+            var filteredAndSortedMounts = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, MountsPerPage, filterAndSortMountsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
 
             return new MountsViewModel()
             {
@@ -175,7 +178,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? NoMountDescriptionAvailable : m.Description,
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),

@@ -6,15 +6,18 @@ using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Repository;
 
+using static LeaguePlaza.Common.Constants.MountConstants;
+using static LeaguePlaza.Common.Constants.PaginationConstants;
+
 namespace LeaguePlaza.Core.Features.Admin.Services
 {
     public class AdminService(IRepository repository) : IAdminService
     {
         private readonly IRepository _repository = repository;
 
-        public async Task<MountAdminViewModel> CreateMountAdminViewModelAsync(int pageNumber = AdminConstants.PageOne)
+        public async Task<MountAdminViewModel> CreateMountAdminViewModelAsync(int pageNumber = PageOne)
         {
-            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, int>(pageNumber, AdminConstants.CountForPagination, false, m => m.Id, m => true);
+            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, int>(pageNumber, AdminCountForPagination, false, m => m.Id, m => true);
             int totalResults = await _repository.GetCountAsync<MountEntity>(m => true);
 
             return new MountAdminViewModel()
@@ -23,7 +26,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? NoMountDescriptionAvailable : m.Description,
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),

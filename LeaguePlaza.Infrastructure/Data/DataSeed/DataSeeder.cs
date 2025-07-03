@@ -3,6 +3,8 @@ using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
 using Microsoft.AspNetCore.Identity;
 
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Infrastructure.Data.DataSeed
 {
     public class DataSeeder(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ApplicationDbContext applicationDbContext) : IDataSeeder
@@ -34,7 +36,7 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
 
         public async Task EnsureRoleSeedAsync()
         {
-            string[] roleNames = [UserRoleConstants.LeagueMaster, UserRoleConstants.Adventurer, UserRoleConstants.QuestGiver];
+            string[] roleNames = [LeagueMaster, Adventurer, QuestGiver];
 
             foreach (var roleName in roleNames)
             {
@@ -59,18 +61,18 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
             if (await _userManager.FindByEmailAsync(defaultLeagueMaster.Email) == null)
             {
                 await _userManager.CreateAsync(defaultLeagueMaster, "LeagueMaster@123");
-                await _userManager.AddToRoleAsync(defaultLeagueMaster, UserRoleConstants.LeagueMaster);
+                await _userManager.AddToRoleAsync(defaultLeagueMaster, LeagueMaster);
             }
         }
 
         public async Task SeedTestDataAsync()
         {
-            var adventurers = _applicationDbContext.UserRoles.Where(ur => ur.RoleId == _roleManager.Roles.First(r => r.Name == UserRoleConstants.Adventurer).Id).ToArray();
+            var adventurers = _applicationDbContext.UserRoles.Where(ur => ur.RoleId == _roleManager.Roles.First(r => r.Name == Adventurer).Id).ToArray();
 
             if (!_applicationDbContext.Quests.Any())
             {
                 var testQuests = new HashSet<QuestEntity>();
-                var questGivers = _applicationDbContext.UserRoles.Where(ur => ur.RoleId == _roleManager.Roles.First(r => r.Name == UserRoleConstants.QuestGiver).Id).ToArray();
+                var questGivers = _applicationDbContext.UserRoles.Where(ur => ur.RoleId == _roleManager.Roles.First(r => r.Name == QuestGiver).Id).ToArray();
 
                 for (int i = 1; i <= 100; i++)
                 {

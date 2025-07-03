@@ -22,6 +22,8 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Web.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
@@ -103,14 +105,14 @@ namespace LeaguePlaza.Web.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "Select Your Role")]
-            [AllowedValues(UserRoleConstants.Adventurer, UserRoleConstants.QuestGiver)]
+            [AllowedValues(Adventurer, QuestGiver)]
             public string UserRole { get; set; }
         }
 
         public List<SelectListItem> Roles { get; } = new List<SelectListItem>
             {
-                new SelectListItem { Value = UserRoleConstants.Adventurer, Text = UserRoleConstants.Adventurer},
-                new SelectListItem { Value = UserRoleConstants.QuestGiver, Text = UserRoleConstants.QuestGiver},
+                new SelectListItem { Value = Adventurer, Text = Adventurer},
+                new SelectListItem { Value = QuestGiver, Text = QuestGiver},
             };
 
         public async Task OnGetAsync(string returnUrl = null)

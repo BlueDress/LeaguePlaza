@@ -4,10 +4,12 @@ using LeaguePlaza.Core.Features.Admin.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = UserRoleConstants.LeagueMaster)]
+    [Authorize(Roles = LeagueMaster)]
     public class AdminController(IAdminService adminService) : Controller
     {
         private readonly IAdminService _adminService = adminService;

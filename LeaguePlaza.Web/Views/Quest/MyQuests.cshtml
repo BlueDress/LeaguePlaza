@@ -1,10 +1,11 @@
-﻿@using LeaguePlaza.Common.Constants
-@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+﻿@using LeaguePlaza.Core.Features.Quest.Models.ViewModels
+
+@using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 @model QuestsViewModel
 
 <div class="container" data-page-name="my-quests">
-    @if (User.IsInRole(UserRoleConstants.QuestGiver))
+    @if (User.IsInRole(QuestGiver))
     {
         <h2>Post a quest</h2>
         <form id="create-quest" class="create-quest-form" novalidate>

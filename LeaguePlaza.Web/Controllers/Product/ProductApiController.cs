@@ -5,6 +5,9 @@ using LeaguePlaza.Core.Features.Product.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Web.Controllers.Product
 {
     [ApiController]
@@ -16,7 +19,7 @@ namespace LeaguePlaza.Web.Controllers.Product
         private readonly IProductService _productService = productService;
         private readonly ILogger<ProductController> _logger = logger;
 
-        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        [Authorize(Roles = Adventurer)]
         [HttpGet("filterandsortproducts")]
         public async Task<IActionResult> FilterAndSortProducts([FromQuery] FilterAndSortProductsRequestData filterAndSortProductsRequestData)
         {
@@ -28,8 +31,8 @@ namespace LeaguePlaza.Web.Controllers.Product
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(FilterAndSortProducts));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(FilterAndSortProducts));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }

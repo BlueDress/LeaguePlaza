@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
-using LeaguePlaza.Common.Constants;
+
+using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Infrastructure.Dropbox.Services
 {
@@ -41,8 +42,8 @@ namespace LeaguePlaza.Infrastructure.Dropbox.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(GetAccessToken));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(GetAccessToken));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return string.Empty;
             }
@@ -65,8 +66,8 @@ namespace LeaguePlaza.Infrastructure.Dropbox.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(UploadImage));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(UploadImage));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return string.Empty;
             }

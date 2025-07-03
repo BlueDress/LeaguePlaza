@@ -6,11 +6,14 @@ using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Web.Controllers.Order
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleConstants.Adventurer)]
+    [Authorize(Roles = Adventurer)]
     public class OrderApiController(IOrderService orderService, ILogger<OrderController> logger) : Controller
     {
         private const string OrderHistoryContainerWithPagination = "~/Views/Order/Partials/_OrderHistoryContainerWithPagination.cshtml";
@@ -31,8 +34,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(GetCartItemsCount));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(GetCartItemsCount));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return 0;
             }
@@ -49,8 +52,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(GetPageResults));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(GetPageResults));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new OrderHistoryViewModel());
             }
@@ -67,8 +70,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(AddToCart));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(AddToCart));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -83,8 +86,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowOrderInformation));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ShowOrderInformation));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -101,8 +104,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowCartItems));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ShowCartItems));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -119,8 +122,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowSubmitOrder));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ShowSubmitOrder));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -135,8 +138,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowOrderSuccessful));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ShowOrderSuccessful));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
