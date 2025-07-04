@@ -25,9 +25,9 @@ namespace LeaguePlaza.Infrastructure.Dropbox.Services
             var requestBody = new FormUrlEncodedContent(
             [
                 new KeyValuePair<string, string>("grant_type", "refresh_token"),
-                new KeyValuePair<string, string>("refresh_token", _configuration["Dropbox:RefreshToken"] ?? ""),
-                new KeyValuePair<string, string>("client_id", _configuration["Dropbox:AppKey"] ?? ""),
-                new KeyValuePair<string, string>("client_secret", _configuration["Dropbox:AppSecret"] ?? "")
+                new KeyValuePair<string, string>("refresh_token", _configuration["Dropbox:RefreshToken"] ?? string.Empty),
+                new KeyValuePair<string, string>("client_id", _configuration["Dropbox:AppKey"] ?? string.Empty),
+                new KeyValuePair<string, string>("client_secret", _configuration["Dropbox:AppSecret"] ?? string.Empty)
             ]);
 
             try

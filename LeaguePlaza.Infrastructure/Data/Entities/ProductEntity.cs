@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using static LeaguePlaza.Common.Constants.ProductConstants;
+
 namespace LeaguePlaza.Infrastructure.Data.Entities
 {
     public class ProductEntity
@@ -10,10 +12,10 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(ProductNameMaxLength)]
         public string Name { get; set; } = null!;
 
-        [MaxLength(500)]
+        [MaxLength(ProductDescriptionMaxLength)]
         public string? Description { get; set; }
 
         [Required]
@@ -21,7 +23,7 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public decimal Price { get; set; }
 
         [Required]
-        [MaxLength(500)]
+        [MaxLength(ProductImageUrlMaxLength)]
         public string ImageUrl { get; set; } = null!;
 
         public bool IsInStock { get; set; }

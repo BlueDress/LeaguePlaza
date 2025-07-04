@@ -4,6 +4,7 @@ using LeaguePlaza.Core.Features.Product.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.ProductConstants;
 using static LeaguePlaza.Common.Constants.ErrorConstants;
 using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
@@ -13,8 +14,6 @@ namespace LeaguePlaza.Web.Controllers.Product
     [Route("api/[controller]")]
     public class ProductApiController(IProductService productService, ILogger<ProductController> logger) : Controller
     {
-        private const string ProductCardsContainerWithPagination = "~/Views/Product/Partials/_ProductCardsContainerWithPagination.cshtml";
-
         private readonly IProductService _productService = productService;
         private readonly ILogger<ProductController> _logger = logger;
 

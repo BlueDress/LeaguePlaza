@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using static LeaguePlaza.Common.Constants.MountConstants;
+
 namespace LeaguePlaza.Core.Features.Mount.Models.Dtos.Create
 {
     public class RateMountDto
@@ -8,7 +10,7 @@ namespace LeaguePlaza.Core.Features.Mount.Models.Dtos.Create
         public int MountId { get; set; }
 
         [Required]
-        [Range(1, 5)]
+        [Range(MountMinRating, MountMaxRating)]
         public int Rating { get; set; }
     }
 }

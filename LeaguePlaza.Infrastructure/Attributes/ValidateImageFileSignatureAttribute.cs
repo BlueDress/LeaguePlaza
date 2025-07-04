@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
+
+using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Infrastructure.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class ValidateImageFileSignatureAttribute : ValidationAttribute
+    public class ValidateImageFileSignatureAttribute() : ValidationAttribute
     {
         private static readonly List<byte[]> ImageFileSignatures = new()
         {
@@ -19,7 +23,12 @@ namespace LeaguePlaza.Infrastructure.Attributes
             {
                 if (!IsFileValid(file))
                 {
-                    return new ValidationResult($"File type is not allowed.");
+                    var logger = validationContext.GetService<ILogger<ValidateImageFileSignatureAttribute>>();
+
+                    logger?.LogError(FailedAt, nameof(IsValid));
+                    logger?.LogError(ValidateImageFileSignatureErrorMessage);
+
+                    return new ValidationResult(GenericErrorMessage);
                 }
             }
 

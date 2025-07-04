@@ -19,13 +19,11 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 {
     public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IQuestService
     {
-        private const string ImageUploadPath = "/quests/{0}/{1}/{2}";
-
         private readonly Dictionary<string, string> DefaultQuestTypeImageUrls = new()
         {
-            { "1", "https://www.dropbox.com/scl/fi/zxqv1fy2io88ytcdi3iqa/monster-hunt-default.jpg?rlkey=vkl9dt9q96af2qlv8gx5etsdy&st=03rctf0o&raw=1" },
-            { "2", "https://www.dropbox.com/scl/fi/ns7u5n9zhqw9q3i5g6gsq/gathering-default.jpg?rlkey=zbrno8iqnhxdqgmm2xkg8moyh&st=gm6ja4j6&raw=1" },
-            { "3", "https://www.dropbox.com/scl/fi/977mmg7o6fxpr3e4i5k4p/escort-default.jpg?rlkey=fyekeazwrh373cyxqtu6kjxeg&st=2y5oj0ms&raw=1" },
+            { "1", MonsterHuntDefaultImageUrl },
+            { "2", GatheringDefaultImageUrl },
+            { "3", EscortDefaultImageUrl },
         };
 
         private readonly IRepository _repository = repository;

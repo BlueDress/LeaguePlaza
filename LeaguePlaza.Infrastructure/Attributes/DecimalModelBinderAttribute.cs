@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LeaguePlaza.Infrastructure.Attributes
 {
+    [AttributeUsage(AttributeTargets.Property)]
     public class DecimalModelBinderAttribute : ModelBinderAttribute
     {
         public DecimalModelBinderAttribute()

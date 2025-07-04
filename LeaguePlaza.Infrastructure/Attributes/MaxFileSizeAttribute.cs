@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
+
+using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Infrastructure.Attributes
 {
@@ -14,16 +18,16 @@ namespace LeaguePlaza.Infrastructure.Attributes
             {
                 if (file.Length > _maxFileSize)
                 {
-                    return new ValidationResult(GetErrorMessage());
+                    var logger = validationContext.GetService<ILogger<MaxFileSizeAttribute>>();
+
+                    logger?.LogError(FailedAt, nameof(IsValid));
+                    logger?.LogError(MaxFileSizeErrorMessage, file.Length);
+
+                    return new ValidationResult(GenericErrorMessage);
                 }
             }
 
             return ValidationResult.Success;
-        }
-
-        public string GetErrorMessage()
-        {
-            return $"Maximum allowed file size is {_maxFileSize} bytes.";
         }
     }
 }

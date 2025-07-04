@@ -15,18 +15,17 @@ using System.Linq.Expressions;
 
 using static LeaguePlaza.Common.Constants.MountConstants;
 using static LeaguePlaza.Common.Constants.PaginationConstants;
+using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Core.Features.Mount.Services
 {
     public class MountService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IMountService
     {
-        private const string ImageUploadPath = "/mounts/{0}/{1}/{2}";
-
         private readonly Dictionary<string, string> DefaultMountTypeImageUrls = new()
         {
-            { "0", "https://www.dropbox.com/scl/fi/wyvpahi0salv5ii2v5i8r/ground-default.jpg?rlkey=br72tc41gyn9b59bqk5ahyyod&st=w147fofs&raw=1" },
-            { "1", "https://www.dropbox.com/scl/fi/9n7d7geaprae40gjhcvyr/flying-default.jpg?rlkey=ktap2t7jjgo2j8oatka34rxdu&st=pfuagymz&raw=1" },
-            { "2", "https://www.dropbox.com/scl/fi/soux4avtf2hlpjw2gguth/aquatic-default.jpg?rlkey=hlf1n9g4pts8zrcfiaiglddyu&st=om0epfjz&raw=1" },
+            { "0", GroundDefaultImageUrl },
+            { "1", FlyingDefaultImageUrl },
+            { "2", AquaticDefaultImageUrl },
         };
 
         private readonly IRepository _repository = repository;
@@ -198,7 +197,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = false,
-                    MountRentMessage = "Something went wrong"
+                    MountRentMessage = GenericErrorMessage,
                 };
             }
 
@@ -209,7 +208,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = false,
-                    MountRentMessage = "Something went wrong",
+                    MountRentMessage = GenericErrorMessage,
                 };
             }
 
@@ -220,7 +219,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = false,
-                    MountRentMessage = "Something went wrong",
+                    MountRentMessage = GenericErrorMessage,
                 };
             }
 
@@ -242,7 +241,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = true,
-                    MountRentMessage = "Mount rented successfully for the chosen interval",
+                    MountRentMessage = MountRentSuccessMessage,
                 };
             }
             else
@@ -250,7 +249,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = false,
-                    MountRentMessage = "The mount is not available for the chosen interval",
+                    MountRentMessage = MountRentFailMessage,
                 };
             }
         }
@@ -261,14 +260,14 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
             if (currentUser == null)
             {
-                return "Something went wrong";
+                return GenericErrorMessage;
             }
 
             var mountToRate = await _repository.FindByIdAsync<MountEntity>(rateMountDto.MountId);
 
             if (mountToRate == null)
             {
-                return "Something went wrong";
+                return GenericErrorMessage;
             }
 
             IEnumerable<MountRatingEntity> currentMountRatings = await _repository.FindAllAsync<MountRatingEntity>(mr => mr.MountId == rateMountDto.MountId);
@@ -294,7 +293,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
             await _repository.SaveChangesAsync();
 
-            return "Mount rated successfully";
+            return MountRateSuccessMessage;
         }
 
         public async Task CancelMountRentAsync(int id)

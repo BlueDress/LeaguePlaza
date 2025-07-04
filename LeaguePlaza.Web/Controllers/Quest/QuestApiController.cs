@@ -5,6 +5,7 @@ using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.QuestConstants;
 using static LeaguePlaza.Common.Constants.ErrorConstants;
 using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
@@ -14,8 +15,6 @@ namespace LeaguePlaza.Web.Controllers.Quest
     [Route("api/[controller]")]
     public class QuestApiController(IQuestService questService, ILogger<QuestApiController> logger) : Controller
     {
-        private const string QuestCardsContainerWithPagination = "~/Views/Quest/Partials/_QuestCardsContainerWithPagination.cshtml";
-
         private readonly IQuestService _questService = questService;
         private readonly ILogger<QuestApiController> _logger = logger;
 
