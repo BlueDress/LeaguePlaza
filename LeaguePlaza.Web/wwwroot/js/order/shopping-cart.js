@@ -22,7 +22,7 @@ function shoppingCartMain() {
                 await showOrderInformation(e);
             }
             if (e.target.id == 'submit-order-confirm') {
-                await showOrderSuccessful(e);
+                await createOrder(e);
             }
         }
     }
@@ -80,8 +80,22 @@ function shoppingCartMain() {
         }
     }
 
-    async function showOrderSuccessful(e) {
-        const response = await fetch(baseUrl + 'showordersuccessful');
+    async function createOrder(e) {
+        const orderInformation = {
+            country: document.querySelector('#order-information-country').textContent,
+            city: document.querySelector('#order-information-city').textContent,
+            street: document.querySelector('#order-information-street').textContent,
+            postalCode: document.querySelector('#order-information-postal-code').textContent,
+            additionalInformation: document.querySelector('#order-information-additional-information').textContent
+        };
+
+        const response = await fetch(baseUrl + 'createorder', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(orderInformation)
+        });
 
         if (response.status == 200) {
             const orderInformationView = await response.text();

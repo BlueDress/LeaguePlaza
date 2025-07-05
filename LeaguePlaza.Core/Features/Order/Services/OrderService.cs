@@ -4,6 +4,7 @@ using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Infrastructure.Data.Entities;
+using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -200,6 +201,47 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 IsAddToCartSuccessful = true,
                 AddToCartMessage = ProductAddedToCartSuccessfully,
             };
+        }
+
+        public async Task<bool> CreateOrderAsync(OrderInformationDto orderInformationDto)
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return false;
+            }
+
+            var currentUserCart = await _repository.FindOneAsync<CartEntity>(ce => ce.UserID == currentUser.Id, query => query.Include(c => c.CartItems).ThenInclude(ci => ci.Product));
+
+            if (currentUserCart == null)
+            {
+                return false;
+            }
+
+            var order = new OrderEntity()
+            {
+                DateCreated = DateTime.UtcNow,
+                Status = OrderStatus.Pending,
+                Country = orderInformationDto.Country,
+                City = orderInformationDto.City,
+                Street = orderInformationDto.Street,
+                PostalCode = orderInformationDto.PostalCode,
+                AdditionalInformation = orderInformationDto.AdditionalInformation,
+                UserId = currentUser.Id,
+                OrderItems = currentUserCart.CartItems.Select(ci => new OrderItemEntity()
+                {
+                    Quantity = ci.Quantity,
+                    Price = ci.Product.Price,
+                    ProductId = ci.ProductId,
+                }).ToList(),
+            };
+
+            await _repository.AddAsync(order);
+            _repository.RemoveRange(currentUserCart.CartItems);
+            await _repository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

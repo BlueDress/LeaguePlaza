@@ -123,16 +123,23 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
         }
 
-        [HttpGet("showordersuccessful")]
-        public async Task<IActionResult> ShowOrderSuccessful()
+        [HttpPost("createorder")]
+        public async Task<IActionResult> CreateOrder([FromBody] OrderInformationDto orderInformationDto)
         {
             try
             {
+                bool orderCreatedSuccessfully = await _orderService.CreateOrderAsync(orderInformationDto);
+
+                if (orderCreatedSuccessfully)
+                {
+                    return PartialView(OrderSuccessful);
+                }
+
                 return PartialView(OrderSuccessful);
             }
             catch (Exception ex)
             {
-                _logger.LogError(FailedAt, nameof(ShowOrderSuccessful));
+                _logger.LogError(FailedAt, nameof(CreateOrder));
                 _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
