@@ -103,6 +103,10 @@ button {
         justify-content: flex-start;
     }
 
+        .submit-order-information > div:last-child {
+            flex-wrap: wrap;
+        }
+
         .submit-order-information > div > span:first-child {
             font-weight: 600;
             flex: 0 0 50%;

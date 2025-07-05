@@ -10,7 +10,7 @@ namespace LeaguePlaza.Core.Features.Order.Contracts
     {
         Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(int pageNumber = PageOne);
 
-        Task<CartViewModel> CreateViewCartViewModelAsync();
+        Task<CartViewModel> CreateViewCartViewModelAsync(OrderInformationDto? orderInformationDto = null);
 
         Task<int> GetCartItemsCountAsync();
 

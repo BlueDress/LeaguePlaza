@@ -48,7 +48,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
             };
         }
 
-        public async Task<CartViewModel> CreateViewCartViewModelAsync()
+        public async Task<CartViewModel> CreateViewCartViewModelAsync(OrderInformationDto? orderInformationDto = null)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -66,6 +66,17 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new CartViewModel();
             }
 
+            var orderInformation = new OrderInformationDto();
+
+            if (orderInformationDto != null)
+            {
+                orderInformation.Country = orderInformationDto.Country;
+                orderInformation.City = orderInformationDto.City;
+                orderInformation.Street = orderInformationDto.Street;
+                orderInformation.PostalCode = orderInformationDto.PostalCode;
+                orderInformation.AdditionalInformation = orderInformationDto.AdditionalInformation;
+            }
+
             return new CartViewModel()
             {
                 CartId = userCart.Id,
@@ -78,6 +89,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                     Price = ci.Product.Price,
                     ProductId = ci.ProductId,
                 }),
+                OrderInformation = orderInformation,
             };
         }
 

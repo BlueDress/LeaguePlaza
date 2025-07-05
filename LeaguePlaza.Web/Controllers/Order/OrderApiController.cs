@@ -111,11 +111,11 @@ namespace LeaguePlaza.Web.Controllers.Order
         }
 
         [HttpGet("showsubmitorder")]
-        public async Task<IActionResult> ShowSubmitOrder()
+        public async Task<IActionResult> ShowSubmitOrder([FromQuery] OrderInformationDto orderInformationDto)
         {
             try
             {
-                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync(orderInformationDto);
 
                 return PartialView(SubmitOrder, cartViewModel);
             }
