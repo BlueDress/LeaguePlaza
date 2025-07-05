@@ -21,7 +21,7 @@ namespace LeaguePlaza.Infrastructure.Attributes
         {
             if (value is IFormFile file)
             {
-                if (!IsFileValid(file))
+                if (!FileIsValid(file))
                 {
                     var logger = validationContext.GetService<ILogger<ValidateImageFileSignatureAttribute>>();
 
@@ -35,7 +35,7 @@ namespace LeaguePlaza.Infrastructure.Attributes
             return ValidationResult.Success;
         }
 
-        public static bool IsFileValid(IFormFile file)
+        public static bool FileIsValid(IFormFile file)
         {
             using var reader = new BinaryReader(file.OpenReadStream());
             var headerBytes = reader.ReadBytes(ImageFileSignatures.Max(s => s.Length));
