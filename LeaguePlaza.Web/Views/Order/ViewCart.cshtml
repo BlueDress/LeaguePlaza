@@ -3,7 +3,14 @@
 @model CartViewModel
 
 <div class="container container-js" data-page-name="view-cart">
-    <partial name="~/Views/Order/Partials/_CartItems.cshtml" model="@Model" />
+    @if (Model.CartItems != null && Model.CartItems.Any())
+    {
+        <partial name="~/Views/Order/Partials/_CartItems.cshtml" model="@Model" />
+    }
+    else
+    {
+        <div class="empty-cart-message">Your cart is empty</div>
+    }
 </div>
 
 @section Styles {

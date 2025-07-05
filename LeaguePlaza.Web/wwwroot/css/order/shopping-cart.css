@@ -123,6 +123,10 @@ button {
     margin: 1rem 0;
 }
 
+.empty-cart-message {
+    margin: 1rem 0;
+}
+
 @media (min-width: 601px) {
     .cart-items-information {
         font-size: 16px;
