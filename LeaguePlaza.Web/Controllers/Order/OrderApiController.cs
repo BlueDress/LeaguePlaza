@@ -135,7 +135,7 @@ namespace LeaguePlaza.Web.Controllers.Order
                     return PartialView(OrderSuccessful);
                 }
 
-                return PartialView(OrderSuccessful);
+                return PartialView(OrderFailed);
             }
             catch (Exception ex)
             {

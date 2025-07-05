@@ -17,6 +17,7 @@
         public const string CartItems = "~/Views/Order/Partials/_CartItems.cshtml";
         public const string SubmitOrder = "~/Views/Order/Partials/_SubmitOrder.cshtml";
         public const string OrderSuccessful = "~/Views/Order/Partials/_OrderSuccessful.cshtml";
+        public const string OrderFailed = "~/Views/Order/Partials/_OrderFailed.cshtml";
 
         public const string ProductAddedToCartSuccessfully = "Product added to cart";
     }
