@@ -5,6 +5,7 @@ using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.OrderConstants;
 using static LeaguePlaza.Common.Constants.ErrorConstants;
 using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
@@ -15,12 +16,6 @@ namespace LeaguePlaza.Web.Controllers.Order
     [Authorize(Roles = Adventurer)]
     public class OrderApiController(IOrderService orderService, ILogger<OrderController> logger) : Controller
     {
-        private const string OrderHistoryContainerWithPagination = "~/Views/Order/Partials/_OrderHistoryContainerWithPagination.cshtml";
-        private const string OrderInformation = "~/Views/Order/Partials/_OrderInformation.cshtml";
-        private const string CartItems = "~/Views/Order/Partials/_CartItems.cshtml";
-        private const string SubmitOrder = "~/Views/Order/Partials/_SubmitOrder.cshtml";
-        private const string OrderSuccessful = "~/Views/Order/Partials/_OrderSuccessful.cshtml";
-
         private readonly IOrderService _orderService = orderService;
         private readonly ILogger<OrderController> _logger = logger;
 

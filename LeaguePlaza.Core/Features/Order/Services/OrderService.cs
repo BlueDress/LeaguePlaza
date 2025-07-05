@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using static LeaguePlaza.Common.Constants.OrderConstants;
 using static LeaguePlaza.Common.Constants.PaginationConstants;
+using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Core.Features.Order.Services
 {
@@ -159,7 +161,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new AddToCartResultDto()
                 {
                     IsAddToCartSuccessful = false,
-                    AddToCartMessage = "Something went wrong",
+                    AddToCartMessage = GenericErrorMessage,
                 };
             }
 
@@ -170,7 +172,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new AddToCartResultDto()
                 {
                     IsAddToCartSuccessful = false,
-                    AddToCartMessage = "Something went wrong",
+                    AddToCartMessage = GenericErrorMessage,
                 };
             }
 
@@ -196,7 +198,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
             return new AddToCartResultDto()
             {
                 IsAddToCartSuccessful = true,
-                AddToCartMessage = "Product added to cart",
+                AddToCartMessage = ProductAddedToCartSuccessfully,
             };
         }
     }

@@ -1,26 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using static LeaguePlaza.Common.Constants.OrderConstants;
+
 namespace LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly
 {
     public class OrderInformationDto
     {
         [Required]
-        [MaxLength(200)]
+        [MinLength(OrderCountryMinLength)]
+        [MaxLength(OrderCountryMaxLength)]
         public string Country { get; set; } = null!;
 
         [Required]
-        [MaxLength(200)]
+        [MinLength(OrderCityMinLength)]
+        [MaxLength(OrderCityMaxLength)]
         public string City { get; set; } = null!;
 
         [Required]
-        [MaxLength(200)]
+        [MinLength(OrderStreetMinLength)]
+        [MaxLength(OrderStreetMaxLength)]
         public string Street { get; set; } = null!;
 
         [Required]
-        [MaxLength(20)]
+        [MinLength(OrderPostalCodeMinLength)]
+        [MaxLength(OrderPostalCodeMaxLength)]
         public string PostalCode { get; set; } = null!;
 
-        [MaxLength(200)]
+        [MaxLength(OrderAdditionalInformationMaxLength)]
         public string? AdditionalInformation { get; set; }
     }
 }
