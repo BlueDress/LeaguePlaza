@@ -18,15 +18,24 @@
                 <div>x</div>
                 <div>@item.Price</div>
                 <div>=</div>
-                <div>@(item.Quantity* item.Price)</div>
+                <div>
+                    <span>@(item.Quantity* item.Price)</span>
+                    <button class="remove-cart-item remove-cart-item-js" type="button" data-cart-item-id="@item.ProductId">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
             </div>
         }
     </div>
     <div class="cart-total-price">
         <span>Total:</span>
-        <span>@Model.CartItems.Sum(ci => ci.Quantity * ci.Price)</span>
+        <div>
+            <span>@Model.CartItems.Sum(ci => ci.Quantity * ci.Price)</span>
+            <span class="total-sum-icon"><i class="fa-solid fa-coins"></i></span>
+        </div>
+        
     </div>
     <div class="cart-items-button">
-        <button id="cart-items-continue" type="button">Continue</button>
+        <button id="cart-items-continue" class="cart-button" type="button">Continue</button>
     </div>
 </div>

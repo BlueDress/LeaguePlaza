@@ -45,7 +45,7 @@
     justify-content: space-between;
 }
 
-button {
+.cart-button {
     padding: 0.3rem 0.7rem;
     font-size: 12px;
     border: 1px solid black;
@@ -55,12 +55,12 @@ button {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-    button:hover {
+    .cart-button:hover {
         background-color: #BA55D3;
         color: #F8F8FF;
     }
 
-    button:active {
+    .cart-button:active {
         transform: scale(0.98);
     }
 
@@ -127,6 +127,17 @@ button {
     margin: 1rem 0;
 }
 
+.remove-cart-item {
+    border: none;
+    margin-left: 0.5rem;
+    font-size: 12px;
+}
+
+.total-sum-icon {
+    margin-left: 0.5rem;
+    font-size: 12px;
+}
+
 @media (min-width: 601px) {
     .cart-items-information {
         font-size: 16px;
@@ -140,7 +151,7 @@ button {
         flex: 0 0 25%;
     }
 
-    button {
+    .cart-button {
         font-size: 16px;
     }
 
@@ -156,6 +167,12 @@ button {
 
     .order-submitted-message,
     .thank-you-message {
+        font-size: 16px;
+    }
+
+    .remove-cart-item,
+    .total-sum-icon {
+        margin-left: 1rem;
         font-size: 16px;
     }
 }
