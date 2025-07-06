@@ -19,5 +19,7 @@ namespace LeaguePlaza.Core.Features.Order.Contracts
         Task<AddToCartResultDto> AddToCartAsync(CreateCartItemDto createCartItemDto);
 
         Task<bool> CreateOrderAsync(OrderInformationDto orderInformationDto);
+
+        Task RemoveCartItemAsync(int cartItemId);
     }
 }

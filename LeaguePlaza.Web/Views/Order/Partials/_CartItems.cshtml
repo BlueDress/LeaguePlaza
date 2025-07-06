@@ -2,40 +2,47 @@
 
 @model CartViewModel
 
-<h1>View Cart</h1>
-<div class="cart-items-information">
-    <div>
-        @foreach (var item in Model.CartItems)
-        {
-            <div class="cart-item">
-                <div class="cart-item-image">
-                    <img src="@item.ProductImageUrl" alt="cart item image" loading="lazy" />
-                </div>
-                <div class="cart-item-name">
-                    <a asp-controller="Product" asp-action="ViewProduct" asp-route-id="@item.ProductId">@item.ProductName</a>
-                </div>
-                <div>@item.Quantity</div>
-                <div>x</div>
-                <div>@item.Price</div>
-                <div>=</div>
-                <div>
-                    <span>@(item.Quantity* item.Price)</span>
-                    <button class="remove-cart-item remove-cart-item-js" type="button" data-cart-item-id="@item.ProductId">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </div>
-            </div>
-        }
-    </div>
-    <div class="cart-total-price">
-        <span>Total:</span>
+@if (Model.CartItems != null && Model.CartItems.Any())
+{
+    <h1>View Cart</h1>
+    <div class="cart-items-information">
         <div>
-            <span>@Model.CartItems.Sum(ci => ci.Quantity * ci.Price)</span>
-            <span class="total-sum-icon"><i class="fa-solid fa-coins"></i></span>
+            @foreach (var item in Model.CartItems)
+            {
+                <div class="cart-item">
+                    <div class="cart-item-image">
+                        <img src="@item.ProductImageUrl" alt="cart item image" loading="lazy" />
+                    </div>
+                    <div class="cart-item-name">
+                        <a asp-controller="Product" asp-action="ViewProduct" asp-route-id="@item.ProductId">@item.ProductName</a>
+                    </div>
+                    <div>@item.Quantity</div>
+                    <div>x</div>
+                    <div>@item.Price</div>
+                    <div>=</div>
+                    <div>
+                        <span>@(item.Quantity* item.Price)</span>
+                        <button class="remove-cart-item remove-cart-item-js" type="button" data-cart-item-id="@item.Id">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            }
         </div>
-        
+        <div class="cart-total-price">
+            <span>Total:</span>
+            <div>
+                <span>@Model.CartItems.Sum(ci => ci.Quantity * ci.Price)</span>
+                <span class="total-sum-icon"><i class="fa-solid fa-coins"></i></span>
+            </div>
+
+        </div>
+        <div class="cart-items-button">
+            <button id="cart-items-continue" class="cart-button" type="button">Continue</button>
+        </div>
     </div>
-    <div class="cart-items-button">
-        <button id="cart-items-continue" class="cart-button" type="button">Continue</button>
-    </div>
-</div>
+}
+else
+{
+    <div class="empty-cart-message">Your cart is empty</div>
+}

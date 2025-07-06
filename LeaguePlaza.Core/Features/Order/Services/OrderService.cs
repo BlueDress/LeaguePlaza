@@ -85,7 +85,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 CartId = userCart.Id,
                 CartItems = userCart.CartItems.Select(ci => new CartItemDto()
                 {
-                    CartId = ci.Id,
+                    Id = ci.Id,
                     ProductName = ci.Product.Name,
                     ProductImageUrl = ci.Product.ImageUrl,
                     Quantity = ci.Quantity,
@@ -242,6 +242,17 @@ namespace LeaguePlaza.Core.Features.Order.Services
             await _repository.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task RemoveCartItemAsync(int cartItemId)
+        {
+            var cartItemToRemove = await _repository.FindByIdAsync<CartItemEntity>(cartItemId);
+
+            if (cartItemToRemove != null)
+            {
+                _repository.Remove(cartItemToRemove);
+                await _repository.SaveChangesAsync();
+            }
         }
     }
 }

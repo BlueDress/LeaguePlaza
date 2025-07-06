@@ -145,5 +145,24 @@ namespace LeaguePlaza.Web.Controllers.Order
                 return BadRequest();
             }
         }
+
+        [HttpPost("removecartitem")]
+        public async Task<IActionResult> RemoveCartItem([FromBody] int cartItemId)
+        {
+            try
+            {
+                await _orderService.RemoveCartItemAsync(cartItemId);
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+
+                return PartialView(CartItems, cartViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(FailedAt, nameof(RemoveCartItem));
+                _logger.LogError(ErrorMessage, ex.Message);
+
+                return BadRequest();
+            }
+        }
     }
 }

@@ -24,6 +24,9 @@ function shoppingCartMain() {
             if (e.target.id == 'submit-order-confirm') {
                 await createOrder(e);
             }
+            if (e.target.parentElement.classList.contains('remove-cart-item-js')) {
+                await removeCartItem(e);
+            }
         }
     }
 
@@ -100,6 +103,23 @@ function shoppingCartMain() {
         if (response.status == 200) {
             const orderInformationView = await response.text();
             container.innerHTML = orderInformationView;
+        }
+    }
+
+    async function removeCartItem(e) {
+        const cartItemId = e.target.parentElement.dataset.cartItemId;
+
+        const response = await fetch(baseUrl + 'removecartitem', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: cartItemId
+        });
+
+        if (response.status == 200) {
+            const cartItemsView = await response.text();
+            container.innerHTML = cartItemsView;
         }
     }
 

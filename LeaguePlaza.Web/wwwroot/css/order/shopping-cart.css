@@ -129,13 +129,18 @@
 
 .remove-cart-item {
     border: none;
-    margin-left: 0.5rem;
     font-size: 12px;
+    margin-left: 0.5rem;
+    cursor: pointer;
 }
 
+    .remove-cart-item:active {
+        transform: scale(0.98);
+    }
+
 .total-sum-icon {
-    margin-left: 0.5rem;
     font-size: 12px;
+    margin-left: 0.5rem;
 }
 
 @media (min-width: 601px) {
@@ -172,7 +177,7 @@
 
     .remove-cart-item,
     .total-sum-icon {
-        margin-left: 1rem;
         font-size: 16px;
+        margin-left: 1rem;
     }
 }

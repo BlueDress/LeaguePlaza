@@ -2,7 +2,7 @@
 {
     public class CartItemDto
     {
-        public int CartId { get; set; }
+        public int Id { get; set; }
 
         public string ProductName { get; set; } = null!;
 
