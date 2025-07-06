@@ -1,5 +1,7 @@
 ﻿@using LeaguePlaza.Core.Features.Home.Models.ViewModels
 
+@using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 @model HomePageViewModel
 
 @{
@@ -25,9 +27,18 @@
     </div>
 
     <div class="container">
-        <h3>Latest quests</h3>
+        <h3>See the latest quests</h3>
         <partial name="~/Views/Quest/Partials/_QuestCardsContainer.cshtml" model="@Model.LatestQuests"></partial>
         <div class="view-all-link"><a asp-controller="Quest" asp-action="Index">View All</a></div>
+        @if (User.IsInRole(Adventurer))
+        {
+            <h3>Check our mounts</h3>
+            <partial name="~/Views/Mount/Partials/_MountCardsContainer.cshtml" model="@Model.LatestMounts"></partial>
+            <div class="view-all-link"><a asp-controller="Mount" asp-action="Index">View All</a></div>
+            <h3>Check our products</h3>
+            <partial name="~/Views/Product/Partials/_ProductCardsContainer.cshtml" model="@Model.CheapestProducts"></partial>
+            <div class="view-all-link"><a asp-controller="Product" asp-action="Index">View All</a></div>
+        }
     </div>
 </div>
 
@@ -35,4 +46,6 @@
 {
     <link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/quest/quest-cards-container.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/mount/mount-cards-container.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/product/product-cards-container.css" asp-append-version="true" />
 }

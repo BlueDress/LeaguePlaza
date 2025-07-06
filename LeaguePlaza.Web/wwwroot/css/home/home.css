@@ -33,6 +33,7 @@
 .view-all-link {
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 1rem;
 }
 
     .view-all-link > a {
