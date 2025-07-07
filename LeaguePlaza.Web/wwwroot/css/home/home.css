@@ -37,10 +37,20 @@
 }
 
     .view-all-link > a {
-        padding: 0.5rem 1.5rem;
+        background-color: #9370DB;
+        padding: 0.3rem 2.5rem;
         border: 0.5px solid black;
         border-radius: 15px;
     }
+
+        .view-all-link > a:hover {
+            background-color: #BA55D3;
+            color: #F8F8FF;
+        }
+
+        .view-all-link > a:active {
+            transform: scale(0.98);
+        }
 
 @media (min-width: 1200px) {
     .banner {
