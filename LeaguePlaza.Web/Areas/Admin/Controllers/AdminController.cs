@@ -24,5 +24,19 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
 
             return View(mountAdminViewModel);
         }
+
+        public async Task<IActionResult> ProductAdmin()
+        {
+            ProductAdminViewModel productAdminViewModel = await _adminService.CreateProductAdminViewModelAsync();
+
+            return View(productAdminViewModel);
+        }
+
+        public async Task<IActionResult> OrderAdmin()
+        {
+            OrderAdminViewModel orderAdminViewModel = await _adminService.CreateOrderAdminViewModelAsync();
+
+            return View(orderAdminViewModel);
+        }
     }
 }

@@ -7,5 +7,9 @@ namespace LeaguePlaza.Core.Features.Admin.Contracts
     public interface IAdminService
     {
         Task<MountAdminViewModel> CreateMountAdminViewModelAsync(int pageNumber = PageOne);
+
+        Task<ProductAdminViewModel> CreateProductAdminViewModelAsync(int pageNumber = PageOne);
+
+        Task<OrderAdminViewModel> CreateOrderAdminViewModelAsync(int pageNumber = PageOne);
     }
 }
