@@ -1,20 +1,20 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Admin.Contracts;
+﻿using LeaguePlaza.Core.Features.Admin.Contracts;
 using LeaguePlaza.Core.Features.Admin.Models.ViewModels;
 using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.AdminConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Web.Areas.Admin.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleConstants.LeagueMaster)]
+    [Authorize(Roles = LeagueMaster)]
     public class AdminApiController(IAdminService adminService, IMountService mountService) : Controller
     {
-        private const string MountAdminCardsContainerWithPagination = "~/Areas/Admin/Views/Partials/_MountAdminCardsContainerWithPagination.cshtml";
-
         public readonly IAdminService _adminService = adminService;
         private readonly IMountService _mountService = mountService;
 

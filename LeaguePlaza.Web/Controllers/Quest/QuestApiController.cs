@@ -1,11 +1,13 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Quest.Contracts;
+﻿using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.RequestData;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using static LeaguePlaza.Common.Constants.QuestConstants;
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Quest
 {
@@ -13,12 +15,10 @@ namespace LeaguePlaza.Web.Controllers.Quest
     [Route("api/[controller]")]
     public class QuestApiController(IQuestService questService, ILogger<QuestApiController> logger) : Controller
     {
-        private const string QuestCardsContainerWithPagination = "~/Views/Quest/Partials/_QuestCardsContainerWithPagination.cshtml";
-
         private readonly IQuestService _questService = questService;
         private readonly ILogger<QuestApiController> _logger = logger;
 
-        [Authorize(Roles = UserRoleConstants.QuestGiver)]
+        [Authorize(Roles = QuestGiver)]
         [HttpPost("createquest")]
         public async Task<IActionResult> CreateQuest([FromForm] CreateQuestDto createQuestDto)
         {
@@ -31,14 +31,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(CreateQuest));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(CreateQuest));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
         }
 
-        [Authorize(Roles = UserRoleConstants.QuestGiver)]
+        [Authorize(Roles = QuestGiver)]
         [HttpPut("updatequest")]
         public async Task<IActionResult> UpdateQuest([FromForm] UpdateQuestDataDto updateQuestDto)
         {
@@ -51,14 +51,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(UpdateQuest));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(UpdateQuest));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
         }
 
-        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        [Authorize(Roles = Adventurer)]
         [HttpPut("acceptquest")]
         public async Task<IActionResult> AcceptQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
@@ -70,14 +70,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(AcceptQuest));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(AcceptQuest));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
         }
 
-        [Authorize(Roles = UserRoleConstants.QuestGiver)]
+        [Authorize(Roles = QuestGiver)]
         [HttpDelete("removequest")]
         public async Task<IActionResult> RemoveQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
@@ -90,14 +90,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(RemoveQuest));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(RemoveQuest));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
         }
 
-        [Authorize(Roles = UserRoleConstants.QuestGiver)]
+        [Authorize(Roles = QuestGiver)]
         [HttpPut("completequest")]
         public async Task<IActionResult> CompleteQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
@@ -110,14 +110,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(CompleteQuest));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(CompleteQuest));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
         }
 
-        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        [Authorize(Roles = Adventurer)]
         [HttpPut("abandonquest")]
         public async Task<IActionResult> AbandonQuest([FromBody] UpdateQuestStatusDto updateQuestStatusDto)
         {
@@ -129,8 +129,8 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(AbandonQuest));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(AbandonQuest));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -147,8 +147,8 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(FilterAndSortQuests));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(FilterAndSortQuests));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }

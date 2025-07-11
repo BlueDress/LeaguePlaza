@@ -1,8 +1,10 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Product.Contracts;
+﻿using LeaguePlaza.Core.Features.Product.Contracts;
 using LeaguePlaza.Core.Features.Product.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Product
 {
@@ -11,7 +13,7 @@ namespace LeaguePlaza.Web.Controllers.Product
         private readonly IProductService _productService = productService;
         private readonly ILogger<ProductController> _logger = logger;
 
-        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> Index()
         {
             try
@@ -22,14 +24,14 @@ namespace LeaguePlaza.Web.Controllers.Product
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(Index));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(Index));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new ProductsViewModel());
             }
         }
 
-        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> ViewProduct(int id)
         {
             try
@@ -40,8 +42,8 @@ namespace LeaguePlaza.Web.Controllers.Product
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ViewProduct));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ViewProduct));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new ViewProductViewModel());
             }

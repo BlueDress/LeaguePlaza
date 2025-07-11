@@ -31,6 +31,8 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
 
         void Remove<T>(T entity) where T : class;
 
+        void RemoveRange<T>(ICollection<T> entities) where T : class;
+
         Task<int> SaveChangesAsync();
     }
 }

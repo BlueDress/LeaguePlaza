@@ -1,5 +1,4 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Mount.Contracts;
+﻿using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
@@ -7,16 +6,17 @@ using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.MountConstants;
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Web.Controllers.Mount
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleConstants.Adventurer)]
+    [Authorize(Roles = Adventurer)]
     public class MountApiController(IMountService mountService, ILogger<MountController> logger) : Controller
     {
-        private const string MountCardsContainerWithPagination = "~/Views/Mount/Partials/_MountCardsContainerWithPagination.cshtml";
-        private const string MountRentHistoryContainerWithPagination = "~/Views/Mount/Partials/_MountRentHistoryContainerWithPagination.cshtml";
-
         private readonly IMountService _mountService = mountService;
         private readonly ILogger<MountController> _logger = logger;
 
@@ -31,8 +31,8 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(FilterAndSortMounts));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(FilterAndSortMounts));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -49,8 +49,8 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(RentMount));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(RentMount));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -67,8 +67,8 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(RateMount));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(RateMount));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -85,8 +85,8 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(RentMount));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(RentMount));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -103,8 +103,8 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(GetPageResults));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(GetPageResults));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new MountRentHistoryViewModel());
             }

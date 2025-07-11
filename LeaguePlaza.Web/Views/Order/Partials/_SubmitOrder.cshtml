@@ -7,23 +7,23 @@
     <div class="submit-order-information">
         <div>
             <span>Country</span>
-            <span></span>
+            <span id="order-information-country">@Model.OrderInformation?.Country</span>
         </div>
         <div>
             <span>City</span>
-            <span></span>
+            <span id="order-information-city">@Model.OrderInformation?.City</span>
         </div>
         <div>
             <span>Street</span>
-            <span></span>
+            <span id="order-information-street">@Model.OrderInformation?.Street</span>
         </div>
         <div>
             <span>Postal Code</span>
-            <span></span>
+            <span id="order-information-postal-code">@Model.OrderInformation?.PostalCode</span>
         </div>
         <div>
             <span>Additional Information</span>
-            <span></span>
+            <span id="order-information-additional-information">@Model.OrderInformation?.AdditionalInformation</span>
         </div>
     </div>
     <div class="cart-items-information">
@@ -50,8 +50,8 @@
             <span>@Model.CartItems.Sum(ci => ci.Quantity * ci.Price)</span>
         </div>
         <div class="submit-order-buttons">
-            <button id="submit-order-back" type="button">Back</button>
-            <button id="submit-order-confirm" type="button">Confirm</button>
+            <button id="submit-order-back" class="cart-button" type="button">Back</button>
+            <button id="submit-order-confirm" class="cart-button" type="button">Confirm</button>
         </div>
     </div>
 </div>

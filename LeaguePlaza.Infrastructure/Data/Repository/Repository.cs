@@ -116,6 +116,11 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
             DbSet<T>().Remove(entity);
         }
 
+        public void RemoveRange<T>(ICollection<T> entities) where T : class
+        {
+            DbSet<T>().RemoveRange(entities);
+        }
+
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

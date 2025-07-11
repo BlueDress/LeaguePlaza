@@ -1,24 +1,21 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Order.Contracts;
+﻿using LeaguePlaza.Core.Features.Order.Contracts;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using static LeaguePlaza.Common.Constants.OrderConstants;
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
+
 namespace LeaguePlaza.Web.Controllers.Order
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = UserRoleConstants.Adventurer)]
+    [Authorize(Roles = Adventurer)]
     public class OrderApiController(IOrderService orderService, ILogger<OrderController> logger) : Controller
     {
-        private const string OrderHistoryContainerWithPagination = "~/Views/Order/Partials/_OrderHistoryContainerWithPagination.cshtml";
-        private const string OrderInformation = "~/Views/Order/Partials/_OrderInformation.cshtml";
-        private const string CartItems = "~/Views/Order/Partials/_CartItems.cshtml";
-        private const string SubmitOrder = "~/Views/Order/Partials/_SubmitOrder.cshtml";
-        private const string OrderSuccessful = "~/Views/Order/Partials/_OrderSuccessful.cshtml";
-
         private readonly IOrderService _orderService = orderService;
         private readonly ILogger<OrderController> _logger = logger;
 
@@ -31,8 +28,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(GetCartItemsCount));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(GetCartItemsCount));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return 0;
             }
@@ -49,8 +46,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(GetPageResults));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(GetPageResults));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new OrderHistoryViewModel());
             }
@@ -67,8 +64,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(AddToCart));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(AddToCart));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -83,8 +80,8 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowOrderInformation));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ShowOrderInformation));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
@@ -101,42 +98,68 @@ namespace LeaguePlaza.Web.Controllers.Order
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowCartItems));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ShowCartItems));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
         }
 
         [HttpGet("showsubmitorder")]
-        public async Task<IActionResult> ShowSubmitOrder()
+        public async Task<IActionResult> ShowSubmitOrder([FromQuery] OrderInformationDto orderInformationDto)
         {
             try
             {
-                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync(orderInformationDto);
 
                 return PartialView(SubmitOrder, cartViewModel);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowSubmitOrder));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ShowSubmitOrder));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }
         }
 
-        [HttpGet("showordersuccessful")]
-        public async Task<IActionResult> ShowOrderSuccessful()
+        [HttpPost("createorder")]
+        public async Task<IActionResult> CreateOrder([FromBody] OrderInformationDto orderInformationDto)
         {
             try
             {
-                return PartialView(OrderSuccessful);
+                bool orderCreatedSuccessfully = await _orderService.CreateOrderAsync(orderInformationDto);
+
+                if (orderCreatedSuccessfully)
+                {
+                    return PartialView(OrderSuccessful);
+                }
+
+                return PartialView(OrderFailed);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ShowOrderSuccessful));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(CreateOrder));
+                _logger.LogError(ErrorMessage, ex.Message);
+
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("removecartitem")]
+        public async Task<IActionResult> RemoveCartItem([FromBody] int cartItemId)
+        {
+            try
+            {
+                await _orderService.RemoveCartItemAsync(cartItemId);
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+
+                return PartialView(CartItems, cartViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(FailedAt, nameof(RemoveCartItem));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return BadRequest();
             }

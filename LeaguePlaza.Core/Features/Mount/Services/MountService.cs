@@ -1,5 +1,4 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Mount.Contracts;
+﻿using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
@@ -14,17 +13,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
+using static LeaguePlaza.Common.Constants.MountConstants;
+using static LeaguePlaza.Common.Constants.PaginationConstants;
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+
 namespace LeaguePlaza.Core.Features.Mount.Services
 {
     public class MountService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IMountService
     {
-        private const string ImageUploadPath = "/mounts/{0}/{1}/{2}";
-
         private readonly Dictionary<string, string> DefaultMountTypeImageUrls = new()
         {
-            { "0", "https://www.dropbox.com/scl/fi/wyvpahi0salv5ii2v5i8r/ground-default.jpg?rlkey=br72tc41gyn9b59bqk5ahyyod&st=w147fofs&raw=1" },
-            { "1", "https://www.dropbox.com/scl/fi/9n7d7geaprae40gjhcvyr/flying-default.jpg?rlkey=ktap2t7jjgo2j8oatka34rxdu&st=pfuagymz&raw=1" },
-            { "2", "https://www.dropbox.com/scl/fi/soux4avtf2hlpjw2gguth/aquatic-default.jpg?rlkey=hlf1n9g4pts8zrcfiaiglddyu&st=om0epfjz&raw=1" },
+            { "0", GroundDefaultImageUrl },
+            { "1", FlyingDefaultImageUrl },
+            { "2", AquaticDefaultImageUrl },
         };
 
         private readonly IRepository _repository = repository;
@@ -34,7 +35,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
         public async Task<MountsViewModel> CreateMountsViewModelAsync()
         {
-            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, double>(MountConstants.PageOne, MountConstants.CountForPagination, true, m => m.Rating, m => true);
+            IEnumerable<MountEntity> mounts = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountEntity, double>(PageOne, MountsPerPage, true, m => m.Rating, m => true);
             int totalResults = await _repository.GetCountAsync<MountEntity>(m => true);
 
             return new MountsViewModel()
@@ -43,7 +44,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? NoMountDescriptionAvailable : m.Description,
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
@@ -51,8 +52,8 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = MountConstants.PageOne,
-                    TotalPages = (int)Math.Ceiling(totalResults / 6d),
+                    CurrentPage = PageOne,
+                    TotalPages = (int)Math.Ceiling((double)totalResults / MountsPerPage),
                 },
             };
         }
@@ -67,7 +68,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             }
 
             var mount = await _repository.FindOneReadOnlyAsync<MountEntity>(m => m.Id == id, query => query.Include(m => m.MountRatings.Where(mr => mr.UserId == currentUser.Id))) ?? new();
-            IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(MountConstants.RecommendedMountsCount, m => m.Id != id && m.MountType == mount.MountType);
+            IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(RecommendedMountsCount, m => m.Id != id && m.MountType == mount.MountType);
 
             return new ViewMountViewModel()
             {
@@ -76,7 +77,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     Id = mount.Id,
                     Name = mount.Name,
-                    Description = string.IsNullOrWhiteSpace(mount.Description) ? MountConstants.NoDescriptionAvailable : mount.Description,
+                    Description = string.IsNullOrWhiteSpace(mount.Description) ? NoMountDescriptionAvailable : mount.Description,
                     RentPrice = mount.RentPrice,
                     ImageUrl = mount.ImageUrl,
                     Type = mount.MountType.ToString(),
@@ -86,7 +87,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? NoMountDescriptionAvailable : m.Description,
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
@@ -95,7 +96,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = MountConstants.PageOne)
+        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = PageOne)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -104,7 +105,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentHistoryViewModel();
             }
 
-            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountConstants.CountForRentHistoryPagination, false, mr => mr.StartDate, mr => mr.UserId == currentUser.Id, query => query.Include(mr => mr.Mount));
+            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountRentalsPerPage, false, mr => mr.StartDate, mr => mr.UserId == currentUser.Id, query => query.Include(mr => mr.Mount));
             int totalResults = await _repository.GetCountAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id);
 
             return new MountRentHistoryViewModel()
@@ -120,7 +121,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageNumber,
-                    TotalPages = (int)Math.Ceiling(totalResults / 10d),
+                    TotalPages = (int)Math.Ceiling((double)totalResults / MountRentalsPerPage),
                 },
             };
         }
@@ -163,11 +164,11 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountsViewModel();
             }
 
-            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedMountCount / ProductConstants.CountForPagination), filterAndSortMountsRequestData.CurrentPage);
+            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedMountCount / MountsPerPage), filterAndSortMountsRequestData.CurrentPage);
 
             Expression<Func<MountEntity, object>> sortExpression = filterAndSortMountsRequestData.SortBy == "Price" ? m => m.RentPrice : m => m.Rating;
 
-            var filteredAndSortedMounts = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, MountConstants.CountForPagination, filterAndSortMountsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
+            var filteredAndSortedMounts = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, MountsPerPage, filterAndSortMountsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
 
             return new MountsViewModel()
             {
@@ -175,7 +176,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = string.IsNullOrWhiteSpace(m.Description) ? MountConstants.NoDescriptionAvailable : m.Description,
+                    Description = string.IsNullOrWhiteSpace(m.Description) ? NoMountDescriptionAvailable : m.Description,
                     RentPrice = m.RentPrice,
                     ImageUrl = m.ImageUrl,
                     Type = m.MountType.ToString(),
@@ -184,7 +185,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageToShow,
-                    TotalPages = (int)Math.Ceiling(totalFilteredAndSortedMountCount / 6d),
+                    TotalPages = (int)Math.Ceiling((double)totalFilteredAndSortedMountCount / MountsPerPage),
                 },
             };
         }
@@ -196,7 +197,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = false,
-                    MountRentMessage = "Something went wrong"
+                    MountRentMessage = GenericErrorMessage,
                 };
             }
 
@@ -207,7 +208,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = false,
-                    MountRentMessage = "Something went wrong",
+                    MountRentMessage = GenericErrorMessage,
                 };
             }
 
@@ -218,7 +219,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = false,
-                    MountRentMessage = "Something went wrong",
+                    MountRentMessage = GenericErrorMessage,
                 };
             }
 
@@ -240,7 +241,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = true,
-                    MountRentMessage = "Mount rented successfully for the chosen interval",
+                    MountRentMessage = MountRentSuccessMessage,
                 };
             }
             else
@@ -248,7 +249,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 return new MountRentalResultDto()
                 {
                     IsMountRentSuccessful = false,
-                    MountRentMessage = "The mount is not available for the chosen interval",
+                    MountRentMessage = MountRentFailMessage,
                 };
             }
         }
@@ -259,14 +260,14 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
             if (currentUser == null)
             {
-                return "Something went wrong";
+                return GenericErrorMessage;
             }
 
             var mountToRate = await _repository.FindByIdAsync<MountEntity>(rateMountDto.MountId);
 
             if (mountToRate == null)
             {
-                return "Something went wrong";
+                return GenericErrorMessage;
             }
 
             IEnumerable<MountRatingEntity> currentMountRatings = await _repository.FindAllAsync<MountRatingEntity>(mr => mr.MountId == rateMountDto.MountId);
@@ -292,7 +293,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
             await _repository.SaveChangesAsync();
 
-            return "Mount rated successfully";
+            return MountRateSuccessMessage;
         }
 
         public async Task CancelMountRentAsync(int id)

@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using static LeaguePlaza.Common.Constants.QuestConstants;
+
 namespace LeaguePlaza.Infrastructure.Data.Entities
 {
     public class QuestEntity
@@ -10,10 +12,10 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(QuestTitleMaxLength)]
         public string Title { get; set; } = string.Empty;
 
-        [MaxLength(500)]
+        [MaxLength(QuestDescriptionMaxLength)]
         public string? Description { get; set; }
 
         [Required]
@@ -30,7 +32,7 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public QuestStatus Status { get; set; }
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(QuestImageUrlMaxLength)]
         public string ImageName { get; set; } = null!;
 
         [Required]

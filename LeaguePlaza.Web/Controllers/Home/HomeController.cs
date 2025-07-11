@@ -1,10 +1,10 @@
 using System.Diagnostics;
-using LeaguePlaza.Common.Constants;
 using LeaguePlaza.Core.Features.Home.Contracts;
 using LeaguePlaza.Core.Features.Home.Models.ViewModels;
 using LeaguePlaza.Web.Models;
-
 using Microsoft.AspNetCore.Mvc;
+
+using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Web.Controllers.Home
 {
@@ -23,8 +23,8 @@ namespace LeaguePlaza.Web.Controllers.Home
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(Index));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(Index));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new HomePageViewModel());
             }

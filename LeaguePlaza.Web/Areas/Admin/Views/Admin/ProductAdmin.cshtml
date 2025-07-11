@@ -1,0 +1,22 @@
+﻿@using LeaguePlaza.Core.Features.Admin.Models.ViewModels
+
+@model ProductAdminViewModel
+
+<div class="container" data-page-name="product-admin">
+    <h1>Manage products</h1>
+    
+    <div id="cards-and-pagination">
+        <partial name="~/Areas/Admin/Views/Partials/_ProductAdminCardsContainerWithPagination.cshtml" model="@Model" />
+    </div>
+</div>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/admin/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/pagination.css" asp-append-version="true" />
+}
+
+@section Scripts
+{
+    <script src="~/js/admin/admin.js"></script>
+}

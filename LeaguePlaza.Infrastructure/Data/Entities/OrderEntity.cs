@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using static LeaguePlaza.Common.Constants.OrderConstants;
+
 namespace LeaguePlaza.Infrastructure.Data.Entities
 {
     public class OrderEntity
@@ -18,22 +20,22 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public OrderStatus Status { get; set; }
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(OrderCountryMaxLength)]
         public string Country { get; set; } = null!;
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(OrderCityMaxLength)]
         public string City { get; set; } = null!;
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(OrderStreetMaxLength)]
         public string Street { get; set; } = null!;
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(OrderPostalCodeMaxLength)]
         public string PostalCode { get; set; } = null!;
 
-        [MaxLength(200)]
+        [MaxLength(OrderAdditionalInformationMaxLength)]
         public string? AdditionalInformation { get; set; }
 
         [Required]

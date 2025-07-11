@@ -1,9 +1,10 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Quest.Contracts;
+﻿using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Quest
 {
@@ -22,14 +23,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(Index));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(Index));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new QuestsViewModel());
             }
         }
 
-        [Authorize(Roles = $"{UserRoleConstants.Adventurer}, {UserRoleConstants.QuestGiver}")]
+        [Authorize(Roles = $"{Adventurer}, {QuestGiver}")]
         public async Task<IActionResult> MyQuests()
         {
             try
@@ -40,14 +41,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(MyQuests));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(MyQuests));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new QuestsViewModel());
             }
         }
 
-        [Authorize(Roles = $"{UserRoleConstants.Adventurer}, {UserRoleConstants.QuestGiver}")]
+        [Authorize(Roles = $"{Adventurer}, {QuestGiver}")]
         public async Task<IActionResult> ViewQuest(int id)
         {
             try
@@ -58,8 +59,8 @@ namespace LeaguePlaza.Web.Controllers.Quest
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ViewQuest));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ViewQuest));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new ViewQuestViewModel());
             }

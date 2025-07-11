@@ -1,0 +1,6 @@
+﻿@using LeaguePlaza.Core.Features.Admin.Models.ViewModels
+
+@model OrderAdminViewModel
+
+<partial name="~/Areas/Admin/Views/Partials/_OrderAdminCardsContainer.cshtml" model="@Model.Orders" />
+<partial name="~/Views/Shared/_Pagination.cshtml" model="@Model.Pagination" />

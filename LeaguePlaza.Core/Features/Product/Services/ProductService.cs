@@ -1,5 +1,4 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Pagination.Models;
+﻿using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Core.Features.Product.Contracts;
 using LeaguePlaza.Core.Features.Product.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Product.Models.RequestData;
@@ -9,6 +8,9 @@ using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
 using System.Linq.Expressions;
 
+using static LeaguePlaza.Common.Constants.ProductConstants;
+using static LeaguePlaza.Common.Constants.PaginationConstants;
+
 namespace LeaguePlaza.Core.Features.Product.Services
 {
     public class ProductService(IRepository repository) : IProductService
@@ -17,7 +19,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
 
         public async Task<ProductsViewModel> CreateAvailableProductsViewModelAsync()
         {
-            IEnumerable<ProductEntity> availableProducts = await _repository.FindSpecificCountOrderedReadOnlyAsync<ProductEntity, string>(ProductConstants.PageOne, ProductConstants.CountForPagination, false, p => p.Name, p => p.IsInStock);
+            IEnumerable<ProductEntity> availableProducts = await _repository.FindSpecificCountOrderedReadOnlyAsync<ProductEntity, string>(PageOne, ProductsPerPage, false, p => p.Name, p => p.IsInStock);
             int totalResults = await _repository.GetCountAsync<ProductEntity>(p => p.IsInStock);
 
             return new ProductsViewModel()
@@ -26,7 +28,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Description = string.IsNullOrWhiteSpace(p.Description) ? ProductConstants.NoDescriptionAvailable : p.Description,
+                    Description = string.IsNullOrWhiteSpace(p.Description) ? NoProductDescriptionAvailable : p.Description,
                     Price = p.Price,
                     ImageUrl = p.ImageUrl,
                     IsInStock = p.IsInStock,
@@ -34,8 +36,8 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 }),
                 Pagination = new PaginationViewModel()
                 {
-                    CurrentPage = ProductConstants.PageOne,
-                    TotalPages = (int)Math.Ceiling(totalResults / 6d),
+                    CurrentPage = PageOne,
+                    TotalPages = (int)Math.Ceiling((double)totalResults / ProductsPerPage),
                 },
             };
         }
@@ -43,7 +45,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
         public async Task<ViewProductViewModel> CreateViewProductViewModelAsync(int id)
         {
             var product = await _repository.FindByIdAsync<ProductEntity>(id) ?? new();
-            IEnumerable<ProductEntity> recommendedProducts = await _repository.FindSpecificCountReadOnlyAsync<ProductEntity>(ProductConstants.RecommendedProductsCount, p => p.Id != id && p.ProductType == product.ProductType);
+            IEnumerable<ProductEntity> recommendedProducts = await _repository.FindSpecificCountReadOnlyAsync<ProductEntity>(RecommendedProductsCount, p => p.Id != id && p.ProductType == product.ProductType);
 
             return new ViewProductViewModel()
             {
@@ -51,7 +53,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 {
                     Id = id,
                     Name = product.Name,
-                    Description = string.IsNullOrWhiteSpace(product.Description) ? ProductConstants.NoDescriptionAvailable : product.Description,
+                    Description = string.IsNullOrWhiteSpace(product.Description) ? NoProductDescriptionAvailable : product.Description,
                     Price = product.Price,
                     ImageUrl = product.ImageUrl,
                     IsInStock = product.IsInStock,
@@ -61,7 +63,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Description = string.IsNullOrWhiteSpace(p.Description) ? ProductConstants.NoDescriptionAvailable : p.Description,
+                    Description = string.IsNullOrWhiteSpace(p.Description) ? NoProductDescriptionAvailable : p.Description,
                     Price = p.Price,
                     ImageUrl = p.ImageUrl,
                     IsInStock = p.IsInStock,
@@ -96,11 +98,11 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 return new ProductsViewModel();
             }
 
-            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedProductsCount / ProductConstants.CountForPagination), filterAndSortProductsRequestData.CurrentPage);
+            int pageToShow = Math.Min((int)Math.Ceiling((double)totalFilteredAndSortedProductsCount / ProductsPerPage), filterAndSortProductsRequestData.CurrentPage);
 
             Expression<Func<ProductEntity, object>> sortExpression = filterAndSortProductsRequestData.SortBy == "Price" ? p => p.Price : p => p.Name;
 
-            IEnumerable<ProductEntity> filteredAndSortedProducts = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, ProductConstants.CountForPagination, filterAndSortProductsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
+            IEnumerable<ProductEntity> filteredAndSortedProducts = await _repository.FindSpecificCountOrderedReadOnlyAsync(pageToShow, ProductsPerPage, filterAndSortProductsRequestData.OrderIsDescending, sortExpression, combinedFilterExpression);
 
             return new ProductsViewModel()
             {
@@ -108,7 +110,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Description = string.IsNullOrWhiteSpace(p.Description) ? ProductConstants.NoDescriptionAvailable : p.Description,
+                    Description = string.IsNullOrWhiteSpace(p.Description) ? NoProductDescriptionAvailable : p.Description,
                     Price = p.Price,
                     ImageUrl = p.ImageUrl,
                     IsInStock = p.IsInStock,
@@ -117,7 +119,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageToShow,
-                    TotalPages = (int)Math.Ceiling(totalFilteredAndSortedProductsCount / 6d),
+                    TotalPages = (int)Math.Ceiling((double)totalFilteredAndSortedProductsCount / ProductsPerPage),
                 },
             };
         }

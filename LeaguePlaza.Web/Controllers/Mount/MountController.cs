@@ -1,9 +1,10 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Mount.Contracts;
+﻿using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Mount
 {
@@ -12,7 +13,7 @@ namespace LeaguePlaza.Web.Controllers.Mount
         private readonly IMountService _mountService = mountService;
         private readonly ILogger<MountController> _logger = logger;
 
-        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> Index()
         {
             try
@@ -23,14 +24,14 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(Index));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(Index));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new MountsViewModel());
             }
         }
 
-        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> ViewMount(int id)
         {
             try
@@ -41,14 +42,14 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(ViewMount));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(ViewMount));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new ViewMountViewModel());
             }
         }
 
-        [Authorize(Roles = UserRoleConstants.Adventurer)]
+        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> MountRentHistory()
         {
             try
@@ -59,8 +60,8 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
             catch (Exception ex)
             {
-                _logger.LogError(ErrorConstants.FailedAt, nameof(MountRentHistory));
-                _logger.LogError(ErrorConstants.ErrorMessage, ex.Message);
+                _logger.LogError(FailedAt, nameof(MountRentHistory));
+                _logger.LogError(ErrorMessage, ex.Message);
 
                 return View(new MountRentHistoryViewModel());
             }

@@ -1,8 +1,9 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
+﻿using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
+
+using static LeaguePlaza.Common.Constants.PaginationConstants;
 
 namespace LeaguePlaza.Core.Features.Mount.Contracts
 {
@@ -12,7 +13,7 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
 
         Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id);
 
-        Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = MountConstants.PageOne);
+        Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = PageOne);
 
         Task<MountsViewModel> CreateMountsViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData);
 

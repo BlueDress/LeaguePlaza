@@ -1,14 +1,18 @@
-﻿using LeaguePlaza.Common.Constants;
-using LeaguePlaza.Core.Features.Order.Contracts;
+﻿using LeaguePlaza.Core.Features.Order.Contracts;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
 using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Infrastructure.Data.Entities;
+using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
+using static LeaguePlaza.Common.Constants.OrderConstants;
+using static LeaguePlaza.Common.Constants.PaginationConstants;
+using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Core.Features.Order.Services
 {
@@ -18,7 +22,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-        public async Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(int pageNumber = OrderConstants.PageOne)
+        public async Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(int pageNumber = PageOne)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -27,7 +31,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new OrderHistoryViewModel();
             }
 
-            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, DateTime?>(pageNumber, OrderConstants.CountForOrderHistoryPagination, true, o => o.DateCompleted, o => o.UserId == currentUser.Id);
+            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, DateTime?>(pageNumber, OrdersPerPage, true, o => o.DateCompleted, o => o.UserId == currentUser.Id);
             int totalResults = await _repository.GetCountAsync<OrderEntity>(o => o.UserId == currentUser.Id);
 
             return new OrderHistoryViewModel()
@@ -42,12 +46,12 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageNumber,
-                    TotalPages = (int)Math.Ceiling(totalResults / 10d),
+                    TotalPages = (int)Math.Ceiling((double)totalResults / OrdersPerPage),
                 },
             };
         }
 
-        public async Task<CartViewModel> CreateViewCartViewModelAsync()
+        public async Task<CartViewModel> CreateViewCartViewModelAsync(OrderInformationDto? orderInformationDto = null)
         {
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
@@ -65,18 +69,30 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new CartViewModel();
             }
 
+            var orderInformation = new OrderInformationDto();
+
+            if (orderInformationDto != null)
+            {
+                orderInformation.Country = orderInformationDto.Country;
+                orderInformation.City = orderInformationDto.City;
+                orderInformation.Street = orderInformationDto.Street;
+                orderInformation.PostalCode = orderInformationDto.PostalCode;
+                orderInformation.AdditionalInformation = orderInformationDto.AdditionalInformation;
+            }
+
             return new CartViewModel()
             {
                 CartId = userCart.Id,
                 CartItems = userCart.CartItems.Select(ci => new CartItemDto()
                 {
-                    CartId = ci.Id,
+                    Id = ci.Id,
                     ProductName = ci.Product.Name,
                     ProductImageUrl = ci.Product.ImageUrl,
                     Quantity = ci.Quantity,
                     Price = ci.Product.Price,
                     ProductId = ci.ProductId,
                 }),
+                OrderInformation = orderInformation,
             };
         }
 
@@ -146,7 +162,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new AddToCartResultDto()
                 {
                     IsAddToCartSuccessful = false,
-                    AddToCartMessage = "Something went wrong",
+                    AddToCartMessage = GenericErrorMessage,
                 };
             }
 
@@ -157,7 +173,7 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 return new AddToCartResultDto()
                 {
                     IsAddToCartSuccessful = false,
-                    AddToCartMessage = "Something went wrong",
+                    AddToCartMessage = GenericErrorMessage,
                 };
             }
 
@@ -183,8 +199,60 @@ namespace LeaguePlaza.Core.Features.Order.Services
             return new AddToCartResultDto()
             {
                 IsAddToCartSuccessful = true,
-                AddToCartMessage = "Product added to cart",
+                AddToCartMessage = ProductAddedToCartSuccessfully,
             };
+        }
+
+        public async Task<bool> CreateOrderAsync(OrderInformationDto orderInformationDto)
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+
+            if (currentUser == null)
+            {
+                return false;
+            }
+
+            var currentUserCart = await _repository.FindOneAsync<CartEntity>(ce => ce.UserID == currentUser.Id, query => query.Include(c => c.CartItems).ThenInclude(ci => ci.Product));
+
+            if (currentUserCart == null)
+            {
+                return false;
+            }
+
+            var order = new OrderEntity()
+            {
+                DateCreated = DateTime.UtcNow,
+                Status = OrderStatus.Pending,
+                Country = orderInformationDto.Country,
+                City = orderInformationDto.City,
+                Street = orderInformationDto.Street,
+                PostalCode = orderInformationDto.PostalCode,
+                AdditionalInformation = orderInformationDto.AdditionalInformation,
+                UserId = currentUser.Id,
+                OrderItems = currentUserCart.CartItems.Select(ci => new OrderItemEntity()
+                {
+                    Quantity = ci.Quantity,
+                    Price = ci.Product.Price,
+                    ProductId = ci.ProductId,
+                }).ToList(),
+            };
+
+            await _repository.AddAsync(order);
+            _repository.RemoveRange(currentUserCart.CartItems);
+            await _repository.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task RemoveCartItemAsync(int cartItemId)
+        {
+            var cartItemToRemove = await _repository.FindByIdAsync<CartItemEntity>(cartItemId);
+
+            if (cartItemToRemove != null)
+            {
+                _repository.Remove(cartItemToRemove);
+                await _repository.SaveChangesAsync();
+            }
         }
     }
 }

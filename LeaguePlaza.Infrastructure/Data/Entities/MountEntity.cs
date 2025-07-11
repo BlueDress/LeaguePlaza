@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using LeaguePlaza.Infrastructure.Data.Enums;
+
+using static LeaguePlaza.Common.Constants.MountConstants;
 
 namespace LeaguePlaza.Infrastructure.Data.Entities
 {
@@ -11,10 +12,10 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(MountNameMaxLength)]
         public string Name { get; set; } = string.Empty;
 
-        [MaxLength(500)]
+        [MaxLength(MountDescriptionMaxLength)]
         public string? Description { get; set; }
 
         [Required]
@@ -24,7 +25,7 @@ namespace LeaguePlaza.Infrastructure.Data.Entities
         [Column(TypeName = "decimal(12,2)")]
         public decimal RentPrice { get; set; }
 
-        [MaxLength(500)]
+        [MaxLength(MountImageUrlMaxLength)]
         public string? ImageUrl { get; set; }
 
         public MountType MountType { get; set; }

@@ -1,5 +1,6 @@
-﻿@using LeaguePlaza.Common.Constants
-@using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly
+﻿@using LeaguePlaza.Core.Features.Quest.Models.Dtos.ReadOnly
+
+@using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 @model IEnumerable<QuestDto>
 
@@ -22,7 +23,7 @@
                 @if (quest.ShowExtraButtons)
                 {
                     <div class="quest-extra-buttons" data-quest-id="@quest.Id">
-                        @if (User.IsInRole(UserRoleConstants.QuestGiver))
+                        @if (User.IsInRole(QuestGiver))
                         {
                             @if (quest.AdventurerId == null)
                             {
@@ -36,7 +37,7 @@
                             }
                         }
 
-                        @if (User.IsInRole(UserRoleConstants.Adventurer) && quest.Status != "Completed")
+                        @if (User.IsInRole(Adventurer) && quest.Status != "Completed")
                         {
                             <button class="abandon-btn abandon-btn-js" type="button">Abandon</button>
                         }
