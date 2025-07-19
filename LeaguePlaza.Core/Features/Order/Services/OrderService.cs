@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using static LeaguePlaza.Common.Constants.ErrorConstants;
 using static LeaguePlaza.Common.Constants.OrderConstants;
 using static LeaguePlaza.Common.Constants.PaginationConstants;
-using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Core.Features.Order.Services
 {
@@ -253,6 +253,29 @@ namespace LeaguePlaza.Core.Features.Order.Services
                 _repository.Remove(cartItemToRemove);
                 await _repository.SaveChangesAsync();
             }
+        }
+
+        public async Task UpdateOrderStatusAsync(UpdateOrderStatusDto updateOrderStatusDto)
+        {
+            var orderToUpdate = await _repository.FindByIdAsync<OrderEntity>(updateOrderStatusDto.Id);
+
+            if (orderToUpdate == null)
+            {
+                return;
+            }
+
+            orderToUpdate.Status = (OrderStatus)Enum.Parse(typeof(OrderStatus), updateOrderStatusDto.Status);
+
+            if (orderToUpdate.Status == OrderStatus.Completed)
+            {
+                orderToUpdate.DateCompleted = DateTime.UtcNow;
+            }
+            else
+            {
+                orderToUpdate.DateCompleted = null;
+            }
+
+            await _repository.SaveChangesAsync();
         }
     }
 }

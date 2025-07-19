@@ -21,6 +21,7 @@ function adminMain() {
     createMountForm?.addEventListener('submit', e => createMount(e));
     updateMountBtn?.addEventListener('click', e => updateMount(e));
     cardsAndPaginationHolder.addEventListener('click', e => handleMountButtonClick(e));
+    cardsAndPaginationHolder.addEventListener('change', e => handleOrderSelectClick(e));
     cardsAndPaginationHolder.addEventListener('click', e => handlePaginationClick(e));
 
     async function createMount(e) {
@@ -130,10 +131,39 @@ function adminMain() {
         }
     }
 
+    async function handleOrderSelectClick(e) {
+        if (e.target) {
+            if (e.target.classList.contains('order-status-js')) {
+                await updateOrderStatus(e);
+            }
+        }
+    }
+
+    async function updateOrderStatus(e) {
+        const updateOrderDto = {
+            id : e.target.dataset.orderId,
+            status : e.target.value
+        };
+
+        const response = await fetch(baseUrl + 'updateorderstatus', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(updateOrderDto)
+        });
+
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+        }
+    }
+
     function handlePaginationClick(e) {
         if (e.target && e.target.classList.contains('pagination-button-js')) {
             switch (pageName) {
                 case 'mount-admin': getMountPageResults(e);
+                case 'order-admin': getOrderPageResults(e);
             }
         }
     }
@@ -144,6 +174,24 @@ function adminMain() {
         const pageNumber = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;
 
         const response = await fetch(baseUrl + 'getpageresults' + `?pageNumber=${pageNumber}`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+            },
+        });
+
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+        }
+    }
+
+    async function getOrderPageResults(e) {
+        e.preventDefault();
+
+        const pageNumber = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;
+
+        const response = await fetch(baseUrl + 'getorderpageresults' + `?pageNumber=${pageNumber}`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',

@@ -2,6 +2,8 @@
 using LeaguePlaza.Core.Features.Admin.Models.ViewModels;
 using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Order.Contracts;
+using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +15,11 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = LeagueMaster)]
-    public class AdminApiController(IAdminService adminService, IMountService mountService) : Controller
+    public class AdminApiController(IAdminService adminService, IMountService mountService, IOrderService orderService) : Controller
     {
         public readonly IAdminService _adminService = adminService;
         private readonly IMountService _mountService = mountService;
+        private readonly IOrderService _orderService = orderService;
 
         [HttpPost("createmount")]
         public async Task<IActionResult> CreateMount([FromForm] CreateMountDto createMountDto)
@@ -51,6 +54,23 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
             MountAdminViewModel mountAdminViewModel = await _adminService.CreateMountAdminViewModelAsync(pageNumber);
 
             return PartialView(MountAdminCardsContainerWithPagination, mountAdminViewModel);
+        }
+
+        [HttpPost("updateorderstatus")]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusDto updateOrderStatusDto)
+        {
+            await _orderService.UpdateOrderStatusAsync(updateOrderStatusDto);
+            OrderAdminViewModel orderAdminViewModel = await _adminService.CreateOrderAdminViewModelAsync();
+
+            return PartialView(OrderAdminCardsContainerWithPagination, orderAdminViewModel);
+        }
+
+        [HttpGet("getorderpageresults")]
+        public async Task<IActionResult> GetOrderPageResults([FromQuery] int pageNumber)
+        {
+            OrderAdminViewModel orderAdminViewModel = await _adminService.CreateOrderAdminViewModelAsync(pageNumber);
+
+            return PartialView(OrderAdminCardsContainerWithPagination, orderAdminViewModel);
         }
     }
 }

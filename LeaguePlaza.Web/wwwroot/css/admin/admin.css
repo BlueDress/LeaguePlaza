@@ -139,3 +139,30 @@
     #update-mount-btn:not(:disabled):active {
         transform: scale(0.98);
     }
+
+.admin-order-card {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+    margin-bottom: 0.3rem;
+    border: 1px solid black;
+}
+
+    .admin-order-card:first-child {
+        font-weight: 600;
+    }
+
+    .admin-order-card > div {
+        padding: 0.3rem;
+    }
+
+    .admin-order-card > div:not(:last-child) {
+        border-right: 1px solid black;
+    }
+
+.order-status {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
