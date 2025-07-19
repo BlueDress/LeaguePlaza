@@ -1,3 +1,24 @@
 ﻿@using LeaguePlaza.Core.Features.Product.Models.Dtos.ReadOnly
 
 @model IEnumerable<ProductDto>
+
+<div class="admin-cards-holder">
+    @foreach (var product in Model)
+    {
+        <div class="admin-card admin-product-card-js">
+            <div>
+                <img src="@product.ImageUrl" />
+            </div>
+            <div class="admin-card-info admin-product-card-info-js">
+                <div>@product.Name</div>
+                <div>@product.Description</div>
+                <div>@product.Price</div>
+                <div>@product.ProductType</div>
+            </div>
+            <div class="admin-card-buttons">
+                <button class="admin-edit-button admin-product-edit-button-js" type="button" data-mount-id="@product.Id">Edit</button>
+                <button class="admin-delete-button admin-product-delete-button-js" type="button" data-mount-id="@product.Id">Delete</button>
+            </div>
+        </div>
+    }
+</div>

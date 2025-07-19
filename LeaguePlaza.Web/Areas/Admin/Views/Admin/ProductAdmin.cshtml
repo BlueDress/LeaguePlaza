@@ -4,7 +4,40 @@
 
 <div class="container" data-page-name="product-admin">
     <h1>Manage products</h1>
-    
+    <div id="form-holder">
+        <form id="create-product" class="admin-form">
+            <div>
+                <label for="product-name">Name</label>
+                <input id="product-name" type="text" name="product-name" maxlength="50" required />
+            </div>
+            <div>
+                <label for="product-description">Description</label>
+                <textarea id="product-description" rows="4" name="product-description" maxlength="500"></textarea>
+            </div>
+            <div>
+                <label for="product-price">Price</label>
+                <input id="product-price" type="number" step="0.01" name="product-price" placeholder="0.00" required />
+            </div>
+            <div>
+                <label for="product-type">Type</label>
+                <select id="product-type" name="product-type" required>
+                    <option value="" disabled selected>Select product type</option>
+                    <option value="0">Healing</option>
+                    <option value="1">Enhancement</option>
+                    <option value="2">Impairment</option>
+                </select>
+            </div>
+            <div>
+                <label for="product-image">Image</label>
+                <input id="product-image" type="file" name="product-image" placeholder="Upload an image" accept="image/*">
+            </div>
+            <div>
+                <button id="create-product-btn" type="submit">Create</button>
+                <button id="update-product-btn" type="button" disabled>Update</button>
+            </div>
+            <span class="display-none form-message-js"></span>
+        </form>
+    </div>
     <div id="cards-and-pagination">
         <partial name="~/Areas/Admin/Views/Partials/_ProductAdminCardsContainerWithPagination.cshtml" model="@Model" />
     </div>

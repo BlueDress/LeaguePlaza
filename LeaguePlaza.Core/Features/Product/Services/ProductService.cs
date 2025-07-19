@@ -1,21 +1,32 @@
-﻿using LeaguePlaza.Core.Features.Pagination.Models;
+﻿using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Pagination.Models;
 using LeaguePlaza.Core.Features.Product.Contracts;
+using LeaguePlaza.Core.Features.Product.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Product.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Product.Models.RequestData;
 using LeaguePlaza.Core.Features.Product.Models.ViewModels;
 using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
+using LeaguePlaza.Infrastructure.Dropbox.Contracts;
 using System.Linq.Expressions;
 
-using static LeaguePlaza.Common.Constants.ProductConstants;
 using static LeaguePlaza.Common.Constants.PaginationConstants;
+using static LeaguePlaza.Common.Constants.ProductConstants;
 
 namespace LeaguePlaza.Core.Features.Product.Services
 {
-    public class ProductService(IRepository repository) : IProductService
+    public class ProductService(IRepository repository, IDropboxService dropboxService) : IProductService
     {
+        private readonly Dictionary<string, string> DefaultProductTypeImageUrls = new()
+        {
+            { "0", HealingDefaultImageUrl },
+            { "1", EnhancementDefaultImageUrl },
+            { "2", ImpairmentDefaultImageUrl },
+        };
+
         private readonly IRepository _repository = repository;
+        private readonly IDropboxService _dropboxService = dropboxService;
 
         public async Task<ProductsViewModel> CreateAvailableProductsViewModelAsync()
         {
@@ -122,6 +133,82 @@ namespace LeaguePlaza.Core.Features.Product.Services
                     TotalPages = (int)Math.Ceiling((double)totalFilteredAndSortedProductsCount / ProductsPerPage),
                 },
             };
+        }
+
+        public async Task CreateProductAsync(CreateProductDto createProductDto)
+        {
+            var dateCreated = DateTime.Now;
+
+            string imageUrl = string.Empty;
+
+            if (createProductDto.Image != null)
+            {
+                string accessToken = await _dropboxService.GetAccessToken();
+
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    string uploadPath = string.Format(ImageUploadPath, createProductDto.Name, dateCreated.ToLongTimeString(), createProductDto.Image.FileName);
+                    imageUrl = await _dropboxService.UploadImage(createProductDto.Image, uploadPath, accessToken);
+                }
+            }
+
+            imageUrl = string.IsNullOrEmpty(imageUrl) ? DefaultProductTypeImageUrls[createProductDto.ProductType] : imageUrl;
+
+            var newProduct = new ProductEntity()
+            {
+                Name = createProductDto.Name,
+                Description = createProductDto.Description,
+                Price = createProductDto.Price,
+                ProductType = (ProductType)Enum.Parse(typeof(ProductType), createProductDto.ProductType),
+                ImageUrl = imageUrl,
+                IsInStock = true,
+            };
+
+            await _repository.AddAsync(newProduct);
+            await _repository.SaveChangesAsync();
+        }
+
+        public async Task UpdateProductAsync(UpdateProductDto updateProductDto)
+        {
+            var productToUpdate = await _repository.FindByIdAsync<ProductEntity>(updateProductDto.Id);
+
+            if (productToUpdate != null)
+            {
+                productToUpdate.Name = updateProductDto.Name;
+                productToUpdate.Description = updateProductDto.Description;
+                productToUpdate.Price = updateProductDto.Price;
+                productToUpdate.ProductType = (ProductType)Enum.Parse(typeof(ProductType), updateProductDto.ProductType);
+
+                if (updateProductDto.Image != null)
+                {
+                    string accessToken = await _dropboxService.GetAccessToken();
+
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        string uploadPath = string.Format(ImageUploadPath, updateProductDto.Name, DateTime.Now.ToLongTimeString(), updateProductDto.Image.FileName);
+                        string imageUrl = await _dropboxService.UploadImage(updateProductDto.Image, uploadPath, accessToken);
+
+                        if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            productToUpdate.ImageUrl = imageUrl;
+                        }
+                    }
+                }
+
+                _repository.Update(productToUpdate);
+                await _repository.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteProductAsync(int id)
+        {
+            var productToRemove = await _repository.FindByIdAsync<ProductEntity>(id);
+
+            if (productToRemove != null)
+            {
+                _repository.Remove(productToRemove);
+                await _repository.SaveChangesAsync();
+            }
         }
     }
 }

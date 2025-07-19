@@ -4,6 +4,8 @@ using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Order.Contracts;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
+using LeaguePlaza.Core.Features.Product.Contracts;
+using LeaguePlaza.Core.Features.Product.Models.Dtos.Create;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +17,12 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = LeagueMaster)]
-    public class AdminApiController(IAdminService adminService, IMountService mountService, IOrderService orderService) : Controller
+    public class AdminApiController(IAdminService adminService, IMountService mountService, IOrderService orderService, IProductService productService) : Controller
     {
         public readonly IAdminService _adminService = adminService;
         private readonly IMountService _mountService = mountService;
         private readonly IOrderService _orderService = orderService;
+        private readonly IProductService _productService = productService;
 
         [HttpPost("createmount")]
         public async Task<IActionResult> CreateMount([FromForm] CreateMountDto createMountDto)
@@ -71,6 +74,41 @@ namespace LeaguePlaza.Web.Areas.Admin.Controllers
             OrderAdminViewModel orderAdminViewModel = await _adminService.CreateOrderAdminViewModelAsync(pageNumber);
 
             return PartialView(OrderAdminCardsContainerWithPagination, orderAdminViewModel);
+        }
+
+        [HttpPost("createproduct")]
+        public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto createProductDto)
+        {
+            await _productService.CreateProductAsync(createProductDto);
+            ProductAdminViewModel productAdminViewModel = await _adminService.CreateProductAdminViewModelAsync();
+
+            return PartialView(ProductAdminCardsContainerWithPagination, productAdminViewModel);
+        }
+
+        [HttpPut("updateproduct")]
+        public async Task<IActionResult> UpdateProduct([FromForm] UpdateProductDto updateProductDto)
+        {
+            await _productService.UpdateProductAsync(updateProductDto);
+            ProductAdminViewModel productAdminViewModel = await _adminService.CreateProductAdminViewModelAsync();
+
+            return PartialView(ProductAdminCardsContainerWithPagination, productAdminViewModel);
+        }
+
+        [HttpDelete("deleteproduct")]
+        public async Task<IActionResult> DeleteProduct([FromBody] DeleteProductDto deleteProductDto)
+        {
+            await _productService.DeleteProductAsync(deleteProductDto.Id);
+            ProductAdminViewModel productAdminViewModel = await _adminService.CreateProductAdminViewModelAsync();
+
+            return PartialView(ProductAdminCardsContainerWithPagination, productAdminViewModel);
+        }
+
+        [HttpGet("getproductpageresults")]
+        public async Task<IActionResult> GetProductPageResults([FromQuery] int pageNumber)
+        {
+            ProductAdminViewModel productAdminViewModel = await _adminService.CreateProductAdminViewModelAsync(pageNumber);
+
+            return PartialView(ProductAdminCardsContainerWithPagination, productAdminViewModel);
         }
     }
 }

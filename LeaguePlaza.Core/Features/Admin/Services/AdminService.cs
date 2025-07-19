@@ -69,7 +69,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
 
         public async Task<OrderAdminViewModel> CreateOrderAdminViewModelAsync(int pageNumber = 1)
         {
-            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, int>(pageNumber, 2, false, o => o.Id, o => true);
+            IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, int>(pageNumber, AdminCountForPagination, false, o => o.Id, o => true);
             int totalResults = await _repository.GetCountAsync<OrderEntity>(o => true);
 
             return new OrderAdminViewModel()
@@ -84,7 +84,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
                 Pagination = new PaginationViewModel()
                 {
                     CurrentPage = pageNumber,
-                    TotalPages = (int)Math.Ceiling((double)totalResults / 2),
+                    TotalPages = (int)Math.Ceiling((double)totalResults / AdminCountForPagination),
                 },
             };
         }
