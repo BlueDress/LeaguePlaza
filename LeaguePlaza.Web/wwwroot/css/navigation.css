@@ -155,7 +155,7 @@
     .nav-sub-links {
         position: absolute;
         width: 200%;
-        bottom: -55px;
+        top: 55px;
     }
 
     #hamburger-menu {

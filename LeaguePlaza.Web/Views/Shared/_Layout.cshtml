@@ -70,7 +70,22 @@
                     @if (User.IsInRole(LeagueMaster))
                     {
                         <li>
-                            <a asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin Panel</a>
+                            <a asp-area="Admin" asp-controller="Admin" asp-action="Index">
+                                <span>Admin Panel</span>
+                                <span class="nav-sub-menu-arrow-js"><i class="fa-solid fa-chevron-down"></i></span>
+                                <span class="nav-sub-menu-arrow-js display-none"><i class="fa-solid fa-chevron-up"></i></span>
+                            </a>
+                            <ul class="nav-sub-links nav-sub-links-js">
+                                <li>
+                                    <a class="nav-sub-link-js" asp-areaAdmin asp-controller="Admin" asp-action="MountAdmin">Manage Mounts</a>
+                                </li>
+                                <li>
+                                    <a class="nav-sub-link-js" asp-area="Admin" asp-controller="Admin" asp-action="ProductAdmin">Manage Products</a>
+                                </li>
+                                <li>
+                                    <a class="nav-sub-link-js" asp-area="Admin" asp-controller="Admin" asp-action="OrderAdmin">Manage Orders</a>
+                                </li>
+                            </ul>
                         </li>
                     }
                 </ul>
