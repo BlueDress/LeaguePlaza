@@ -344,6 +344,8 @@ namespace LeaguePlaza.Core.Features.Mount.Services
         {
             var mountToUpdate = await _repository.FindByIdAsync<MountEntity>(updateMountDto.Id);
 
+            string imageUrl = string.Empty;
+
             if (mountToUpdate != null)
             {
                 mountToUpdate.Name = updateMountDto.Name;
@@ -358,14 +360,11 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                     if (!string.IsNullOrEmpty(accessToken))
                     {
                         string uploadPath = string.Format(ImageUploadPath, updateMountDto.Name, mountToUpdate.Created.ToLongTimeString(), updateMountDto.Image.FileName);
-                        string imageUrl = await _dropboxService.UploadImage(updateMountDto.Image, uploadPath, accessToken);
-
-                        if (!string.IsNullOrEmpty(imageUrl))
-                        {
-                            mountToUpdate.ImageUrl = imageUrl;
-                        }
+                        imageUrl = await _dropboxService.UploadImage(updateMountDto.Image, uploadPath, accessToken);
                     }
                 }
+
+                mountToUpdate.ImageUrl = string.IsNullOrEmpty(imageUrl) ? DefaultMountTypeImageUrls[updateMountDto.MountType] : imageUrl;
 
                 _repository.Update(mountToUpdate);
                 await _repository.SaveChangesAsync();

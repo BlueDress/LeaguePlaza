@@ -28,6 +28,7 @@ function adminMain() {
     const pageName = document.querySelector('.container').dataset.pageName;
 
     let mountId;
+    let productId;
 
     createMountForm?.addEventListener('submit', e => createMount(e));
     updateMountBtn?.addEventListener('click', e => updateMount(e));

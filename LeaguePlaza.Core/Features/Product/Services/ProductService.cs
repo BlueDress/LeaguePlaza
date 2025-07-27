@@ -172,6 +172,8 @@ namespace LeaguePlaza.Core.Features.Product.Services
         {
             var productToUpdate = await _repository.FindByIdAsync<ProductEntity>(updateProductDto.Id);
 
+            string imageUrl = string.Empty;
+
             if (productToUpdate != null)
             {
                 productToUpdate.Name = updateProductDto.Name;
@@ -186,14 +188,11 @@ namespace LeaguePlaza.Core.Features.Product.Services
                     if (!string.IsNullOrEmpty(accessToken))
                     {
                         string uploadPath = string.Format(ImageUploadPath, updateProductDto.Name, DateTime.Now.ToLongTimeString(), updateProductDto.Image.FileName);
-                        string imageUrl = await _dropboxService.UploadImage(updateProductDto.Image, uploadPath, accessToken);
-
-                        if (!string.IsNullOrEmpty(imageUrl))
-                        {
-                            productToUpdate.ImageUrl = imageUrl;
-                        }
+                        imageUrl = await _dropboxService.UploadImage(updateProductDto.Image, uploadPath, accessToken);
                     }
                 }
+
+                productToUpdate.ImageUrl = string.IsNullOrEmpty(imageUrl) ? DefaultProductTypeImageUrls[updateProductDto.ProductType] : imageUrl;
 
                 _repository.Update(productToUpdate);
                 await _repository.SaveChangesAsync();
