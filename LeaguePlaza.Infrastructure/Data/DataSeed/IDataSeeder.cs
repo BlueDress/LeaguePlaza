@@ -6,6 +6,8 @@
 
         Task EnsureDefaultLeagueMasterSeedAsync();
 
+        Task SeedTestQuestGiversAsync();
+
         Task SeedTestDataAsync();
     }
 }

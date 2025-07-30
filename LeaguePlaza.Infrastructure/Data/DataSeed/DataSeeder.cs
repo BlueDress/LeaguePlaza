@@ -52,8 +52,8 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
         {
             var defaultLeagueMaster = new ApplicationUser
             {
-                UserName = "LeagueMaster@leaguemaster.com",
-                Email = "LeagueMaster@leaguemaster.com",
+                UserName = "LeagueMaster@leagueplaza.com",
+                Email = "LeagueMaster@leagueplaza.com",
                 EmailConfirmed = true,
             };
 
@@ -64,16 +64,43 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
             }
         }
 
+        public async Task SeedTestQuestGiversAsync()
+        {
+            var questgiverOne = new ApplicationUser
+            {
+                UserName = "questgiver1@leagueplaza.com",
+                Email = "questgiver1@leagueplaza.com",
+                EmailConfirmed = true,
+            };
+
+            if (await _userManager.FindByEmailAsync(questgiverOne.Email) == null)
+            {
+                await _userManager.CreateAsync(questgiverOne, "QuestGiver1@123");
+                await _userManager.AddToRoleAsync(questgiverOne, QuestGiver);
+            }
+
+            var questgiverTwo = new ApplicationUser
+            {
+                UserName = "questgiver2@leagueplaza.com",
+                Email = "questgiver2@leagueplaza.com",
+                EmailConfirmed = true,
+            };
+
+            if (await _userManager.FindByEmailAsync(questgiverTwo.Email) == null)
+            {
+                await _userManager.CreateAsync(questgiverTwo, "QuestGiver2@123");
+                await _userManager.AddToRoleAsync(questgiverTwo, QuestGiver);
+            }
+        }
+
         public async Task SeedTestDataAsync()
         {
-            var adventurers = _applicationDbContext.UserRoles.Where(ur => ur.RoleId == _roleManager.Roles.First(r => r.Name == Adventurer).Id).ToArray();
-
             if (!_applicationDbContext.Quests.Any())
             {
                 var testQuests = new HashSet<QuestEntity>();
                 var questGivers = _applicationDbContext.UserRoles.Where(ur => ur.RoleId == _roleManager.Roles.First(r => r.Name == QuestGiver).Id).ToArray();
 
-                for (int i = 1; i <= 100; i++)
+                for (int i = 1; i <= 50; i++)
                 {
                     var newTestQuest = new QuestEntity
                     {
@@ -82,9 +109,9 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
                         Created = DateTime.Now.AddDays(-i),
                         RewardAmount = Math.Round((i + 7) / 17m, 2) * 100,
                         Type = i % 3 == 0 ? QuestType.MonsterHunt : i % 3 == 1 ? QuestType.Escort : QuestType.Gathering,
-                        Status = i % 9 == 0 ? QuestStatus.Accepted : QuestStatus.Posted,
+                        Status = QuestStatus.Posted,
                         CreatorId = questGivers[i % 2].UserId,
-                        AdventurerId = i % 9 == 0 ? adventurers[i % 2].UserId : null,
+                        AdventurerId = null,
                         ImageName = i % 3 == 0 ? DefaultQuestTypeImages["MonsterHunt"] : i % 3 == 1 ? DefaultQuestTypeImages["Escort"] : DefaultQuestTypeImages["Gathering"],
                     };
 
@@ -109,48 +136,6 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
                         ImageUrl = i % 3 == 0 ? DefaultMountTypeImages["Ground"] : i % 3 == 1 ? DefaultMountTypeImages["Flying"] : DefaultMountTypeImages["Aquatic"],
                         MountType = i % 3 == 0 ? MountType.Ground : i % 3 == 1 ? MountType.Flying : MountType.Aquatic,
                     };
-
-                    if (i % 3 == 0)
-                    {
-                        double rating = 0;
-
-                        for (int j = 0; j < adventurers.Length; j++)
-                        {
-                            newTestMount.MountRatings.Add(new MountRatingEntity()
-                            {
-                                Rating = (i + j) % 6,
-                                UserId = adventurers[j].UserId,
-                            });
-
-                            rating += (i + j) % 6;
-
-                            newTestMount.MountRentals.Add(new MountRentalEntity()
-                            {
-                                StartDate = DateTime.UtcNow.AddMonths(j).AddDays(i),
-                                EndDate = DateTime.UtcNow.AddMonths(j).AddDays(i + j),
-                                UserId = adventurers[j].UserId,
-                            });
-                        }
-
-                        newTestMount.Rating = Math.Round(rating / adventurers.Length, 2);
-                    }
-                    else if (i % 3 == 1)
-                    {
-                        newTestMount.MountRatings.Add(new MountRatingEntity()
-                        {
-                            Rating = i % 6,
-                            UserId = adventurers[i % 2].UserId,
-                        });
-
-                        newTestMount.Rating = Math.Round(i % 6d, 2);
-
-                        newTestMount.MountRentals.Add(new MountRentalEntity()
-                        {
-                            StartDate = DateTime.UtcNow.AddMonths(i % 2).AddDays(i),
-                            EndDate = DateTime.UtcNow.AddMonths(i % 2).AddDays(i + i % 2),
-                            UserId = adventurers[i % 2].UserId,
-                        });
-                    }
 
                     testMounts.Add(newTestMount);
                 }
