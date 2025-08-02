@@ -14,20 +14,21 @@ namespace LeaguePlaza.Infrastructure.Attributes
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value is IFormFile file)
+            var file = value as IFormFile;
+
+            if (file != null && file.Length <= _maxFileSize)
             {
-                if (file.Length > _maxFileSize)
-                {
-                    var logger = validationContext.GetService<ILogger<MaxFileSizeAttribute>>();
-
-                    logger?.LogError(FailedAt, nameof(IsValid));
-                    logger?.LogError(MaxFileSizeErrorMessage, file.Length);
-
-                    return new ValidationResult(GenericErrorMessage);
-                }
+                return ValidationResult.Success;
             }
+            else
+            {
+                var logger = validationContext.GetService<ILogger<MaxFileSizeAttribute>>();
 
-            return ValidationResult.Success;
+                logger?.LogError(FailedAt, nameof(IsValid));
+                logger?.LogError(MaxFileSizeErrorMessage, file?.Length);
+
+                return new ValidationResult(GenericErrorMessage);
+            }
         }
     }
 }

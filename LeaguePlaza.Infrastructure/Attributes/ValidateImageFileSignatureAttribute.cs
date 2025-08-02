@@ -19,26 +19,28 @@ namespace LeaguePlaza.Infrastructure.Attributes
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value is IFormFile file)
+            var file = value as IFormFile;
+
+            if (file != null && FileIsValid(file))
             {
-                if (!FileIsValid(file))
-                {
-                    var logger = validationContext.GetService<ILogger<ValidateImageFileSignatureAttribute>>();
-
-                    logger?.LogError(FailedAt, nameof(IsValid));
-                    logger?.LogError(ValidateImageFileSignatureErrorMessage);
-
-                    return new ValidationResult(GenericErrorMessage);
-                }
+                return ValidationResult.Success;
             }
+            else
+            {
+                var logger = validationContext.GetService<ILogger<ValidateImageFileSignatureAttribute>>();
 
-            return ValidationResult.Success;
+                logger?.LogError(FailedAt, nameof(IsValid));
+                logger?.LogError(ValidateImageFileSignatureErrorMessage);
+
+                return new ValidationResult(GenericErrorMessage);
+            }
         }
 
         public static bool FileIsValid(IFormFile file)
         {
             using var reader = new BinaryReader(file.OpenReadStream());
             var headerBytes = reader.ReadBytes(ImageFileSignatures.Max(s => s.Length));
+
             return ImageFileSignatures.Any(s => headerBytes.Take(s.Length).SequenceEqual(s));
         }
     }
