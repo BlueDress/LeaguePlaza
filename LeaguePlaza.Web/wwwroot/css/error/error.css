@@ -1,0 +1,24 @@
+﻿.error-meassage-holder {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+    .error-meassage-holder > * {
+        flex: 1 0 100%;
+        text-align: center;
+    }
+
+    .error-meassage-holder img {
+        margin-top: 1rem;
+    }
+
+@media (min-width: 600px) {
+    .error-meassage-holder {
+        font-size: 16px;
+    }
+
+        .error-meassage-holder img {
+            width: 50%;
+        }
+}

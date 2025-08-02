@@ -3,19 +3,18 @@ using LeaguePlaza.Core.Features.Mount.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Mount.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Mount.Models.RequestData;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using static LeaguePlaza.Common.Constants.MountConstants;
 using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.MountConstants;
 using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Mount
 {
-    [ApiController]
-    [Route("api/[controller]")]
     [Authorize(Roles = Adventurer)]
-    public class MountApiController(IMountService mountService, ILogger<MountController> logger) : Controller
+    public class MountApiController(IMountService mountService, ILogger<MountController> logger) : BaseApiController
     {
         private readonly IMountService _mountService = mountService;
         private readonly ILogger<MountController> _logger = logger;
@@ -43,7 +42,14 @@ namespace LeaguePlaza.Web.Controllers.Mount
         {
             try
             {
-                MountRentalResultDto mountRentResult = await _mountService.RentMountAsync(rentMountDto);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return BadRequest();
+                }
+
+                MountRentalResultDto mountRentResult = await _mountService.RentMountAsync(rentMountDto, currentUserId);
 
                 return Ok(mountRentResult);
             }
@@ -61,7 +67,14 @@ namespace LeaguePlaza.Web.Controllers.Mount
         {
             try
             {
-                string response = await _mountService.AddOrUpadeMountRatingAsync(rateMountDto);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return BadRequest();
+                }
+
+                string response = await _mountService.AddOrUpadeMountRatingAsync(rateMountDto, currentUserId);
 
                 return Ok(response);
             }
@@ -97,7 +110,14 @@ namespace LeaguePlaza.Web.Controllers.Mount
         {
             try
             {
-                MountRentHistoryViewModel mountRentHistoryViewModel = await _mountService.CreateMountRentHistoryViewModelAsync(pageNumber);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new MountRentHistoryViewModel());
+                }
+
+                MountRentHistoryViewModel mountRentHistoryViewModel = await _mountService.CreateMountRentHistoryViewModelAsync(currentUserId, pageNumber);
 
                 return PartialView(MountRentHistoryContainerWithPagination, mountRentHistoryViewModel);
             }

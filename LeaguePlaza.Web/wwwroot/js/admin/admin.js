@@ -9,18 +9,36 @@ function adminMain() {
     const mountTypeSelect = document.querySelector('#mount-type');
     const mountImageInput = document.querySelector('#image');
 
+    const productNameInput = document.querySelector('#product-name');
+    const productDescriptionTextarea = document.querySelector('#product-description');
+    const productPriceInput = document.querySelector('#product-price');
+    const productTypeSelect = document.querySelector('#product-type');
+    const productImageInput = document.querySelector('#product-image');
+
     const createMountForm = document.querySelector('#create-mount');
     const createMountBtn = document.querySelector('#create-mount-btn');
     const updateMountBtn = document.querySelector('#update-mount-btn');
+
+    const createProductForm = document.querySelector('#create-product');
+    const createProductBtn = document.querySelector('#create-product-btn');
+    const updateProductBtn = document.querySelector('#update-product-btn');
+
     const cardsAndPaginationHolder = document.querySelector('#cards-and-pagination');
 
     const pageName = document.querySelector('.container').dataset.pageName;
 
     let mountId;
+    let productId;
 
     createMountForm?.addEventListener('submit', e => createMount(e));
     updateMountBtn?.addEventListener('click', e => updateMount(e));
+
+    createProductForm?.addEventListener('submit', e => createProduct(e));
+    updateProductBtn?.addEventListener('click', e => updateProduct(e));
+
     cardsAndPaginationHolder.addEventListener('click', e => handleMountButtonClick(e));
+    cardsAndPaginationHolder.addEventListener('click', e => handleProductButtonClick(e));
+    cardsAndPaginationHolder.addEventListener('change', e => handleOrderSelectClick(e));
     cardsAndPaginationHolder.addEventListener('click', e => handlePaginationClick(e));
 
     async function createMount(e) {
@@ -66,7 +84,7 @@ function adminMain() {
         });
 
         if (response.status == 200) {
-            createMountForm.removeAttribute('disabled');
+            createMountBtn.removeAttribute('disabled');
             const cardsAndPaginationHolderView = await response.text();
             cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
             ShowFormMessage('success-message', 'The mount was updated successfully');
@@ -130,10 +148,147 @@ function adminMain() {
         }
     }
 
+    async function handleOrderSelectClick(e) {
+        if (e.target) {
+            if (e.target.classList.contains('order-status-js')) {
+                await updateOrderStatus(e);
+            }
+        }
+    }
+
+    async function updateOrderStatus(e) {
+        const updateOrderDto = {
+            id : e.target.dataset.orderId,
+            status : e.target.value
+        };
+
+        const response = await fetch(baseUrl + 'updateorderstatus', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(updateOrderDto)
+        });
+
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+        }
+    }
+
+    async function createProduct(e) {
+        createProductBtn.setAttribute('disabled', 'disabled');
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('name', productNameInput.value);
+        formData.append('description', productDescriptionTextarea.value);
+        formData.append('price', productPriceInput.value);
+        formData.append('productType', productTypeSelect.value);
+        formData.append('image', productImageInput?.files[0]);
+
+        const response = await fetch(baseUrl + 'createproduct', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+            ShowFormMessage('success-message', 'The product was created successfully');
+            ClearProductInputs();
+        }
+
+        createProductBtn.removeAttribute('disabled');
+    }
+
+    async function updateProduct(e) {
+        updateProductBtn.setAttribute('disabled', 'disabled');
+
+        const formData = new FormData();
+        formData.append('id', productId);
+        formData.append('name', productNameInput.value);
+        formData.append('description', productDescriptionTextarea.value);
+        formData.append('price', productPriceInput.value);
+        formData.append('productType', productTypeSelect.value);
+        formData.append('image', productImageInput?.files[0]);
+
+        const response = await fetch(baseUrl + 'updateproduct', {
+            method: 'PUT',
+            body: formData,
+        });
+
+        if (response.status == 200) {
+            createProductBtn.removeAttribute('disabled');
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+            ShowFormMessage('success-message', 'The product was updated successfully');
+            ClearProductInputs();
+        }
+    }
+
+    async function handleProductButtonClick(e) {
+        if (e.target) {
+            if (e.target.classList.contains('admin-product-edit-button-js')) {
+                productEditBtnClick(e);
+            }
+            if (e.target.classList.contains('admin-product-delete-button-js')) {
+                await deleteProduct(e);
+            }
+        }
+    }
+
+    function productEditBtnClick(e) {
+        createProductForm.scrollIntoView({ behavior: 'smooth' });
+
+        const productInfoEl = e.target.closest('.admin-product-card-js').querySelector('.admin-product-card-info-js');
+
+        productNameInput.value = productInfoEl.children[0].textContent;
+        productDescriptionTextarea.value = productInfoEl.children[1].textContent;
+        productPriceInput.value = parseFloat(productInfoEl.children[2].textContent.replace(',', '.'));
+        productTypeSelect.value = getProductTypeValue(productInfoEl.children[3].textContent);
+        productId = e.target.dataset.productId;
+
+        createProductBtn.setAttribute('disabled', 'disabled');
+        updateProductBtn.removeAttribute('disabled')
+    }
+
+    function getProductTypeValue(productType) {
+        let value;
+
+        switch (productType) {
+            case 'Healing': value = 0; break;
+            case 'Enhancement': value = 1; break;
+            case 'Impairment': value = 2; break;
+        }
+
+        return value;
+    }
+
+    async function deleteProduct(e) {
+        const productId = e.target.dataset.productId;
+
+        const response = await fetch(baseUrl + 'deleteproduct', {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({ id: productId })
+        });
+
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+            ClearProductInputs();
+        }
+    }
+
     function handlePaginationClick(e) {
         if (e.target && e.target.classList.contains('pagination-button-js')) {
             switch (pageName) {
-                case 'mount-admin': getMountPageResults(e);
+                case 'mount-admin': getMountPageResults(e); break;
+                case 'order-admin': getOrderPageResults(e); break;
+                case 'product-admin': getProductPageResults(e); break;
             }
         }
     }
@@ -144,6 +299,42 @@ function adminMain() {
         const pageNumber = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;
 
         const response = await fetch(baseUrl + 'getpageresults' + `?pageNumber=${pageNumber}`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+            },
+        });
+
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+        }
+    }
+
+    async function getOrderPageResults(e) {
+        e.preventDefault();
+
+        const pageNumber = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;
+
+        const response = await fetch(baseUrl + 'getorderpageresults' + `?pageNumber=${pageNumber}`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+            },
+        });
+
+        if (response.status == 200) {
+            const cardsAndPaginationHolderView = await response.text();
+            cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
+        }
+    }
+
+    async function getProductPageResults(e) {
+        e.preventDefault();
+
+        const pageNumber = e.target.classList.contains('pagination-button-js') ? e.target.dataset.value : document.querySelector('.active-pagination')?.dataset.value ?? 1;
+
+        const response = await fetch(baseUrl + 'getproductpageresults' + `?pageNumber=${pageNumber}`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
@@ -175,5 +366,13 @@ function adminMain() {
         mountRentPriceInput.value = '';
         mountTypeSelect.value = '';
         mountImageInput.value = '';
+    }
+
+    function ClearProductInputs() {
+        productNameInput.value = '';
+        productDescriptionTextarea.value = '';
+        productPriceInput.value = '';
+        productTypeSelect.value = '';
+        productImageInput.value = '';
     }
 }

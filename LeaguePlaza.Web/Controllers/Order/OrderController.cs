@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Core.Features.Order.Contracts;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ using static LeaguePlaza.Common.Constants.UserRoleConstants;
 namespace LeaguePlaza.Web.Controllers.Order
 {
     [Authorize(Roles = Adventurer)]
-    public class OrderController(IOrderService orderService, ILogger<OrderController> logger) : Controller
+    public class OrderController(IOrderService orderService, ILogger<OrderController> logger) : BaseController
     {
         private readonly IOrderService _orderService = orderService;
         private readonly ILogger<OrderController> _logger = logger;
@@ -18,7 +19,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                OrderHistoryViewModel orderHistoryViewModel = await _orderService.CreateOrderHistoryViewModelAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new OrderHistoryViewModel());
+                }
+
+                OrderHistoryViewModel orderHistoryViewModel = await _orderService.CreateOrderHistoryViewModelAsync(currentUserId);
 
                 return View(orderHistoryViewModel);
             }
@@ -35,7 +43,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new CartViewModel());
+                }
+
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync(currentUserId);
 
                 return View(cartViewModel);
             }
@@ -52,7 +67,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                OrderViewModel orderViewModel = await _orderService.CreateOrderViewModelAsync(id);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new OrderViewModel());
+                }
+
+                OrderViewModel orderViewModel = await _orderService.CreateOrderViewModelAsync(id, currentUserId);
 
                 return View(orderViewModel);
             }

@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @* TODO: Add SEO *@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
@@ -28,28 +27,64 @@
 
             <div class="links-holder">
                 <ul id="nav-links" class="nav-links">
-                    <li>
-                        <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li>
-                        <a asp-area="" asp-controller="Quest" asp-action="Index">Quests</a>
-                    </li>
+                    @if (!User.IsInRole(LeagueMaster))
+                    {
+                        <li>
+                            <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li>
+                            <a class="nav-parent-link" asp-area="" asp-controller="Quest" asp-action="Index">
+                                <span>Quests</span>
+                                <span class="nav-sub-menu-arrow-js"><i class="fa-solid fa-chevron-down"></i></span>
+                                <span class="nav-sub-menu-arrow-js display-none"><i class="fa-solid fa-chevron-up"></i></span>
+                            </a>
+                            <ul class="nav-sub-links nav-sub-links-js">
+                                <li>
+                                    <a class="nav-sub-link-js" asp-area="" asp-controller="Quest" asp-action="MyQuests">My Quests</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
                     @if (User.IsInRole(Adventurer))
                     {
                         <li>
-                            <a asp-area="" asp-controller="Mount" asp-action="Index">Mounts</a>
+                            <a class="nav-parent-link" asp-area="" asp-controller="Mount" asp-action="Index">
+                                <span>Mounts</span>
+                                <span class="nav-sub-menu-arrow-js"><i class="fa-solid fa-chevron-down"></i></span>
+                                <span class="nav-sub-menu-arrow-js display-none"><i class="fa-solid fa-chevron-up"></i></span>
+                            </a>
+                            <ul class="nav-sub-links nav-sub-links-js">
+                                <li>
+                                    <a class="nav-sub-link-js" asp-area="" asp-controller="Mount" asp-action="MountRentHistory">Mount Rent History</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a asp-area="" asp-controller="Product" asp-action="Index">Products</a>
                         </li>
                         <li>
-                            <a asp-area="" asp-controller="Order" asp-action="Index">Order History</a>
+                            <a class="nav-parent-link" asp-area="" asp-controller="Order" asp-action="Index">Order History</a>
                         </li>
                     }
                     @if (User.IsInRole(LeagueMaster))
                     {
                         <li>
-                            <a asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin Panel</a>
+                            <a asp-area="Admin" asp-controller="Admin" asp-action="Index">
+                                <span>Admin Panel</span>
+                                <span class="nav-sub-menu-arrow-js"><i class="fa-solid fa-chevron-down"></i></span>
+                                <span class="nav-sub-menu-arrow-js display-none"><i class="fa-solid fa-chevron-up"></i></span>
+                            </a>
+                            <ul class="nav-sub-links nav-sub-links-js">
+                                <li>
+                                    <a class="nav-sub-link-js" asp-area="Admin" asp-controller="Admin" asp-action="MountAdmin">Manage Mounts</a>
+                                </li>
+                                <li>
+                                    <a class="nav-sub-link-js" asp-area="Admin" asp-controller="Admin" asp-action="ProductAdmin">Manage Products</a>
+                                </li>
+                                <li>
+                                    <a class="nav-sub-link-js" asp-area="Admin" asp-controller="Admin" asp-action="OrderAdmin">Manage Orders</a>
+                                </li>
+                            </ul>
                         </li>
                     }
                 </ul>

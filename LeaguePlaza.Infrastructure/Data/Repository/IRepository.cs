@@ -5,10 +5,6 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
 {
     public interface IRepository
     {
-        Task<IEnumerable<T>> GetAllAsync<T>() where T : class;
-
-        Task<IEnumerable<T>> GetAllReadOnlyAsync<T>() where T : class;
-
         Task<int> GetCountAsync<T>(Expression<Func<T, bool>> filterCondition) where T : class;
 
         Task<T?> FindByIdAsync<T>(object id) where T : class;

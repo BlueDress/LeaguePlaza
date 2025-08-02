@@ -1,23 +1,21 @@
 ﻿using LeaguePlaza.Core.Features.Product.Contracts;
 using LeaguePlaza.Core.Features.Product.Models.RequestData;
 using LeaguePlaza.Core.Features.Product.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using static LeaguePlaza.Common.Constants.ProductConstants;
 using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.ProductConstants;
 using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Product
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductApiController(IProductService productService, ILogger<ProductController> logger) : Controller
+    [Authorize(Roles = Adventurer)]
+    public class ProductApiController(IProductService productService, ILogger<ProductController> logger) : BaseApiController
     {
         private readonly IProductService _productService = productService;
         private readonly ILogger<ProductController> _logger = logger;
 
-        [Authorize(Roles = Adventurer)]
         [HttpGet("filterandsortproducts")]
         public async Task<IActionResult> FilterAndSortProducts([FromQuery] FilterAndSortProductsRequestData filterAndSortProductsRequestData)
         {

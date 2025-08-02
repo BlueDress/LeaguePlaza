@@ -1,3 +1,28 @@
 ﻿@using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly
 
-@model IEnumerable<OrderDto> 
+@model IEnumerable<OrderDto>
+
+<div>
+    <div class="admin-order-card">
+        <div>Order Id</div>
+        <div>Date Created</div>
+        <div>Date Completed</div>
+        <div>Order Status</div>
+    </div>
+    @foreach (var order in Model)
+    {
+        <div class="admin-order-card">
+            <div>@order.Id</div>
+            <div>@order.DateCreated</div>
+            <div>@order.DateCompleted</div>
+            <div>
+                <select class="order-status order-status-js" name="order-status" data-order-id="@order.Id">
+                    <option value="" disabled selected>@order.Status</option>
+                    <option value="0">Pending</option>
+                    <option value="1">In Progress</option>
+                    <option value="2">Completed</option>
+                </select>
+            </div>
+        </div>
+    }
+</div>

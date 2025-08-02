@@ -8,8 +8,6 @@ using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
 using LeaguePlaza.Infrastructure.Dropbox.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
 
 using static LeaguePlaza.Common.Constants.QuestConstants;
@@ -17,18 +15,16 @@ using static LeaguePlaza.Common.Constants.PaginationConstants;
 
 namespace LeaguePlaza.Core.Features.Quest.Services
 {
-    public class QuestService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IQuestService
+    public class QuestService(IRepository repository, IDropboxService dropboxService) : IQuestService
     {
         private readonly Dictionary<string, string> DefaultQuestTypeImageUrls = new()
         {
-            { "1", MonsterHuntDefaultImageUrl },
-            { "2", GatheringDefaultImageUrl },
-            { "3", EscortDefaultImageUrl },
+            { "0", MonsterHuntDefaultImageUrl },
+            { "1", GatheringDefaultImageUrl },
+            { "2", EscortDefaultImageUrl },
         };
 
         private readonly IRepository _repository = repository;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IDropboxService _dropboxService = dropboxService;
 
         public async Task<QuestsViewModel> CreateAvailableQuestsViewModelAsync()
@@ -59,128 +55,105 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             };
         }
 
-        public async Task<QuestsViewModel> CreateUserQuestsViewModelAsync()
+        public async Task<QuestsViewModel> CreateUserQuestsViewModelAsync(string currentUserId)
         {
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+            IEnumerable<QuestEntity> userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, object>(PageOne, QuestsPerPage, true, q => q.Created, q => q.CreatorId == currentUserId || q.AdventurerId == currentUserId);
+            int totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.CreatorId == currentUserId || q.AdventurerId == currentUserId);
 
-            if (currentUser != null)
+            return new QuestsViewModel()
             {
-                IEnumerable<QuestEntity> userQuests = await _repository.FindSpecificCountOrderedReadOnlyAsync<QuestEntity, object>(PageOne, QuestsPerPage, true, q => q.Created, q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
-                int totalResults = await _repository.GetCountAsync<QuestEntity>(q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id);
-
-                return new QuestsViewModel()
+                Quests = userQuests.Select(q => new QuestDto
                 {
-                    Quests = userQuests.Select(q => new QuestDto
-                    {
-                        Id = q.Id,
-                        Title = q.Title,
-                        Description = string.IsNullOrWhiteSpace(q.Description) ? NoQuestDescriptionAvailable : q.Description,
-                        Created = q.Created,
-                        RewardAmount = q.RewardAmount,
-                        Type = q.Type.ToString(),
-                        Status = q.Status.ToString(),
-                        CreatorId = q.CreatorId,
-                        AdventurerId = q.AdventurerId,
-                        ShowExtraButtons = true,
-                        ImageUrl = q.ImageName,
-                    }),
-                    Pagination = new PaginationViewModel()
-                    {
-                        CurrentPage = PageOne,
-                        TotalPages = (int)Math.Ceiling((double)totalResults / QuestsPerPage),
-                    },
-                };
-            }
-            else
-            {
-                return new QuestsViewModel();
-            }
+                    Id = q.Id,
+                    Title = q.Title,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? NoQuestDescriptionAvailable : q.Description,
+                    Created = q.Created,
+                    RewardAmount = q.RewardAmount,
+                    Type = q.Type.ToString(),
+                    Status = q.Status.ToString(),
+                    CreatorId = q.CreatorId,
+                    AdventurerId = q.AdventurerId,
+                    ShowExtraButtons = true,
+                    ImageUrl = q.ImageName,
+                }),
+                Pagination = new PaginationViewModel()
+                {
+                    CurrentPage = PageOne,
+                    TotalPages = (int)Math.Ceiling((double)totalResults / QuestsPerPage),
+                },
+            };
         }
 
-        public async Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id)
+        public async Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id, string currentUserId)
         {
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+            var quest = await _repository.FindByIdAsync<QuestEntity>(id) ?? new();
+            IEnumerable<QuestEntity> recommendedQuests = await _repository.FindSpecificCountReadOnlyAsync<QuestEntity>(RecommendedQuestsCount, q => q.Id != id && q.Type == quest.Type && q.Status == QuestStatus.Posted);
 
-            if (currentUser != null)
+            return new ViewQuestViewModel()
             {
-                var quest = await _repository.FindByIdAsync<QuestEntity>(id) ?? new();
-                IEnumerable<QuestEntity> recommendedQuests = await _repository.FindSpecificCountReadOnlyAsync<QuestEntity>(RecommendedQuestsCount, q => q.Id != id && q.Type == quest.Type && q.Status == QuestStatus.Posted);
-
-                return new ViewQuestViewModel()
+                Quest = new QuestDto()
                 {
-                    Quest = new QuestDto()
-                    {
-                        Id = id,
-                        Title = quest.Title,
-                        Description = string.IsNullOrWhiteSpace(quest.Description) ? NoQuestDescriptionAvailable : quest.Description,
-                        Created = quest.Created,
-                        RewardAmount = quest.RewardAmount,
-                        Type = quest.Type.ToString(),
-                        Status = quest.Status.ToString(),
-                        CreatorId = quest.CreatorId,
-                        AdventurerId = quest.AdventurerId,
-                        ImageUrl = quest.ImageName,
-                    },
-                    RecommendedQuests = recommendedQuests.Select(q => new QuestDto
-                    {
-                        Id = q.Id,
-                        Title = q.Title,
-                        Description = string.IsNullOrWhiteSpace(q.Description) ? NoQuestDescriptionAvailable : q.Description,
-                        Created = q.Created,
-                        RewardAmount = q.RewardAmount,
-                        Type = q.Type.ToString(),
-                        Status = q.Status.ToString(),
-                        CreatorId = q.CreatorId,
-                        AdventurerId = q.AdventurerId,
-                        ImageUrl = q.ImageName,
-                    }),
-                    CurrentUserId = currentUser.Id,
-                };
-            }
-            else
-            {
-                return new ViewQuestViewModel();
-            }
+                    Id = id,
+                    Title = quest.Title,
+                    Description = string.IsNullOrWhiteSpace(quest.Description) ? NoQuestDescriptionAvailable : quest.Description,
+                    Created = quest.Created,
+                    RewardAmount = quest.RewardAmount,
+                    Type = quest.Type.ToString(),
+                    Status = quest.Status.ToString(),
+                    CreatorId = quest.CreatorId,
+                    AdventurerId = quest.AdventurerId,
+                    ImageUrl = quest.ImageName,
+                },
+                RecommendedQuests = recommendedQuests.Select(q => new QuestDto
+                {
+                    Id = q.Id,
+                    Title = q.Title,
+                    Description = string.IsNullOrWhiteSpace(q.Description) ? NoQuestDescriptionAvailable : q.Description,
+                    Created = q.Created,
+                    RewardAmount = q.RewardAmount,
+                    Type = q.Type.ToString(),
+                    Status = q.Status.ToString(),
+                    CreatorId = q.CreatorId,
+                    AdventurerId = q.AdventurerId,
+                    ImageUrl = q.ImageName,
+                }),
+                CurrentUserId = currentUserId,
+            };
         }
 
-        public async Task CreateQuestAsync(CreateQuestDto createQuestDto)
+        public async Task CreateQuestAsync(CreateQuestDto createQuestDto, string currentUserId)
         {
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
+            var dateCreated = DateTime.UtcNow;
 
-            if (currentUser != null)
+            string imageUrl = string.Empty;
+
+            if (createQuestDto.Image != null)
             {
-                var dateCreated = DateTime.Now;
+                string accessToken = await _dropboxService.GetAccessToken();
 
-                string imageUrl = string.Empty;
-
-                if (createQuestDto.Image != null)
+                if (!string.IsNullOrEmpty(accessToken))
                 {
-                    string accessToken = await _dropboxService.GetAccessToken();
-
-                    if (!string.IsNullOrEmpty(accessToken))
-                    {
-                        string uploadPath = string.Format(ImageUploadPath, createQuestDto.Title, dateCreated.ToLongTimeString(), createQuestDto.Image.FileName);
-                        imageUrl = await _dropboxService.UploadImage(createQuestDto.Image, uploadPath, accessToken);
-                    }
+                    string uploadPath = string.Format(ImageUploadPath, createQuestDto.Title, dateCreated.ToLongTimeString(), createQuestDto.Image.FileName);
+                    imageUrl = await _dropboxService.UploadImage(createQuestDto.Image, uploadPath, accessToken);
                 }
-
-                imageUrl = string.IsNullOrEmpty(imageUrl) ? DefaultQuestTypeImageUrls[createQuestDto.Type] : imageUrl;
-
-                var newQuest = new QuestEntity()
-                {
-                    Title = createQuestDto.Title,
-                    Description = createQuestDto.Description,
-                    Created = dateCreated,
-                    RewardAmount = createQuestDto.RewardAmount,
-                    Type = (QuestType)Enum.Parse(typeof(QuestType), createQuestDto.Type),
-                    Status = QuestStatus.Posted,
-                    Creator = currentUser,
-                    ImageName = imageUrl,
-                };
-
-                await _repository.AddAsync(newQuest);
-                await _repository.SaveChangesAsync();
             }
+
+            imageUrl = string.IsNullOrEmpty(imageUrl) ? DefaultQuestTypeImageUrls[createQuestDto.Type] : imageUrl;
+
+            var newQuest = new QuestEntity()
+            {
+                Title = createQuestDto.Title,
+                Description = createQuestDto.Description,
+                Created = dateCreated,
+                RewardAmount = createQuestDto.RewardAmount,
+                Type = (QuestType)Enum.Parse(typeof(QuestType), createQuestDto.Type),
+                Status = QuestStatus.Posted,
+                CreatorId = currentUserId,
+                ImageName = imageUrl,
+            };
+
+            await _repository.AddAsync(newQuest);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task UpdateQuestAsync(UpdateQuestDataDto updateQuestDto)
@@ -215,15 +188,14 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             }
         }
 
-        public async Task AcceptQuestAsync(int id)
+        public async Task AcceptQuestAsync(int id, string currentUserId)
         {
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
             var questToAccept = await _repository.FindByIdAsync<QuestEntity>(id);
 
-            if (currentUser != null && questToAccept != null)
+            if (questToAccept != null)
             {
                 questToAccept.Status = QuestStatus.Accepted;
-                questToAccept.AdventurerId = currentUser.Id;
+                questToAccept.AdventurerId = currentUserId;
 
                 _repository.Update(questToAccept);
                 await _repository.SaveChangesAsync();
@@ -268,13 +240,10 @@ namespace LeaguePlaza.Core.Features.Quest.Services
             }
         }
 
-        public async Task<QuestsViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)
+        public async Task<QuestsViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData, string? currentUserId)
         {
-            // TODO: Refactor expression build and extract it in method
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
-
-            Expression<Func<QuestEntity, bool>> userFilterExpression = filterAndSortQuestsRequestData.PageIsMyQuests && currentUser != null
-                ? q => q.CreatorId == currentUser.Id || q.AdventurerId == currentUser.Id
+            Expression<Func<QuestEntity, bool>> userFilterExpression = filterAndSortQuestsRequestData.PageIsMyQuests && !string.IsNullOrWhiteSpace(currentUserId)
+                ? q => q.CreatorId == currentUserId || q.AdventurerId == currentUserId
                 : q => true;
 
             Expression<Func<QuestEntity, bool>> searchExpression = string.IsNullOrWhiteSpace(filterAndSortQuestsRequestData.SearchTerm)
@@ -283,7 +252,6 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             string[] statusFilters = filterAndSortQuestsRequestData.StatusFilters?.Split(',') ?? [];
 
-            // TODO: Replace Enum Parse with Try Parse and extract method
             Expression<Func<QuestEntity, bool>> statusFiltersExpression = statusFilters.Length != 0
                 ? q => statusFilters.Select(f => (QuestStatus)Enum.Parse(typeof(QuestStatus), f)).Contains(q.Status)
                 : q => true;

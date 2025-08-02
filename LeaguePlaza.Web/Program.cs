@@ -57,6 +57,7 @@ namespace LeaguePlaza.Web
                 var dataSeeder = scope.ServiceProvider.GetService<IDataSeeder>();
                 await dataSeeder!.EnsureRoleSeedAsync();
                 await dataSeeder!.EnsureDefaultLeagueMasterSeedAsync();
+                await dataSeeder!.SeedTestQuestGiversAsync();
                 await dataSeeder!.SeedTestDataAsync();
             }
 
@@ -66,8 +67,9 @@ namespace LeaguePlaza.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseExceptionHandler("/Error/Error500");
+                app.UseStatusCodePagesWithReExecute("/Error/Error404");
+
                 app.UseHsts();
             }
 
@@ -81,7 +83,7 @@ namespace LeaguePlaza.Web
 
             app.MapControllerRoute(
                 name: "areas",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                pattern: "{area:exists}/{controller=Admin}/{action=Index}/{id?}");
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
