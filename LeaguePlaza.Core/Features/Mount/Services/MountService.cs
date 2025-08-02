@@ -253,7 +253,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 await _repository.AddAsync(newMountRating);
             }
 
-            mountToRate.Rating = currentMountRatings.Average(mr => mr.Rating);
+            mountToRate.Rating = currentMountRatings.Any() ? currentMountRatings.Average(mr => mr.Rating) : rateMountDto.Rating;
 
             await _repository.SaveChangesAsync();
 
