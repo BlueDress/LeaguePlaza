@@ -1,12 +1,13 @@
 using LeaguePlaza.Core.Features.Home.Contracts;
 using LeaguePlaza.Core.Features.Home.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 
 using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Web.Controllers.Home
 {
-    public class HomeController(IHomeService homeService, ILogger<HomeController> logger) : Controller
+    public class HomeController(IHomeService homeService, ILogger<HomeController> logger) : BaseController
     {
         private readonly IHomeService _homeService = homeService;
         private readonly ILogger<HomeController> _logger = logger;

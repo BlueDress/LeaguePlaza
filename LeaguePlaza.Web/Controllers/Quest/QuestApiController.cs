@@ -2,18 +2,16 @@
 using LeaguePlaza.Core.Features.Quest.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Quest.Models.RequestData;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using static LeaguePlaza.Common.Constants.QuestConstants;
 using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.QuestConstants;
 using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Quest
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class QuestApiController(IQuestService questService, ILogger<QuestApiController> logger) : Controller
+    public class QuestApiController(IQuestService questService, ILogger<QuestApiController> logger) : BaseApiController
     {
         private readonly IQuestService _questService = questService;
         private readonly ILogger<QuestApiController> _logger = logger;

@@ -2,19 +2,18 @@
 using LeaguePlaza.Core.Features.Order.Models.Dtos.Create;
 using LeaguePlaza.Core.Features.Order.Models.Dtos.ReadOnly;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using static LeaguePlaza.Common.Constants.OrderConstants;
 using static LeaguePlaza.Common.Constants.ErrorConstants;
+using static LeaguePlaza.Common.Constants.OrderConstants;
 using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Order
 {
-    [ApiController]
-    [Route("api/[controller]")]
     [Authorize(Roles = Adventurer)]
-    public class OrderApiController(IOrderService orderService, ILogger<OrderController> logger) : Controller
+    public class OrderApiController(IOrderService orderService, ILogger<OrderController> logger) : BaseApiController
     {
         private readonly IOrderService _orderService = orderService;
         private readonly ILogger<OrderController> _logger = logger;

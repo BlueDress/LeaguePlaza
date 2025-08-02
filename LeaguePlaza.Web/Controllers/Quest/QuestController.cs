@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Core.Features.Quest.Contracts;
 using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,7 @@ using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Quest
 {
-    public class QuestController(IQuestService questService, ILogger<QuestController> logger) : Controller
+    public class QuestController(IQuestService questService, ILogger<QuestController> logger) : BaseController
     {
         private readonly IQuestService _questService = questService;
         private readonly ILogger<QuestController> _logger = logger;

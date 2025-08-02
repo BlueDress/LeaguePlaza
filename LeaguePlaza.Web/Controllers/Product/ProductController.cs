@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Core.Features.Product.Contracts;
 using LeaguePlaza.Core.Features.Product.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +9,12 @@ using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Product
 {
-    public class ProductController(IProductService productService, ILogger<ProductController> logger) : Controller
+    [Authorize(Roles = Adventurer)]
+    public class ProductController(IProductService productService, ILogger<ProductController> logger) : BaseController
     {
         private readonly IProductService _productService = productService;
         private readonly ILogger<ProductController> _logger = logger;
 
-        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> Index()
         {
             try
@@ -31,7 +32,6 @@ namespace LeaguePlaza.Web.Controllers.Product
             }
         }
 
-        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> ViewProduct(int id)
         {
             try

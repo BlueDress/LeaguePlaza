@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Core.Features.Order.Contracts;
 using LeaguePlaza.Core.Features.Order.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ using static LeaguePlaza.Common.Constants.UserRoleConstants;
 namespace LeaguePlaza.Web.Controllers.Order
 {
     [Authorize(Roles = Adventurer)]
-    public class OrderController(IOrderService orderService, ILogger<OrderController> logger) : Controller
+    public class OrderController(IOrderService orderService, ILogger<OrderController> logger) : BaseController
     {
         private readonly IOrderService _orderService = orderService;
         private readonly ILogger<OrderController> _logger = logger;

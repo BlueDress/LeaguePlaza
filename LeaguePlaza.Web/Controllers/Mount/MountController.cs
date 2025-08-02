@@ -1,5 +1,6 @@
 ﻿using LeaguePlaza.Core.Features.Mount.Contracts;
 using LeaguePlaza.Core.Features.Mount.Models.ViewModels;
+using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +9,12 @@ using static LeaguePlaza.Common.Constants.UserRoleConstants;
 
 namespace LeaguePlaza.Web.Controllers.Mount
 {
-    public class MountController(IMountService mountService, ILogger<MountController> logger) : Controller
+    [Authorize(Roles = Adventurer)]
+    public class MountController(IMountService mountService, ILogger<MountController> logger) : BaseController
     {
         private readonly IMountService _mountService = mountService;
         private readonly ILogger<MountController> _logger = logger;
 
-        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> Index()
         {
             try
@@ -31,7 +32,6 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
         }
 
-        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> ViewMount(int id)
         {
             try
@@ -49,7 +49,6 @@ namespace LeaguePlaza.Web.Controllers.Mount
             }
         }
 
-        [Authorize(Roles = Adventurer)]
         public async Task<IActionResult> MountRentHistory()
         {
             try
