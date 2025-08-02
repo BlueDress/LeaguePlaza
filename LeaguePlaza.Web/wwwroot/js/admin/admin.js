@@ -286,9 +286,9 @@ function adminMain() {
     function handlePaginationClick(e) {
         if (e.target && e.target.classList.contains('pagination-button-js')) {
             switch (pageName) {
-                case 'mount-admin': getMountPageResults(e);
-                case 'order-admin': getOrderPageResults(e);
-                case 'product-admin': getProductPageResults(e);
+                case 'mount-admin': getMountPageResults(e); break;
+                case 'order-admin': getOrderPageResults(e); break;
+                case 'product-admin': getProductPageResults(e); break;
             }
         }
     }
