@@ -26,6 +26,5 @@
         public const string MountRentFailMessage = "The mount is not available for the chosen interval";
 
         public const string MountRateSuccessMessage = "Mount rated successfully";
-
     }
 }

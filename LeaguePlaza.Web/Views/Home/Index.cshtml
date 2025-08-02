@@ -30,7 +30,7 @@
         @if (Model.LatestQuests.Count() > 0)
         {
             <h3>See the latest quests</h3>
-            <partial name="~/Views/Quest/Partials/_QuestCardsContainer.cshtml" model="@Model.LatestQuests"></partial>
+            <partial name="~/Views/Quest/Partials/_QuestCardsContainer.cshtml" model="@Model.LatestQuests" />
             <div class="view-all-link"><a asp-controller="Quest" asp-action="Index">View All</a></div>
         }
         @if (User.IsInRole(Adventurer))
@@ -38,14 +38,14 @@
             if (Model.LatestMounts.Count() > 0)
             {
                 <h3>Check our mounts</h3>
-                <partial name="~/Views/Mount/Partials/_MountCardsContainer.cshtml" model="@Model.LatestMounts"></partial>
+                <partial name="~/Views/Mount/Partials/_MountCardsContainer.cshtml" model="@Model.LatestMounts" />
                 <div class="view-all-link"><a asp-controller="Mount" asp-action="Index">View All</a></div>
             }
 
             if (Model.CheapestProducts.Count() > 0)
             {
                 <h3>Check our products</h3>
-                <partial name="~/Views/Product/Partials/_ProductCardsContainer.cshtml" model="@Model.CheapestProducts"></partial>
+                <partial name="~/Views/Product/Partials/_ProductCardsContainer.cshtml" model="@Model.CheapestProducts" />
                 <div class="view-all-link"><a asp-controller="Product" asp-action="Index">View All</a></div>
             }
         }

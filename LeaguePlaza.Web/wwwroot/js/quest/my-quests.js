@@ -267,8 +267,6 @@ function myQuestsMain() {
             body: JSON.stringify({ id: questId })
         });
 
-        // TODO: handle response from server
-
         if (response.status == 200) {
             const cardsAndPaginationHolderView = await response.text();
             cardsAndPaginationHolder.innerHTML = cardsAndPaginationHolderView;
@@ -287,8 +285,6 @@ function myQuestsMain() {
             },
             body: JSON.stringify({ id: questId })
         });
-
-        // TODO: handle response from server
 
         if (response.status === 200) {
             const cardsAndPaginationHolderView = await response.text();
@@ -309,8 +305,6 @@ function myQuestsMain() {
             body: JSON.stringify({ id: questId })
         });
 
-        // TODO: handle response from server
-
         if (response.status == 200) {
             e.target.parentElement.appendChild(createElement('button', 'Abandon', { class: 'abandon-btn abandon-btn-js', type: 'button' }));
             e.target.parentElement.removeChild(e.target);
@@ -327,8 +321,6 @@ function myQuestsMain() {
             },
             body: JSON.stringify({ id: questId })
         });
-
-        // TODO: handle response from server
 
         if (response.status == 200) {
             e.target.parentElement.appendChild(createElement('button', 'Accept', { class: 'accept-btn accept-btn-js', type: 'button' }));

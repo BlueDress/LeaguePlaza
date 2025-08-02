@@ -270,7 +270,6 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
         public async Task<QuestsViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData)
         {
-            // TODO: Refactor expression build and extract it in method
             ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
 
             Expression<Func<QuestEntity, bool>> userFilterExpression = filterAndSortQuestsRequestData.PageIsMyQuests && currentUser != null
@@ -283,7 +282,6 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             string[] statusFilters = filterAndSortQuestsRequestData.StatusFilters?.Split(',') ?? [];
 
-            // TODO: Replace Enum Parse with Try Parse and extract method
             Expression<Func<QuestEntity, bool>> statusFiltersExpression = statusFilters.Length != 0
                 ? q => statusFilters.Select(f => (QuestStatus)Enum.Parse(typeof(QuestStatus), f)).Contains(q.Status)
                 : q => true;
