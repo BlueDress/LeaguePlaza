@@ -5,9 +5,16 @@
 <div class="container" data-page-name="order-admin">
     <h1>Manage orders</h1>
 
-    <div id="cards-and-pagination">
-        <partial name="~/Areas/Admin/Views/Partials/_OrderAdminCardsContainerWithPagination.cshtml" model="@Model" />
-    </div>
+    @if (Model.Orders.Any())
+    {
+        <div id="cards-and-pagination">
+            <partial name="~/Areas/Admin/Views/Partials/_OrderAdminCardsContainerWithPagination.cshtml" model="@Model" />
+        </div>
+    }
+    else
+    {
+        <p>There are no orders</p>
+    }
 </div>
 
 @section Styles
