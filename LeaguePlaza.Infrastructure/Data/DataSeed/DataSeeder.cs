@@ -106,7 +106,7 @@ namespace LeaguePlaza.Infrastructure.Data.DataSeed
                     {
                         Title = $"Test Quest {i}",
                         Description = i % 7 == 0 ? string.Empty : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                        Created = DateTime.Now.AddDays(-i),
+                        Created = DateTime.UtcNow.AddDays(-i),
                         RewardAmount = Math.Round((i + 7) / 17m, 2) * 100,
                         Type = i % 3 == 0 ? QuestType.MonsterHunt : i % 3 == 1 ? QuestType.Escort : QuestType.Gathering,
                         Status = QuestStatus.Posted,

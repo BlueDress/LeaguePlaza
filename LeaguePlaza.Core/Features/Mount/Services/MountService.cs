@@ -309,7 +309,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
 
         public async Task CreateMountsAsync(CreateMountDto createMountDto)
         {
-            var dateCreated = DateTime.Now;
+            var dateCreated = DateTime.UtcNow;
 
             string imageUrl = string.Empty;
 

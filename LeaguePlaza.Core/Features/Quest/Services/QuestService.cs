@@ -149,7 +149,7 @@ namespace LeaguePlaza.Core.Features.Quest.Services
 
             if (currentUser != null)
             {
-                var dateCreated = DateTime.Now;
+                var dateCreated = DateTime.UtcNow;
 
                 string imageUrl = string.Empty;
 

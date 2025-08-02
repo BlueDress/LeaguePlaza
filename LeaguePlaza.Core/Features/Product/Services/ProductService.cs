@@ -137,7 +137,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
 
         public async Task CreateProductAsync(CreateProductDto createProductDto)
         {
-            var dateCreated = DateTime.Now;
+            var dateCreated = DateTime.UtcNow;
 
             string imageUrl = string.Empty;
 
@@ -187,7 +187,7 @@ namespace LeaguePlaza.Core.Features.Product.Services
 
                     if (!string.IsNullOrEmpty(accessToken))
                     {
-                        string uploadPath = string.Format(ImageUploadPath, updateProductDto.Name, DateTime.Now.ToLongTimeString(), updateProductDto.Image.FileName);
+                        string uploadPath = string.Format(ImageUploadPath, updateProductDto.Name, DateTime.UtcNow.ToLongTimeString(), updateProductDto.Image.FileName);
                         imageUrl = await _dropboxService.UploadImage(updateProductDto.Image, uploadPath, accessToken);
                     }
                 }
