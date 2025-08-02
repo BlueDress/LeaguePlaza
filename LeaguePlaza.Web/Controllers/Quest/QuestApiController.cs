@@ -5,6 +5,7 @@ using LeaguePlaza.Core.Features.Quest.Models.ViewModels;
 using LeaguePlaza.Web.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using static LeaguePlaza.Common.Constants.ErrorConstants;
 using static LeaguePlaza.Common.Constants.QuestConstants;
 using static LeaguePlaza.Common.Constants.UserRoleConstants;
@@ -22,8 +23,15 @@ namespace LeaguePlaza.Web.Controllers.Quest
         {
             try
             {
-                await _questService.CreateQuestAsync(createQuestDto);
-                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new QuestsViewModel());
+                }
+
+                await _questService.CreateQuestAsync(createQuestDto, currentUserId);
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync(currentUserId);
 
                 return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
@@ -43,7 +51,15 @@ namespace LeaguePlaza.Web.Controllers.Quest
             try
             {
                 await _questService.UpdateQuestAsync(updateQuestDto);
-                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new QuestsViewModel());
+                }
+
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync(currentUserId);
 
                 return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
@@ -62,7 +78,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
         {
             try
             {
-                await _questService.AcceptQuestAsync(updateQuestStatusDto.Id);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return BadRequest();
+                }
+
+                await _questService.AcceptQuestAsync(updateQuestStatusDto.Id, currentUserId);
 
                 return Ok();
             }
@@ -82,7 +105,15 @@ namespace LeaguePlaza.Web.Controllers.Quest
             try
             {
                 await _questService.RemoveQuestAsync(updateQuestStatusDto.Id);
-                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new QuestsViewModel());
+                }
+
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync(currentUserId);
 
                 return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
@@ -102,7 +133,15 @@ namespace LeaguePlaza.Web.Controllers.Quest
             try
             {
                 await _questService.CompleteQuestAsync(updateQuestStatusDto.Id);
-                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new QuestsViewModel());
+                }
+
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync(currentUserId);
 
                 return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }
@@ -139,7 +178,9 @@ namespace LeaguePlaza.Web.Controllers.Quest
         {
             try
             {
-                QuestsViewModel questsViewModel = await _questService.CreateQuestCardsContainerWithPaginationViewModelAsync(filterAndSortQuestsRequestData);
+                string? currentUserId = GetCurrentUserId();
+
+                QuestsViewModel questsViewModel = await _questService.CreateQuestCardsContainerWithPaginationViewModelAsync(filterAndSortQuestsRequestData, currentUserId);
 
                 return PartialView(QuestCardsContainerWithPagination, questsViewModel);
             }

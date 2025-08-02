@@ -11,15 +11,15 @@ namespace LeaguePlaza.Core.Features.Mount.Contracts
     {
         Task<MountsViewModel> CreateMountsViewModelAsync();
 
-        Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id);
+        Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id, string currentUserId);
 
-        Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = PageOne);
+        Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(string currentUserId, int pageNumber = PageOne);
 
         Task<MountsViewModel> CreateMountsViewModelAsync(FilterAndSortMountsRequestData filterAndSortMountsRequestData);
 
-        Task<MountRentalResultDto> RentMountAsync(RentMountDto rentMountDto);
+        Task<MountRentalResultDto> RentMountAsync(RentMountDto rentMountDto, string currentUserId);
 
-        Task<string> AddOrUpadeMountRatingAsync(RateMountDto rateMountDto);
+        Task<string> AddOrUpadeMountRatingAsync(RateMountDto rateMountDto, string currentUserId);
 
         Task CancelMountRentAsync(int id);
 

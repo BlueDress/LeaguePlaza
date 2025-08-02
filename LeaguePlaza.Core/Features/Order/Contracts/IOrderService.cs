@@ -8,17 +8,17 @@ namespace LeaguePlaza.Core.Features.Order.Contracts
 {
     public interface IOrderService
     {
-        Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(int pageNumber = PageOne);
+        Task<OrderHistoryViewModel> CreateOrderHistoryViewModelAsync(string currentUserId, int pageNumber = PageOne);
 
-        Task<CartViewModel> CreateViewCartViewModelAsync(OrderInformationDto? orderInformationDto = null);
+        Task<CartViewModel> CreateViewCartViewModelAsync(string currentUserId, OrderInformationDto? orderInformationDto = null);
 
-        Task<int> GetCartItemsCountAsync();
+        Task<int> GetCartItemsCountAsync(string currentUserId);
 
-        Task<OrderViewModel> CreateOrderViewModelAsync(int orderId);
+        Task<OrderViewModel> CreateOrderViewModelAsync(int orderId, string currentUserId);
 
-        Task<AddToCartResultDto> AddToCartAsync(CreateCartItemDto createCartItemDto);
+        Task<AddToCartResultDto> AddToCartAsync(CreateCartItemDto createCartItemDto, string currentUserId);
 
-        Task<bool> CreateOrderAsync(OrderInformationDto orderInformationDto);
+        Task<bool> CreateOrderAsync(OrderInformationDto orderInformationDto, string currentUserId);
 
         Task RemoveCartItemAsync(int cartItemId);
 

@@ -4,7 +4,7 @@ namespace LeaguePlaza.Web.Controllers.Base
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseApiController : BaseController
+    public abstract class BaseApiController : BaseController
     {
     }
 }

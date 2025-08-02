@@ -8,15 +8,15 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
     {
         Task<QuestsViewModel> CreateAvailableQuestsViewModelAsync();
 
-        Task<QuestsViewModel> CreateUserQuestsViewModelAsync();
+        Task<QuestsViewModel> CreateUserQuestsViewModelAsync(string currentUserId);
 
-        Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id);
+        Task<ViewQuestViewModel> CreateViewQuestViewModelAsync(int id, string currentUserId);
 
-        Task CreateQuestAsync(CreateQuestDto createQuestDto);
+        Task CreateQuestAsync(CreateQuestDto createQuestDto, string currentUserId);
 
         Task UpdateQuestAsync(UpdateQuestDataDto updateQuestDto);
 
-        Task AcceptQuestAsync(int id);
+        Task AcceptQuestAsync(int id, string currentUserId);
 
         Task RemoveQuestAsync(int id);
 
@@ -24,6 +24,6 @@ namespace LeaguePlaza.Core.Features.Quest.Contracts
 
         Task AbandonQuestAsync(int id);
 
-        Task<QuestsViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData);
+        Task<QuestsViewModel> CreateQuestCardsContainerWithPaginationViewModelAsync(FilterAndSortQuestsRequestData filterAndSortQuestsRequestData, string? currentUserId);
     }
 }

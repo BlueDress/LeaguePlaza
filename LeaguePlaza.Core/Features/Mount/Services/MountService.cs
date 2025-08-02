@@ -8,8 +8,6 @@ using LeaguePlaza.Infrastructure.Data.Entities;
 using LeaguePlaza.Infrastructure.Data.Enums;
 using LeaguePlaza.Infrastructure.Data.Repository;
 using LeaguePlaza.Infrastructure.Dropbox.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -19,7 +17,7 @@ using static LeaguePlaza.Common.Constants.ErrorConstants;
 
 namespace LeaguePlaza.Core.Features.Mount.Services
 {
-    public class MountService(IRepository repository, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, IDropboxService dropboxService) : IMountService
+    public class MountService(IRepository repository, IDropboxService dropboxService) : IMountService
     {
         private readonly Dictionary<string, string> DefaultMountTypeImageUrls = new()
         {
@@ -29,8 +27,6 @@ namespace LeaguePlaza.Core.Features.Mount.Services
         };
 
         private readonly IRepository _repository = repository;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IDropboxService _dropboxService = dropboxService;
 
         public async Task<MountsViewModel> CreateMountsViewModelAsync()
@@ -58,16 +54,9 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id)
+        public async Task<ViewMountViewModel> CreateViewMountViewModelAsync(int id, string currentUserId)
         {
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
-
-            if (currentUser == null)
-            {
-                return new ViewMountViewModel();
-            }
-
-            var mount = await _repository.FindOneReadOnlyAsync<MountEntity>(m => m.Id == id, query => query.Include(m => m.MountRatings.Where(mr => mr.UserId == currentUser.Id))) ?? new();
+            var mount = await _repository.FindOneReadOnlyAsync<MountEntity>(m => m.Id == id, query => query.Include(m => m.MountRatings.Where(mr => mr.UserId == currentUserId))) ?? new();
             IEnumerable<MountEntity> recommendedMounts = await _repository.FindSpecificCountReadOnlyAsync<MountEntity>(RecommendedMountsCount, m => m.Id != id && m.MountType == mount.MountType);
 
             return new ViewMountViewModel()
@@ -96,17 +85,10 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(int pageNumber = PageOne)
+        public async Task<MountRentHistoryViewModel> CreateMountRentHistoryViewModelAsync(string currentUserId, int pageNumber = PageOne)
         {
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
-
-            if (currentUser == null)
-            {
-                return new MountRentHistoryViewModel();
-            }
-
-            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountRentalsPerPage, false, mr => mr.StartDate, mr => mr.UserId == currentUser.Id, query => query.Include(mr => mr.Mount));
-            int totalResults = await _repository.GetCountAsync<MountRentalEntity>(mr => mr.UserId == currentUser.Id);
+            IEnumerable<MountRentalEntity> mountRentals = await _repository.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(pageNumber, MountRentalsPerPage, false, mr => mr.StartDate, mr => mr.UserId == currentUserId, query => query.Include(mr => mr.Mount));
+            int totalResults = await _repository.GetCountAsync<MountRentalEntity>(mr => mr.UserId == currentUserId);
 
             return new MountRentHistoryViewModel()
             {
@@ -190,20 +172,9 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             };
         }
 
-        public async Task<MountRentalResultDto> RentMountAsync(RentMountDto rentMountDto)
+        public async Task<MountRentalResultDto> RentMountAsync(RentMountDto rentMountDto, string currentUserId)
         {
             if (rentMountDto.StartDate > rentMountDto.EndDate)
-            {
-                return new MountRentalResultDto()
-                {
-                    IsMountRentSuccessful = false,
-                    MountRentMessage = GenericErrorMessage,
-                };
-            }
-
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
-
-            if (currentUser == null)
             {
                 return new MountRentalResultDto()
                 {
@@ -231,7 +202,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 {
                     StartDate = rentMountDto.StartDate,
                     EndDate = rentMountDto.EndDate,
-                    UserId = currentUser.Id,
+                    UserId = currentUserId,
                     MountId = mountToRent.Id,
                 };
 
@@ -254,15 +225,8 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             }
         }
 
-        public async Task<string> AddOrUpadeMountRatingAsync(RateMountDto rateMountDto)
+        public async Task<string> AddOrUpadeMountRatingAsync(RateMountDto rateMountDto, string currentUserId)
         {
-            ApplicationUser? currentUser = await _userManager.GetUserAsync(_httpContextAccessor?.HttpContext?.User!);
-
-            if (currentUser == null)
-            {
-                return GenericErrorMessage;
-            }
-
             var mountToRate = await _repository.FindByIdAsync<MountEntity>(rateMountDto.MountId);
 
             if (mountToRate == null)
@@ -271,7 +235,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             }
 
             IEnumerable<MountRatingEntity> currentMountRatings = await _repository.FindAllAsync<MountRatingEntity>(mr => mr.MountId == rateMountDto.MountId);
-            MountRatingEntity? usersCurrentMountRating = currentMountRatings.FirstOrDefault(mr => mr.UserId == currentUser.Id);
+            MountRatingEntity? usersCurrentMountRating = currentMountRatings.FirstOrDefault(mr => mr.UserId == currentUserId);
 
             if (usersCurrentMountRating != null)
             {
@@ -282,7 +246,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 var newMountRating = new MountRatingEntity()
                 {
                     Rating = rateMountDto.Rating,
-                    UserId = currentUser.Id,
+                    UserId = currentUserId,
                     MountId = rateMountDto.MountId,
                 };
 

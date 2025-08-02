@@ -36,7 +36,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
         {
             try
             {
-                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new QuestsViewModel());
+                }
+
+                QuestsViewModel questsViewModel = await _questService.CreateUserQuestsViewModelAsync(currentUserId);
 
                 return View(questsViewModel);
             }
@@ -54,7 +61,14 @@ namespace LeaguePlaza.Web.Controllers.Quest
         {
             try
             {
-                ViewQuestViewModel viewQuestViewModel = await _questService.CreateViewQuestViewModelAsync(id);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new ViewQuestViewModel());
+                }
+
+                ViewQuestViewModel viewQuestViewModel = await _questService.CreateViewQuestViewModelAsync(id, currentUserId);
 
                 return View(viewQuestViewModel);
             }

@@ -36,7 +36,14 @@ namespace LeaguePlaza.Web.Controllers.Mount
         {
             try
             {
-                ViewMountViewModel viewMountViewModel = await _mountService.CreateViewMountViewModelAsync(id);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new ViewMountViewModel());
+                }
+
+                ViewMountViewModel viewMountViewModel = await _mountService.CreateViewMountViewModelAsync(id, currentUserId);
 
                 return View(viewMountViewModel);
             }
@@ -53,7 +60,14 @@ namespace LeaguePlaza.Web.Controllers.Mount
         {
             try
             {
-                MountRentHistoryViewModel mountRentHistoryViewModel = await _mountService.CreateMountRentHistoryViewModelAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new MountRentHistoryViewModel());
+                }
+
+                MountRentHistoryViewModel mountRentHistoryViewModel = await _mountService.CreateMountRentHistoryViewModelAsync(currentUserId);
 
                 return View(mountRentHistoryViewModel);
             }

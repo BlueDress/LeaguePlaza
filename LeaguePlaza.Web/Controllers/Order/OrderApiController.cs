@@ -23,7 +23,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                return await _orderService.GetCartItemsCountAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return 0;
+                }
+
+                return await _orderService.GetCartItemsCountAsync(currentUserId);
             }
             catch (Exception ex)
             {
@@ -39,7 +46,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                OrderHistoryViewModel orderHistoryViewModel = await _orderService.CreateOrderHistoryViewModelAsync(pageNumber);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new OrderHistoryViewModel());
+                }
+
+                OrderHistoryViewModel orderHistoryViewModel = await _orderService.CreateOrderHistoryViewModelAsync(currentUserId, pageNumber);
 
                 return PartialView(OrderHistoryContainerWithPagination, orderHistoryViewModel);
             }
@@ -57,7 +71,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                AddToCartResultDto addToCartResult = await _orderService.AddToCartAsync(createCartItemDto);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return BadRequest();
+                }
+
+                AddToCartResultDto addToCartResult = await _orderService.AddToCartAsync(createCartItemDto, currentUserId);
 
                 return Ok(addToCartResult);
             }
@@ -91,7 +112,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return BadRequest();
+                }
+
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync(currentUserId);
 
                 return PartialView(CartItems, cartViewModel);
             }
@@ -109,7 +137,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync(orderInformationDto);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return BadRequest();
+                }
+
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync(currentUserId, orderInformationDto);
 
                 return PartialView(SubmitOrder, cartViewModel);
             }
@@ -127,7 +162,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                bool orderCreatedSuccessfully = await _orderService.CreateOrderAsync(orderInformationDto);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return BadRequest();
+                }
+
+                bool orderCreatedSuccessfully = await _orderService.CreateOrderAsync(orderInformationDto, currentUserId);
 
                 if (orderCreatedSuccessfully)
                 {
@@ -150,8 +192,15 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return BadRequest();
+                }
+
                 await _orderService.RemoveCartItemAsync(cartItemId);
-                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync(currentUserId);
 
                 return PartialView(CartItems, cartViewModel);
             }

@@ -19,7 +19,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                OrderHistoryViewModel orderHistoryViewModel = await _orderService.CreateOrderHistoryViewModelAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new OrderHistoryViewModel());
+                }
+
+                OrderHistoryViewModel orderHistoryViewModel = await _orderService.CreateOrderHistoryViewModelAsync(currentUserId);
 
                 return View(orderHistoryViewModel);
             }
@@ -36,7 +43,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync();
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new CartViewModel());
+                }
+
+                CartViewModel cartViewModel = await _orderService.CreateViewCartViewModelAsync(currentUserId);
 
                 return View(cartViewModel);
             }
@@ -53,7 +67,14 @@ namespace LeaguePlaza.Web.Controllers.Order
         {
             try
             {
-                OrderViewModel orderViewModel = await _orderService.CreateOrderViewModelAsync(id);
+                string? currentUserId = GetCurrentUserId();
+
+                if (string.IsNullOrWhiteSpace(currentUserId))
+                {
+                    return View(new OrderViewModel());
+                }
+
+                OrderViewModel orderViewModel = await _orderService.CreateOrderViewModelAsync(id, currentUserId);
 
                 return View(orderViewModel);
             }
