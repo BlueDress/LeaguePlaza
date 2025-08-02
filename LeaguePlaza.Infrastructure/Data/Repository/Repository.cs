@@ -8,16 +8,6 @@ namespace LeaguePlaza.Infrastructure.Data.Repository
     {
         private readonly DbContext _context = context;
 
-        public async Task<IEnumerable<T>> GetAllAsync<T>() where T : class
-        {
-            return await DbSet<T>().ToListAsync();
-        }
-
-        public async Task<IEnumerable<T>> GetAllReadOnlyAsync<T>() where T : class
-        {
-            return await DbSet<T>().AsNoTracking().ToListAsync();
-        }
-
         public async Task<int> GetCountAsync<T>(Expression<Func<T, bool>> filterCondition) where T : class
         {
             return await DbSet<T>().AsNoTracking().Where(filterCondition).CountAsync();
