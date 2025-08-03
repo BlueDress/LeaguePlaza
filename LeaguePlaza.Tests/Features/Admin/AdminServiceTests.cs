@@ -47,7 +47,7 @@ namespace LeaguePlaza.Tests.Features.Admin
 
             var mountsForPage = allMounts.Skip((pageNumber - 1) * mountsPerPage).Take(mountsPerPage).ToList();
 
-            _mockRepository.Setup(r => r.FindSpecificCountOrderedReadOnlyAsync<MountEntity, int>(
+            _mockRepository.Setup(r => r.FindSpecificCountOrderedReadOnlyAsync(
                 pageNumber,
                 mountsPerPage,
                 false,
@@ -55,7 +55,7 @@ namespace LeaguePlaza.Tests.Features.Admin
                 It.IsAny<Expression<Func<MountEntity, bool>>>()
             )).ReturnsAsync(mountsForPage);
 
-            _mockRepository.Setup(r => r.GetCountAsync<MountEntity>(It.IsAny<Expression<Func<MountEntity, bool>>>()))
+            _mockRepository.Setup(r => r.GetCountAsync(It.IsAny<Expression<Func<MountEntity, bool>>>()))
                            .ReturnsAsync(totalMounts);
 
             // Act
@@ -64,13 +64,13 @@ namespace LeaguePlaza.Tests.Features.Admin
             // Assert
             Assert.That(viewModel, Is.Not.Null);
 
-            _mockRepository.Verify(r => r.FindSpecificCountOrderedReadOnlyAsync<MountEntity, int>(
+            _mockRepository.Verify(r => r.FindSpecificCountOrderedReadOnlyAsync(
                 pageNumber, mountsPerPage, false,
                 It.IsAny<Expression<Func<MountEntity, int>>>(),
                 It.IsAny<Expression<Func<MountEntity, bool>>>()
             ), Times.Once);
 
-            _mockRepository.Verify(r => r.GetCountAsync<MountEntity>(
+            _mockRepository.Verify(r => r.GetCountAsync(
                 It.IsAny<Expression<Func<MountEntity, bool>>>()
             ), Times.Once);
 
@@ -128,7 +128,7 @@ namespace LeaguePlaza.Tests.Features.Admin
 
             var productsForPage = allProducts.Skip((pageNumber - 1) * productsPerPage).Take(productsPerPage).ToList();
 
-            _mockRepository.Setup(r => r.FindSpecificCountOrderedReadOnlyAsync<ProductEntity, int>(
+            _mockRepository.Setup(r => r.FindSpecificCountOrderedReadOnlyAsync(
                 pageNumber,
                 productsPerPage,
                 false,
@@ -136,7 +136,7 @@ namespace LeaguePlaza.Tests.Features.Admin
                 It.IsAny<Expression<Func<ProductEntity, bool>>>()
             )).ReturnsAsync(productsForPage);
 
-            _mockRepository.Setup(r => r.GetCountAsync<ProductEntity>(It.IsAny<Expression<Func<ProductEntity, bool>>>()))
+            _mockRepository.Setup(r => r.GetCountAsync(It.IsAny<Expression<Func<ProductEntity, bool>>>()))
                            .ReturnsAsync(totalProducts);
 
             // Act
@@ -145,13 +145,13 @@ namespace LeaguePlaza.Tests.Features.Admin
             // Assert
             Assert.That(viewModel, Is.Not.Null);
 
-            _mockRepository.Verify(r => r.FindSpecificCountOrderedReadOnlyAsync<ProductEntity, int>(
+            _mockRepository.Verify(r => r.FindSpecificCountOrderedReadOnlyAsync(
                 pageNumber, productsPerPage, false,
                 It.IsAny<Expression<Func<ProductEntity, int>>>(),
                 It.IsAny<Expression<Func<ProductEntity, bool>>>()
             ), Times.Once);
 
-            _mockRepository.Verify(r => r.GetCountAsync<ProductEntity>(
+            _mockRepository.Verify(r => r.GetCountAsync(
                 It.IsAny<Expression<Func<ProductEntity, bool>>>()
             ), Times.Once);
 
@@ -200,14 +200,14 @@ namespace LeaguePlaza.Tests.Features.Admin
                 {
                     Id = i,
                     DateCreated = now.AddDays(-i),
-                    DateCompleted = (i % 3 == 0) ? (DateTime?)null : now.AddDays(-i + 1),
+                    DateCompleted = (i % 3 == 0) ? null : now.AddDays(-i + 1),
                     Status = (i % 2 == 0) ? OrderStatus.Completed  : OrderStatus.Pending
                 });
             }
 
             var ordersForPage = allOrders.Skip((pageNumber - 1) * ordersPerPage).Take(ordersPerPage).ToList();
 
-            _mockRepository.Setup(r => r.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, int>(
+            _mockRepository.Setup(r => r.FindSpecificCountOrderedReadOnlyAsync(
                 pageNumber,
                 ordersPerPage,
                 false,
@@ -215,7 +215,7 @@ namespace LeaguePlaza.Tests.Features.Admin
                 It.IsAny<Expression<Func<OrderEntity, bool>>>()
             )).ReturnsAsync(ordersForPage);
 
-            _mockRepository.Setup(r => r.GetCountAsync<OrderEntity>(It.IsAny<Expression<Func<OrderEntity, bool>>>()))
+            _mockRepository.Setup(r => r.GetCountAsync(It.IsAny<Expression<Func<OrderEntity, bool>>>()))
                            .ReturnsAsync(totalOrders);
 
             // Act
@@ -224,14 +224,14 @@ namespace LeaguePlaza.Tests.Features.Admin
             // Assert
             Assert.That(viewModel, Is.Not.Null);
 
-            _mockRepository.Verify(r => r.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, int>(
+            _mockRepository.Verify(r => r.FindSpecificCountOrderedReadOnlyAsync(
                 pageNumber, ordersPerPage, false,
                 It.IsAny<Expression<Func<OrderEntity, int>>>(),
                 It.IsAny<Expression<Func<OrderEntity, bool>>>()
             ), Times.Once);
 
-            _mockRepository.Verify(r => r.GetCountAsync<OrderEntity>(
-                It.IsAny<Expression<Func<OrderEntity, bool>>>() // o => true
+            _mockRepository.Verify(r => r.GetCountAsync(
+                It.IsAny<Expression<Func<OrderEntity, bool>>>()
             ), Times.Once);
 
             Assert.That(viewModel.Orders, Is.Not.Null);
