@@ -665,7 +665,7 @@ namespace LeaguePlaza.Tests.Features.Order
         {
             // Arrange
             int orderId = 1;
-            // Start with a completed order to test setting DateCompleted to null
+            
             var orderToUpdate = new OrderEntity { Id = orderId, Status = OrderStatus.Completed, DateCompleted = DateTime.UtcNow.AddDays(-1) };
             var updateDto = new UpdateOrderStatusDto { Id = orderId, Status = OrderStatus.InProgress.ToString() };
 
