@@ -240,6 +240,7 @@ namespace LeaguePlaza.Core.Features.Mount.Services
             if (usersCurrentMountRating != null)
             {
                 usersCurrentMountRating.Rating = rateMountDto.Rating;
+                mountToRate.Rating = currentMountRatings.Average(mr => mr.Rating);
             }
             else
             {
@@ -251,9 +252,12 @@ namespace LeaguePlaza.Core.Features.Mount.Services
                 };
 
                 await _repository.AddAsync(newMountRating);
-            }
 
-            mountToRate.Rating = currentMountRatings.Any() ? currentMountRatings.Average(mr => mr.Rating) : rateMountDto.Rating;
+                var allRatings = currentMountRatings.Select(mr => mr.Rating).ToList();
+                allRatings.Add(rateMountDto.Rating);
+
+                mountToRate.Rating = allRatings.Average();
+            }
 
             await _repository.SaveChangesAsync();
 
