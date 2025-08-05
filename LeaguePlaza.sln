@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaguePlaza.Core", "LeagueP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaguePlaza.Common", "LeaguePlaza.Common\LeaguePlaza.Common.csproj", "{7612AF05-2E97-4D9A-B820-E02E4C0B2765}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaguePlaza.Tests", "LeaguePlaza.Tests\LeaguePlaza.Tests.csproj", "{08DC48F0-085A-47F0-9B91-51A4DF3CEC0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{7612AF05-2E97-4D9A-B820-E02E4C0B2765}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7612AF05-2E97-4D9A-B820-E02E4C0B2765}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7612AF05-2E97-4D9A-B820-E02E4C0B2765}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08DC48F0-085A-47F0-9B91-51A4DF3CEC0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08DC48F0-085A-47F0-9B91-51A4DF3CEC0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08DC48F0-085A-47F0-9B91-51A4DF3CEC0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08DC48F0-085A-47F0-9B91-51A4DF3CEC0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

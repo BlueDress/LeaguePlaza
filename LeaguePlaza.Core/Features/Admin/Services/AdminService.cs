@@ -42,7 +42,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
             };
         }
 
-        public async Task<ProductAdminViewModel> CreateProductAdminViewModelAsync(int pageNumber = 1)
+        public async Task<ProductAdminViewModel> CreateProductAdminViewModelAsync(int pageNumber = PageOne)
         {
             IEnumerable<ProductEntity> products = await _repository.FindSpecificCountOrderedReadOnlyAsync<ProductEntity, int>(pageNumber, AdminCountForPagination, false, p => p.Id, p => true);
             int totalResults = await _repository.GetCountAsync<ProductEntity>(p => true);
@@ -67,7 +67,7 @@ namespace LeaguePlaza.Core.Features.Admin.Services
             };
         }
 
-        public async Task<OrderAdminViewModel> CreateOrderAdminViewModelAsync(int pageNumber = 1)
+        public async Task<OrderAdminViewModel> CreateOrderAdminViewModelAsync(int pageNumber = PageOne)
         {
             IEnumerable<OrderEntity> orders = await _repository.FindSpecificCountOrderedReadOnlyAsync<OrderEntity, int>(pageNumber, AdminCountForPagination, false, o => o.Id, o => true);
             int totalResults = await _repository.GetCountAsync<OrderEntity>(o => true);
