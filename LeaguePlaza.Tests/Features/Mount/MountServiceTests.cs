@@ -153,9 +153,9 @@ namespace LeaguePlaza.Tests.Features.Mount
             var viewModel = await _mountService.CreateMountRentHistoryViewModelAsync(userId, pageNumber);
 
             // Assert
-            _mockRepository.Verify(r => r.FindSpecificCountOrderedReadOnlyAsync<MountRentalEntity, DateTime>(
+            _mockRepository.Verify(r => r.FindSpecificCountOrderedReadOnlyAsync(
                 pageNumber, 10, false,
-                It.IsAny<Expression<Func<MountRentalEntity, DateTime>>>(), // m => m.StartDate
+                It.IsAny<Expression<Func<MountRentalEntity, DateTime>>>(),
                 It.Is<Expression<Func<MountRentalEntity, bool>>>(expr => expr.Compile()(new MountRentalEntity { UserId = userId })),
                 It.IsAny<Func<IQueryable<MountRentalEntity>, IIncludableQueryable<MountRentalEntity, object>>>()
             ), Times.Once);
