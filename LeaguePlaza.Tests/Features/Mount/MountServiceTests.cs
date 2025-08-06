@@ -360,8 +360,11 @@ namespace LeaguePlaza.Tests.Features.Mount
             _mockRepository.Verify(r => r.AddAsync(It.IsAny<MountRatingEntity>()), Times.Never);
             _mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
 
-            Assert.That(existingUserRating.Rating, Is.EqualTo(2));
-            Assert.That(mountToRate.Rating, Is.EqualTo(2.5));
+            Assert.Multiple(() =>
+            {
+                Assert.That(existingUserRating.Rating, Is.EqualTo(2));
+                Assert.That(mountToRate.Rating, Is.EqualTo(2.5));
+            });
         }
 
         [Test]
